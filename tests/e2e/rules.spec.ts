@@ -98,10 +98,35 @@ test.describe('donation rules', () => {
   });
 });
 
+test.describe('claiming', () => {
+  test('an NGO can reserve part of a seeded donation and release it again', async ({ baseURL }) => {
+    const ngo = await apiAs(baseURL!, 'ngo');
+    const feed = await (await ngo.get('/api/donations/eligible')).json();
+    test.skip(feed.donations.length === 0, 'nothing is open for claiming right now');
+    const target = feed.donations[0].donation;
+
+    const res = await ngo.post(`/api/donations/${target.id}/claims`, { data: { portions_claimed: 1 } });
+    expect(res.status(), await res.text()).toBe(201);
+    const { claim } = await res.json();
+    try {
+      const after = await (await ngo.get('/api/donations/eligible')).json();
+      const seen = after.donations.find((x: any) => x.donation.id === target.id);
+      expect(seen.donation.portionsRemaining).toBe(target.portionsRemaining - 1);
+    } finally {
+      const released = await ngo.post(`/api/my/donation-claims/${claim.id}/release`);
+      expect(released.ok(), await released.text()).toBeTruthy();
+    }
+    const back = await (await ngo.get('/api/donations/eligible')).json();
+    expect(back.donations.find((x: any) => x.donation.id === target.id).donation.portionsRemaining).toBe(
+      target.portionsRemaining,
+    );
+  });
+});
+
 test.describe('sample data', () => {
   test('pickup tasks only carry a failure reason and timestamps their status allows', async ({ baseURL }) => {
     const admin = await apiAs(baseURL!, 'admin');
-    const res = await admin.get('/api/pickup-tasks');
+    const res = await admin.get('/api/admin/pickup-tasks');
     expect(res.ok()).toBeTruthy();
     const body = await res.json();
     const tasks: any[] = Array.isArray(body) ? body : (body.pickupTasks ?? body.tasks ?? []);
