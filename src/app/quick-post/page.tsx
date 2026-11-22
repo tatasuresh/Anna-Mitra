@@ -227,9 +227,9 @@ export default function QuickPostPage() {
             </div>
           )}
           <ExtractedValuesForm
-            values={values}
+            values={{ description: values.foodDescription, portions: values.portions, pickupBy: values.pickupBy }}
             onChange={handleChange}
-            errors={errors}
+            errors={{ description: errors.foodDescription, portions: errors.portions, pickupBy: errors.pickupBy }}
             aiUnavailable={aiStatus === 'unavailable'}
           />
           <div className="ui-actions">
