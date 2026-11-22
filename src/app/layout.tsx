@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html data-nexen-component="nx_app_layout" lang="en">
-      <body className="font-sans">
+      <body className="font-sans ui-root">
 				<NexenInspector /><NexenAuthRoot><AppShell>{children}</AppShell></NexenAuthRoot></body>
     </html>
   );

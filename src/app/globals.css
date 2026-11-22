@@ -325,15 +325,17 @@
 .ui-root .ui-check.is-disabled input { cursor: not-allowed; }
 
 /* Top bar and menu */
-.ui-shell { display: flex; flex-direction: column; min-height: 100%; background: var(--ui-bg); color: var(--ui-text); }
-.ui-sidebar { position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: calc(var(--ui-space) * 4); padding: calc(var(--ui-space) * 3) calc(var(--ui-space) * 8); background: var(--ui-surface); border-bottom: 1px solid var(--ui-border); box-shadow: var(--ui-shadow); }
+/* The app shell (AppShell.tsx) lays itself out with Tailwind classes: a sidebar from the sm breakpoint up and a collapsible menu below it. Do not add display/flex/padding rules for .ui-shell, .ui-sidebar, .ui-nav, .ui-topbar or .ui-content here, because unlayered CSS overrides those utilities. */
 .ui-brand { display: flex; align-items: center; gap: calc(var(--ui-space) * 2); font-family: var(--ui-font-heading); font-size: 18px; font-weight: 700; line-height: 1.2; color: var(--ui-text); }
-.ui-nav { display: flex; flex-wrap: wrap; align-items: center; gap: calc(var(--ui-space) / 1); }
 .ui-nav-item { display: inline-flex; align-items: center; padding: calc(var(--ui-space) * 2) calc(var(--ui-space) * 3); border-radius: var(--ui-radius-sm); font-size: 14px; font-weight: 500; line-height: 1.2; color: var(--ui-text); text-decoration: none; transition: background-color 120ms ease, color 120ms ease; }
 .ui-nav-item:hover { background: var(--ui-surface-2); }
 .ui-nav-item:focus-visible { outline: 2px solid var(--ui-primary); outline-offset: 2px; }
 .ui-nav-item.is-active { background: var(--ui-primary); color: var(--ui-primary-text); font-weight: 600; }
-.ui-topbar { display: flex; align-items: center; justify-content: flex-end; padding: calc(var(--ui-space) * 3) calc(var(--ui-space) * 8); background: var(--ui-surface); border-bottom: 1px solid var(--ui-border); }
 .ui-user { display: inline-flex; align-items: center; gap: calc(var(--ui-space) * 2); font-size: 13px; color: var(--ui-muted); }
 .ui-user > span:first-child { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 999px; background: var(--ui-surface-2); color: var(--ui-text); font-size: 12px; font-weight: 600; }
-.ui-content { flex: 1; padding: calc(var(--ui-space) * 8) calc(var(--ui-space) * 8); color: var(--ui-text); }
+
+/* Small screens: single-column grids and wrapping button rows */
+@media (max-width: 559px) {
+  .ui-root .ui-grid-3, .ui-root .ui-grid-4 { grid-template-columns: minmax(0, 1fr); }
+}
+.ui-root .ui-card-footer .ui-actions { flex: 1 1 auto; min-width: 0; max-width: 100%; }

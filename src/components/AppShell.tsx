@@ -85,9 +85,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="ui-shell flex min-h-screen flex-col bg-background text-foreground sm:flex-row">
       <aside
-        className={`ui-sidebar ${
-          open ? 'flex' : 'hidden'
-        } min-w-0 flex-col gap-4 border-b border-border bg-card p-4 sm:flex sm:shrink-0 sm:max-w-56 sm:border-b-0 sm:border-r`}
+        className="ui-sidebar flex min-w-0 flex-col gap-4 border-b border-border bg-card p-4 sm:shrink-0 sm:basis-56 sm:border-b-0 sm:border-r"
        data-nexen-id="nx-2bffa68a-0">
         <div className="ui-brand flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2 font-semibold">
@@ -109,36 +107,38 @@ export default function AppShell({ children }: { children: ReactNode }) {
           </button>
         </div>
 
-        <nav className="ui-nav flex flex-col gap-1" data-nexen-id="nx-2bffa68a-4">
-          {items.map((item) => {
-            const active = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                aria-current={active ? 'page' : undefined}
-                className={`truncate rounded-[var(--radius)] px-3 py-2 text-sm ${
-                  active
-                    ? 'bg-primary/10 font-semibold text-primary'
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                }`}
-               data-nexen-id="nx-2bffa68a-5">
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
+        <div className={`${open ? 'flex' : 'hidden'} min-w-0 flex-col gap-4 sm:flex`}>
+          <nav className="ui-nav flex flex-col gap-1" data-nexen-id="nx-2bffa68a-4">
+            {items.map((item) => {
+              const active = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={active ? 'page' : undefined}
+                  className={`truncate rounded-[var(--radius)] px-3 py-2 text-sm ${
+                    active
+                      ? 'bg-primary/10 font-semibold text-primary'
+                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                  }`}
+                 data-nexen-id="nx-2bffa68a-5">
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
 
-        {user && (
-          <button data-nexen-component="nx_components_AppShell"
-            type="button"
-            onClick={signOut}
-            className="rounded-[var(--radius)] border border-border px-3 py-2 text-left text-sm sm:hidden"
-           data-nexen-id="nx-2bffa68a-6">
-            Sign out
-          </button>
-        )}
+          {user && (
+            <button data-nexen-component="nx_components_AppShell"
+              type="button"
+              onClick={signOut}
+              className="rounded-[var(--radius)] border border-border px-3 py-2 text-left text-sm sm:hidden"
+             data-nexen-id="nx-2bffa68a-6">
+              Sign out
+            </button>
+          )}
+        </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
