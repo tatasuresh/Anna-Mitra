@@ -18,3 +18,7 @@ node_modules/
 .next/
 next-nexen/
 *.tsbuildinfo
+
+# Playwright output
+test-results/
+playwright-report/
