@@ -23,7 +23,7 @@ async function main() {
   if (!process.env.DEMO_PASSWORD) console.log('[seed] demo accounts: DEMO_PASSWORD is not set in .env, so nobody can sign in as them');
   const hashed = await bcrypt.hash(demoPassword, 10);
   try {
-    const u = await db.user.upsert({ where: { email: "demo@example.com" }, update: process.env.DEMO_PASSWORD ? { passwordHash: hashed } : {}, create: { id: "00000000-0000-4000-8000-000000000001", email: "demo@example.com", passwordHash: hashed, name: "Demo User", role: "admin" } });
+    const u = await db.user.upsert({ where: { email: "demo@example.com" }, update: { status: "approved", isDemo: true, ...(process.env.DEMO_PASSWORD ? { passwordHash: hashed } : {}) }, create: { status: "approved", isDemo: true, id: "00000000-0000-4000-8000-000000000001", email: "demo@example.com", passwordHash: hashed, name: "Demo User", role: "admin" } });
     if (!users["admin"]) users["admin"] = u.id;
     (ids["User"] ??= []).push(u.id);
     console.log('[seed] demo-user: ok demo@example.com');
@@ -31,7 +31,7 @@ async function main() {
     console.log('[seed] demo-user: MISSING — ' + why(e));
   }
   try {
-    const u = await db.user.upsert({ where: { email: "donor@example.com" }, update: process.env.DEMO_PASSWORD ? { passwordHash: hashed } : {}, create: { email: "donor@example.com", passwordHash: hashed, name: "Demo Donor", role: "donor" } });
+    const u = await db.user.upsert({ where: { email: "donor@example.com" }, update: { status: "approved", isDemo: true, ...(process.env.DEMO_PASSWORD ? { passwordHash: hashed } : {}) }, create: { status: "approved", isDemo: true, email: "donor@example.com", passwordHash: hashed, name: "Demo Donor", role: "donor" } });
     if (!users["donor"]) users["donor"] = u.id;
     (ids["User"] ??= []).push(u.id);
     console.log('[seed] account: ok donor@example.com');
@@ -39,7 +39,7 @@ async function main() {
     console.log('[seed] account donor@example.com: ' + why(e));
   }
   try {
-    const u = await db.user.upsert({ where: { email: "ngo@example.com" }, update: process.env.DEMO_PASSWORD ? { passwordHash: hashed } : {}, create: { email: "ngo@example.com", passwordHash: hashed, name: "Demo Ngo", role: "ngo" } });
+    const u = await db.user.upsert({ where: { email: "ngo@example.com" }, update: { status: "approved", isDemo: true, ...(process.env.DEMO_PASSWORD ? { passwordHash: hashed } : {}) }, create: { status: "approved", isDemo: true, email: "ngo@example.com", passwordHash: hashed, name: "Demo Ngo", role: "ngo" } });
     if (!users["ngo"]) users["ngo"] = u.id;
     (ids["User"] ??= []).push(u.id);
     console.log('[seed] account: ok ngo@example.com');
@@ -47,7 +47,7 @@ async function main() {
     console.log('[seed] account ngo@example.com: ' + why(e));
   }
   try {
-    const u = await db.user.upsert({ where: { email: "volunteer@example.com" }, update: process.env.DEMO_PASSWORD ? { passwordHash: hashed } : {}, create: { email: "volunteer@example.com", passwordHash: hashed, name: "Demo Volunteer", role: "volunteer" } });
+    const u = await db.user.upsert({ where: { email: "volunteer@example.com" }, update: { status: "approved", isDemo: true, ...(process.env.DEMO_PASSWORD ? { passwordHash: hashed } : {}) }, create: { status: "approved", isDemo: true, email: "volunteer@example.com", passwordHash: hashed, name: "Demo Volunteer", role: "volunteer" } });
     if (!users["volunteer"]) users["volunteer"] = u.id;
     (ids["User"] ??= []).push(u.id);
     console.log('[seed] account: ok volunteer@example.com');
@@ -55,7 +55,7 @@ async function main() {
     console.log('[seed] account volunteer@example.com: ' + why(e));
   }
   try {
-    const u = await db.user.upsert({ where: { email: "admin@example.com" }, update: process.env.DEMO_PASSWORD ? { passwordHash: hashed } : {}, create: { email: "admin@example.com", passwordHash: hashed, name: "Demo Admin", role: "admin" } });
+    const u = await db.user.upsert({ where: { email: "admin@example.com" }, update: { status: "approved", isDemo: true, ...(process.env.DEMO_PASSWORD ? { passwordHash: hashed } : {}) }, create: { status: "approved", isDemo: true, email: "admin@example.com", passwordHash: hashed, name: "Demo Admin", role: "admin" } });
     if (!users["admin"]) users["admin"] = u.id;
     (ids["User"] ??= []).push(u.id);
     console.log('[seed] account: ok admin@example.com');
@@ -63,7 +63,7 @@ async function main() {
     console.log('[seed] account admin@example.com: ' + why(e));
   }
   try {
-    const u = await db.user.upsert({ where: { email: "csr.sponsor@example.com" }, update: process.env.DEMO_PASSWORD ? { passwordHash: hashed } : {}, create: { email: "csr.sponsor@example.com", passwordHash: hashed, name: "Demo Csr Sponsor", role: "csr_sponsor" } });
+    const u = await db.user.upsert({ where: { email: "csr.sponsor@example.com" }, update: { status: "approved", isDemo: true, ...(process.env.DEMO_PASSWORD ? { passwordHash: hashed } : {}) }, create: { status: "approved", isDemo: true, email: "csr.sponsor@example.com", passwordHash: hashed, name: "Demo Csr Sponsor", role: "csr_sponsor" } });
     if (!users["csr_sponsor"]) users["csr_sponsor"] = u.id;
     (ids["User"] ??= []).push(u.id);
     console.log('[seed] account: ok csr.sponsor@example.com');
@@ -366,6 +366,17 @@ async function main() {
     }
   } catch (e) {
     console.log('[seed] PickupTask skipped: ' + why(e));
+  }
+  // Link demo accounts to seeded organisations so role pages have data to show.
+  try {
+    const restaurant = await db.restaurant.findFirst({ where: { name: "Saffron Buffet" } });
+    const ngo = await db.ngo.findFirst({ where: { name: "Velachery Hunger Relief Trust" } });
+    if (restaurant) await db.user.updateMany({ where: { email: "donor@example.com", restaurantId: null }, data: { restaurantId: restaurant.id } });
+    if (ngo) await db.user.updateMany({ where: { email: "ngo@example.com", ngoId: null }, data: { ngoId: ngo.id } });
+    await db.user.updateMany({ where: { email: "volunteer@example.com", carryingCapacity: null }, data: { carryingCapacity: 20, isAvailable: true } });
+    console.log('[seed] demo accounts linked');
+  } catch (e) {
+    console.log('[seed] demo account linking skipped: ' + why(e));
   }
 }
 
