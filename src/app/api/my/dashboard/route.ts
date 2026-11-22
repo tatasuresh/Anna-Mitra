@@ -1,12 +1,14 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { requireUser } from '@/lib/session';
+import { expireOverdueDonations } from '@/lib/expiry';
 
 const RECENT_LIMIT = 5;
 
 export async function GET(request: Request) {
   const user = await requireUser(request);
   if (user instanceof Response) return user;
+  await expireOverdueDonations();
 
   if (user.role !== 'donor') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

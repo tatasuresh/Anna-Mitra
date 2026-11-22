@@ -655,7 +655,7 @@
       "group": "Donation claims",
       "request_shape": "{portions_claimed: number}",
       "response_shape": "DonationClaim",
-      "description": "Reserves portions_claimed of a published donation for the NGO from NGO Claim inside one database transaction, refusing it if portions_claimed exceeds portions_available or the pickup-by time has passed; it sets reserved_until to now plus the configured reservation timeout (default 5 minutes) and creates an open pickup task for volunteers."
+      "description": "Reserves portions_claimed of a published donation for the NGO from NGO Claim inside one database transaction, refusing it if portions_claimed exceeds portions_available or the pickup-by time has passed; it sets reserved_until to now plus the configured reservation timeout (default 5 minutes) and creates an open pickup task for volunteers. Refused with 403 when the donation's restaurant is not approved."
     },
     {
       "method": "GET",
@@ -899,8 +899,8 @@
       ],
       "group": "Settings",
       "request_shape": "",
-      "response_shape": "Setting[]",
-      "description": "Returns the configurable settings (reservation timeout in minutes, default 5, and impact assumption of 0.35 kg per portion) so NGO Claim can show the countdown and Sponsor Impact can label its assumptions."
+      "response_shape": "{settings: {key: string, value: number, description: string}[]}",
+      "description": "Returns the configurable settings (reservation timeout in minutes, default 5, and impact assumption of 0.35 kg per portion) so NGO Claim can show the countdown and Sponsor Impact can label its assumptions. Values are stored in the settings table; a setting without a stored value returns its default (reservation timeout 5 minutes, 0.35 kg per portion)."
     },
     {
       "method": "PATCH",
@@ -911,9 +911,9 @@
         "Admin"
       ],
       "group": "Settings",
-      "request_shape": "{value: object}",
-      "response_shape": "Setting",
-      "description": "Changes the value of one configurable setting from Admin Operations, such as the reservation timeout or the kg-per-portion impact assumption, validating the value range on the server before saving."
+      "request_shape": "{value: number}",
+      "response_shape": "{setting: {key: string, value: number, description: string}}",
+      "description": "Changes the value of one configurable setting from Admin Operations, such as the reservation timeout or the kg-per-portion impact assumption, validating the value range on the server before saving. Keys: reservation_timeout_minutes (whole number, 1-60) and kg_per_portion (0.01-10). The new value is stored and used by claims and by the sponsor impact figures."
     },
     {
       "method": "POST",
@@ -1399,7 +1399,7 @@
       "group": "Donations",
       "request_shape": "",
       "response_shape": "{donations: {donation: Donation, distance_km: number, match_explanation: string}[], alerts: {message: string, donation_id: string}[]}",
-      "description": "Returns the NGO feed of donations eligible for the caller's NGO with a short match explanation and in-app alerts: a donation qualifies when it is published or partially_claimed, portions_remaining is above 0, pickup_by_at is in the future, the haversine distance from the restaurant to the NGO is within service_radius_km, the NGO is available, and cold storage exists when requires_refrigeration is true."
+      "description": "Returns the NGO feed of donations eligible for the caller's NGO with a short match explanation and in-app alerts: a donation qualifies when it is published or partially_claimed, portions_remaining is above 0, pickup_by_at is in the future, the haversine distance from the restaurant to the NGO is within service_radius_km, the NGO is available, and cold storage exists when requires_refrigeration is true. Only donations from approved restaurants are listed; donations past their pickup-by time are marked expired and not listed."
     },
     {
       "method": "GET",

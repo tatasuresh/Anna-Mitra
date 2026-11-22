@@ -5,14 +5,13 @@ import { useRouter } from 'next/navigation';
 import { getSettings, updateAdminSetting } from '@/lib/api';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 
-type SettingRow = { key: string; value: Record<string, unknown> };
+type SettingRow = { key: string; value: number; description?: string };
 
 const TIMEOUT_KEY = 'reservation_timeout_minutes';
 const KG_KEY = 'kg_per_portion';
 
-function readField(rows: SettingRow[], key: string, field: string): string {
-  const row = rows.find((r) => r.key === key);
-  const raw = row?.value?.[field];
+function readValue(rows: SettingRow[], key: string): string {
+  const raw = rows.find((r) => r.key === key)?.value;
   return typeof raw === 'number' ? String(raw) : '';
 }
 
@@ -37,10 +36,10 @@ export default function SettingsPage() {
     if (!user) return;
     getSettings()
       .then((data) => {
-        const list: SettingRow[] = Array.isArray(data) ? data : [];
+        const list: SettingRow[] = Array.isArray(data?.settings) ? data.settings : Array.isArray(data) ? data : [];
         setRows(list);
-        setTimeoutValue(readField(list, TIMEOUT_KEY, 'minutes'));
-        setKg(readField(list, KG_KEY, 'kg'));
+        setTimeoutValue(readValue(list, TIMEOUT_KEY));
+        setKg(readValue(list, KG_KEY));
       })
       .catch((err: unknown) =>
         setLoadError(err instanceof Error ? err.message : 'Settings could not be loaded.')
@@ -58,10 +57,10 @@ export default function SettingsPage() {
     }
     setSavingKey(key);
     try {
-      await updateAdminSetting(key, { value: { [field]: num } });
+      await updateAdminSetting(key, { value: num });
       setRows((prev) => {
         const others = prev.filter((r) => r.key !== key);
-        return [...others, { key, value: { [field]: num } }];
+        return [...others, { key, value: num }];
       });
       setMessage('Setting saved.');
     } catch (err: unknown) {

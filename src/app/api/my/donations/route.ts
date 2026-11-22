@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { requireUser } from '@/lib/session';
 import { prisma } from '@/lib/db';
+import { expireOverdueDonations } from '@/lib/expiry';
 
 const INPUT_METHODS = ['voice', 'text', 'manual', 'repeat'] as const;
 type InputMethod = (typeof INPUT_METHODS)[number];
@@ -16,6 +17,7 @@ async function findDonorRestaurant(userId: string) {
 export async function GET(request: Request) {
   const user = await requireUser(request);
   if (user instanceof Response) return user;
+  await expireOverdueDonations();
 
   if (user.role !== 'donor') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

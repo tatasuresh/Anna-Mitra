@@ -37,8 +37,9 @@
         "priority": "high",
         "effort": "S",
         "tokens": 22562,
-        "status": "open",
-        "needsScheduler": true
+        "status": "done",
+        "needsScheduler": true,
+        "note": "Built after the first build: overdue published donations are marked expired (with a status event) whenever donations are listed, and kg per portion and the reservation timeout are stored settings that the sponsor dashboard and claims read."
       },
       {
         "id": "bl-mws1z8xg-8",
@@ -49,7 +50,8 @@
         "priority": "medium",
         "effort": "S",
         "tokens": 22565,
-        "status": "open"
+        "status": "done",
+        "note": "Built after the first build: overdue published donations are marked expired (with a status event) whenever donations are listed, and kg per portion and the reservation timeout are stored settings that the sponsor dashboard and claims read."
       }
     ],
     "deferred": [

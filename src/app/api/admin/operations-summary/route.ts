@@ -1,12 +1,14 @@
 import { NextResponse } from 'next/server';
 import { requireUser } from '@/lib/session';
 import { prisma } from '@/lib/db';
+import { expireOverdueDonations } from '@/lib/expiry';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   const user = await requireUser(request);
   if (user instanceof Response) return user;
+  await expireOverdueDonations();
 
   if (user.role !== 'admin') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

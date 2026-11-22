@@ -93,6 +93,27 @@
           "name": "last_signed_out_at",
           "type": "datetime",
           "nullable": true
+        },
+        {
+          "name": "organisation_name",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "password_changed_at",
+          "type": "datetime",
+          "nullable": true
+        },
+        {
+          "name": "session_token",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "token_version",
+          "type": "int",
+          "nullable": false,
+          "default": "0"
         }
       ],
       "persona_access": {
@@ -270,6 +291,21 @@
           "type": "uuid",
           "nullable": false,
           "fk": "users.id"
+        },
+        {
+          "name": "default_pickup_window",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "default_pickup_window_minutes",
+          "type": "int",
+          "nullable": true
+        },
+        {
+          "name": "preferred_food_types",
+          "type": "json",
+          "nullable": true
         }
       ],
       "persona_access": {
@@ -495,6 +531,18 @@
           "name": "published_at",
           "type": "datetime",
           "nullable": true
+        },
+        {
+          "name": "sponsor_campaign_id",
+          "type": "uuid",
+          "nullable": true,
+          "fk": "sponsor_campaigns.id"
+        },
+        {
+          "name": "confirmed_portions",
+          "type": "int",
+          "nullable": false,
+          "default": "0"
         }
       ],
       "persona_access": {
@@ -569,6 +617,22 @@
           "name": "declared_at",
           "type": "datetime",
           "nullable": false
+        },
+        {
+          "name": "preparation_time_at",
+          "type": "datetime",
+          "nullable": true
+        },
+        {
+          "name": "prepared_at",
+          "type": "datetime",
+          "nullable": true
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "nullable": false,
+          "default": "active"
         }
       ],
       "persona_access": {
@@ -643,6 +707,12 @@
           "name": "received_at",
           "type": "datetime",
           "nullable": true
+        },
+        {
+          "name": "portions_released",
+          "type": "int",
+          "nullable": false,
+          "default": "0"
         }
       ],
       "persona_access": {
@@ -785,6 +855,26 @@
           "name": "reason",
           "type": "text",
           "nullable": true
+        },
+        {
+          "name": "event_type",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "sequence_no",
+          "type": "int",
+          "nullable": false
+        },
+        {
+          "name": "record_type",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "record_id",
+          "type": "string",
+          "nullable": true
         }
       ],
       "persona_access": {
@@ -847,6 +937,12 @@
           "type": "enum(draft|active|ended)",
           "nullable": false,
           "default": "draft"
+        },
+        {
+          "name": "cost_per_portion",
+          "type": "decimal",
+          "nullable": false,
+          "default": "0"
         }
       ],
       "persona_access": {
@@ -927,6 +1023,41 @@
       "persona_access": {
         "Donor": "none",
         "NGO": "none",
+        "Volunteer / NGO Transporter": "none",
+        "Admin": "full",
+        "CSR Sponsor": "read"
+      }
+    },
+    {
+      "name": "settings",
+      "fields": [
+        {
+          "name": "key",
+          "type": "string",
+          "nullable": false,
+          "pk": true
+        },
+        {
+          "name": "value",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "updated_by_user_id",
+          "type": "uuid",
+          "nullable": true,
+          "fk": "users.id"
+        }
+      ],
+      "persona_access": {
+        "Donor": "none",
+        "NGO": "read",
         "Volunteer / NGO Transporter": "none",
         "Admin": "full",
         "CSR Sponsor": "read"

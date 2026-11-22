@@ -29,6 +29,7 @@ COPY --from=build --chown=node:node /app/package.json ./package.json
 COPY --from=build --chown=node:node /app/public ./public
 COPY --from=build --chown=node:node /app/prisma ./prisma
 EXPOSE 3000
-# Create/upgrade tables and seed demo accounts (idempotent), then serve.
+# Create/upgrade tables, clear end-to-end test data and repair inconsistent sample rows, seed demo accounts
+# (idempotent), then serve.
 # `db push` without --accept-data-loss refuses destructive changes.
-CMD ["sh", "-c", "node_modules/.bin/prisma db push --skip-generate; node_modules/.bin/tsx prisma/seed.ts; npm start"]
+CMD ["sh", "-c", "node_modules/.bin/prisma db push --skip-generate; node_modules/.bin/tsx prisma/maintenance.ts; node_modules/.bin/tsx prisma/seed.ts; npm start"]

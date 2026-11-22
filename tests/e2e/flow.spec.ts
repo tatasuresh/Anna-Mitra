@@ -84,5 +84,8 @@ test('donor → NGO → volunteer → NGO receipt → sponsor impact', async ({ 
 
   const after = await ok(await sponsor.get('/api/impact-dashboard'), 'impact after');
   expect(after.confirmed_portions_delivered).toBe(before.confirmed_portions_delivered + PORTIONS);
-  expect(after.estimated_waste_avoided_kg).toBeCloseTo(after.confirmed_portions_delivered * 0.35, 2);
+  expect(after.estimated_waste_avoided_kg).toBeCloseTo(
+    after.confirmed_portions_delivered * after.assumptions.kg_per_portion,
+    2,
+  );
 });

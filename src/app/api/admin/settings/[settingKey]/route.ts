@@ -1,41 +1,7 @@
 import { NextResponse } from 'next/server';
 import { requireUser } from '@/lib/session';
-
-type SettingRule = {
-  min: number;
-  max: number;
-  integer: boolean;
-  message: string;
-};
-
-const SETTING_RULES: Record<string, SettingRule> = {
-  reservation_timeout_minutes: {
-    min: 1,
-    max: 60,
-    integer: true,
-    message: 'Reservation timeout must be a whole number of minutes between 1 and 60.',
-  },
-  kg_per_portion: {
-    min: 0.01,
-    max: 10,
-    integer: false,
-    message: 'Kilograms per portion must be a number between 0.01 and 10.',
-  },
-};
-
-function validateValue(settingKey: string, value: unknown): { ok: true; value: number } | { ok: false; error: string } {
-  const rule = SETTING_RULES[settingKey];
-  if (typeof value !== 'number' || !Number.isFinite(value)) {
-    return { ok: false, error: rule.message };
-  }
-  if (rule.integer && !Number.isInteger(value)) {
-    return { ok: false, error: rule.message };
-  }
-  if (value < rule.min || value > rule.max) {
-    return { ok: false, error: rule.message };
-  }
-  return { ok: true, value };
-}
+import { prisma } from '@/lib/db';
+import { isSettingKey, validateSettingValue, getAllSettings } from '@/lib/settings';
 
 export async function PATCH(
   request: Request,
@@ -50,7 +16,7 @@ export async function PATCH(
   }
 
   const settingKey = params.settingKey;
-  if (!Object.prototype.hasOwnProperty.call(SETTING_RULES, settingKey)) {
+  if (!isSettingKey(settingKey)) {
     return NextResponse.json({ error: 'Setting not found' }, { status: 404 });
   }
 
@@ -70,16 +36,20 @@ export async function PATCH(
     return NextResponse.json({ error: 'Missing required field: value' }, { status: 400 });
   }
 
-  const validation = validateValue(settingKey, rawValue);
+  const validation = validateSettingValue(settingKey, rawValue);
   if (!validation.ok) {
     return NextResponse.json({ error: validation.error }, { status: 400 });
   }
 
-  // The settings store is not part of the generated Prisma schema, so the
-  // validated change cannot be persisted yet. Refuse rather than report a
-  // false success.
-  return NextResponse.json(
-    { error: 'Settings store is not configured' },
-    { status: 503 }
-  );
+  try {
+    await prisma.setting.upsert({
+      where: { key: settingKey },
+      update: { value: validation.value, updatedByUserId: user.id },
+      create: { key: settingKey, value: validation.value, updatedByUserId: user.id },
+    });
+    const all = await getAllSettings();
+    return NextResponse.json({ setting: all.find((x) => x.key === settingKey) });
+  } catch {
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
+  }
 }

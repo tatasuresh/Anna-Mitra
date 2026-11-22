@@ -379,3 +379,13 @@ model ImpactReport {
 
   @@map("impact_reports")
 }
+
+/// Admin-editable configuration (e.g. reservation timeout, kg per portion).
+model Setting {
+  key             String   @id
+  value           Float
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  updatedByUserId String?  @map("updated_by_user_id") @db.Uuid
+
+  @@map("settings")
+}

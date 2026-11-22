@@ -1,12 +1,14 @@
 import { NextResponse } from 'next/server';
 import { requireUser } from '@/lib/session';
 import { prisma } from '@/lib/db';
+import { expireOverdueDonations } from '@/lib/expiry';
 
 // Donation statuses are the schema's DonationStatus enum. The atlas label
 // "delivered" maps to the enum value `received` (donation fully confirmed by the NGO).
 export async function GET(request: Request) {
   const user = await requireUser(request);
   if (user instanceof Response) return user;
+  await expireOverdueDonations();
 
   if (user.role !== 'donor') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
