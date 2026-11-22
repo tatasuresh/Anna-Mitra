@@ -80,7 +80,7 @@ function validateBody(body: Record<string, unknown>): ValidationResult {
 export async function PATCH(
   request: NextRequest,
   context: {
-    params: Promise<{ handlingDeclarationId: string }> | { handlingDeclarationId: string };
+    params: Promise<{ handlingDeclarationId: string }>;
   },
 ) {
   const user = await requireUser(request);
