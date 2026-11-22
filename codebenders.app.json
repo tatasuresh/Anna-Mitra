@@ -1,0 +1,99 @@
+{
+  "schema": 1,
+  "name": "Anna Mitra",
+  "kind": "next-unified",
+  "stack": {
+    "frontend": "next",
+    "backend": "",
+    "database": "postgres",
+    "orm": "prisma",
+    "architecture": "monolith"
+  },
+  "services": [
+    {
+      "name": "web",
+      "root": ".",
+      "runtime": "node",
+      "runtimeVersion": "22",
+      "install": "npm ci",
+      "build": "npm run build",
+      "start": "npm run start",
+      "port": 3000,
+      "health": "/",
+      "output": ".next"
+    }
+  ],
+  "routing": {
+    "apiPrefix": "/__nexen_api"
+  },
+  "database": {
+    "engine": "postgres",
+    "orm": "prisma",
+    "envVar": "DATABASE_URL",
+    "schemaPath": "prisma/schema.prisma"
+  },
+  "env": [
+    {
+      "name": "AUTH_SECRET",
+      "class": "generated",
+      "required": true
+    },
+    {
+      "name": "DATABASE_URL",
+      "class": "managed",
+      "required": true
+    },
+    {
+      "name": "DEMO_ACCOUNTS_ENABLED",
+      "class": "secret",
+      "required": true
+    },
+    {
+      "name": "ILLUSTRATIVE_COST_PER_PORTION",
+      "class": "secret",
+      "required": true
+    },
+    {
+      "name": "MOCK_MODE",
+      "class": "forbidden"
+    },
+    {
+      "name": "NEXT_PUBLIC_APP_URL",
+      "class": "public",
+      "required": false
+    },
+    {
+      "name": "NEXT_PUBLIC_MOCK_MODE",
+      "class": "forbidden"
+    },
+    {
+      "name": "ONESIGNAL_APP_ID",
+      "class": "secret",
+      "required": true
+    },
+    {
+      "name": "ONESIGNAL_REST_API_KEY",
+      "class": "secret",
+      "required": true
+    },
+    {
+      "name": "RESEND_API_KEY",
+      "class": "secret",
+      "required": true
+    },
+    {
+      "name": "RESERVATION_TIMEOUT_MINUTES",
+      "class": "secret",
+      "required": true
+    },
+    {
+      "name": "SESSION_COOKIE_NAME",
+      "class": "secret",
+      "required": false
+    }
+  ],
+  "publishable": {
+    "ok": true,
+    "reasons": []
+  }
+}
