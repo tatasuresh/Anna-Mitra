@@ -1,0 +1,381 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  donor
+  ngo
+  volunteer
+  admin
+  csr_sponsor
+}
+
+enum AccountStatus {
+  pending_approval
+  approved
+  suspended
+}
+
+enum RestaurantStatus {
+  pending_approval
+  approved
+  suspended
+}
+
+enum NgoStatus {
+  pending_approval
+  approved
+  suspended
+}
+
+enum DonationInputMethod {
+  voice
+  text
+  manual
+  repeat
+}
+
+enum DonationStatus {
+  draft
+  published
+  claimed
+  partially_claimed
+  in_transit
+  received
+  expired
+  cancelled
+  failed
+}
+
+enum StorageMethod {
+  refrigerated
+  hot_held
+  ambient
+  frozen
+}
+
+enum ClaimStatus {
+  reserved
+  confirmed
+  released
+  expired
+}
+
+enum PickupTaskStatus {
+  open
+  accepted
+  collected
+  handed_over
+  failed
+}
+
+enum SponsorCampaignStatus {
+  draft
+  active
+  ended
+}
+
+model User {
+  id                 String        @id @default(uuid()) @db.Uuid
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+  name               String
+  email              String        @unique
+  passwordHash       String?       @map("password_hash")
+  role               UserRole
+  status             AccountStatus @default(pending_approval)
+  isDemo             Boolean       @default(false) @map("is_demo")
+  restaurantId       String?       @map("restaurant_id") @db.Uuid
+  ngoId              String?       @map("ngo_id") @db.Uuid
+  isAvailable        Boolean       @default(false) @map("is_available")
+  carryingCapacity   Int?          @map("carrying_capacity")
+  decidedAt          DateTime?     @map("decided_at")
+  decidedByUserId    String?       @map("decided_by_user_id") @db.Uuid
+  lastSignedOutAt    DateTime?     @map("last_signed_out_at")
+  organisationName   String?       @map("organisation_name")
+  passwordChangedAt  DateTime?     @map("password_changed_at")
+  sessionToken       String?       @map("session_token")
+  tokenVersion       Int           @default(0) @map("token_version")
+
+  restaurant          Restaurant?           @relation("UserRestaurant", fields: [restaurantId], references: [id], onDelete: SetNull)
+  ngo                 Ngo?                  @relation("UserNgo", fields: [ngoId], references: [id], onDelete: SetNull)
+  decidedBy           User?                 @relation("UserDecidedBy", fields: [decidedByUserId], references: [id], onDelete: SetNull)
+  decidedUsers        User[]                @relation("UserDecidedBy")
+  ownedRestaurants    Restaurant[]          @relation("RestaurantOwner")
+  passwordResetTokens PasswordResetToken[]  @relation("UserPasswordResetTokens")
+  preferencesUpdated  RestaurantPreference[] @relation("PreferenceUpdatedBy")
+  postedDonations     Donation[]            @relation("DonationPostedBy")
+  handlingDeclarations HandlingDeclaration[] @relation("DeclaredBy")
+  claims              DonationClaim[]       @relation("ClaimedBy")
+  volunteerPickups    PickupTask[]          @relation("PickupVolunteer")
+  statusEvents        StatusEvent[]         @relation("StatusActor")
+  sponsorCampaigns    SponsorCampaign[]     @relation("SponsorUser")
+
+  @@index([role, status])
+  @@map("users")
+}
+
+model PasswordResetToken {
+  id          String    @id @default(uuid()) @db.Uuid
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  userId      String    @map("user_id") @db.Uuid
+  tokenHash   String    @unique @map("token_hash")
+  requestedAt DateTime  @map("requested_at")
+  expiresAt   DateTime  @map("expires_at")
+  usedAt      DateTime? @map("used_at")
+
+  user User @relation("UserPasswordResetTokens", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model Restaurant {
+  id           String           @id @default(uuid()) @db.Uuid
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+  name         String
+  ownerUserId  String           @map("owner_user_id") @db.Uuid
+  latitude     Decimal          @db.Decimal(10, 7)
+  longitude    Decimal          @db.Decimal(10, 7)
+  status       RestaurantStatus @default(pending_approval)
+
+  ownerUser   User                  @relation("RestaurantOwner", fields: [ownerUserId], references: [id], onDelete: Cascade)
+  linkedUsers User[]                @relation("UserRestaurant")
+  preference  RestaurantPreference? @relation("RestaurantPreference")
+  donations   Donation[]            @relation("DonationRestaurant")
+
+  @@index([ownerUserId])
+  @@index([status])
+  @@map("restaurants")
+}
+
+model RestaurantPreference {
+  id                       String   @id @default(uuid()) @db.Uuid
+  createdAt                DateTime @default(now()) @map("created_at")
+  updatedAt                DateTime @updatedAt @map("updated_at")
+  restaurantId             String   @unique @map("restaurant_id") @db.Uuid
+  defaultPortions          Int?     @map("default_portions")
+  preferredPickupStart     String?  @map("preferred_pickup_start")
+  preferredPickupEnd       String?  @map("preferred_pickup_end")
+  pickupNotes              String?  @map("pickup_notes") @db.Text
+  defaultPickupWindow      String?  @map("default_pickup_window")
+  defaultPickupWindowMinutes Int?   @map("default_pickup_window_minutes")
+  preferredFoodTypes       Json?    @map("preferred_food_types")
+  updatedByUserId          String   @map("updated_by_user_id") @db.Uuid
+
+  restaurant Restaurant @relation("RestaurantPreference", fields: [restaurantId], references: [id], onDelete: Cascade)
+  updatedBy  User       @relation("PreferenceUpdatedBy", fields: [updatedByUserId], references: [id])
+
+  @@map("restaurant_preferences")
+}
+
+model Ngo {
+  id              String    @id @default(uuid()) @db.Uuid
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  name            String
+  latitude        Decimal   @db.Decimal(10, 7)
+  longitude       Decimal   @db.Decimal(10, 7)
+  serviceRadiusKm Decimal   @map("service_radius_km") @db.Decimal(6, 2)
+  status          NgoStatus @default(pending_approval)
+
+  users    User[]         @relation("UserNgo")
+  capacity NgoCapacity?   @relation("NgoCapacity")
+  claims   DonationClaim[] @relation("NgoClaims")
+
+  @@index([status])
+  @@map("ngos")
+}
+
+model NgoCapacity {
+  id                    String   @id @default(uuid()) @db.Uuid
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+  ngoId                 String   @unique @map("ngo_id") @db.Uuid
+  currentNeedPortions   Int      @default(0) @map("current_need_portions")
+  capacityPortions      Int      @default(0) @map("capacity_portions")
+  maxPortionsPerClaim   Int      @default(0) @map("max_portions_per_claim")
+  hasColdStorage        Boolean  @default(false) @map("has_cold_storage")
+  isAvailable           Boolean  @default(true) @map("is_available")
+
+  ngo Ngo @relation("NgoCapacity", fields: [ngoId], references: [id], onDelete: Cascade)
+
+  @@map("ngo_capacities")
+}
+
+model Donation {
+  id                     String              @id @default(uuid()) @db.Uuid
+  createdAt              DateTime            @default(now()) @map("created_at")
+  updatedAt              DateTime            @updatedAt @map("updated_at")
+  restaurantId           String              @map("restaurant_id") @db.Uuid
+  postedByUserId         String              @map("posted_by_user_id") @db.Uuid
+  repeatedFromDonationId String?             @map("repeated_from_donation_id") @db.Uuid
+  sponsorCampaignId      String?             @map("sponsor_campaign_id") @db.Uuid
+  description            String              @db.Text
+  portionsTotal          Int                 @map("portions_total")
+  portionsRemaining      Int                 @default(0) @map("portions_remaining")
+  confirmedPortions      Int                 @default(0) @map("confirmed_portions")
+  pickupLocation         String              @map("pickup_location")
+  pickupByAt             DateTime            @map("pickup_by_at")
+  inputMethod            DonationInputMethod @default(text) @map("input_method")
+  aiExtracted            Boolean             @default(false) @map("ai_extracted")
+  photoUrl               String?             @map("photo_url")
+  status                 DonationStatus      @default(draft)
+  publishedAt            DateTime?           @map("published_at")
+
+  restaurant         Restaurant           @relation("DonationRestaurant", fields: [restaurantId], references: [id], onDelete: Cascade)
+  postedBy           User                 @relation("DonationPostedBy", fields: [postedByUserId], references: [id])
+  repeatedFrom       Donation?            @relation("DonationRepeat", fields: [repeatedFromDonationId], references: [id], onDelete: SetNull)
+  repeats            Donation[]           @relation("DonationRepeat")
+  sponsorCampaign    SponsorCampaign?     @relation("CampaignDonations", fields: [sponsorCampaignId], references: [id], onDelete: SetNull)
+  handlingDeclarations HandlingDeclaration[] @relation("DonationDeclarations")
+  claims             DonationClaim[]      @relation("DonationClaims")
+  pickupTasks        PickupTask[]         @relation("DonationPickupTasks")
+  statusEvents       StatusEvent[]        @relation("DonationStatusEvents")
+
+  @@index([restaurantId])
+  @@index([status, pickupByAt])
+  @@index([sponsorCampaignId])
+  @@index([repeatedFromDonationId])
+  @@map("donations")
+}
+
+model HandlingDeclaration {
+  id                      String        @id @default(uuid()) @db.Uuid
+  createdAt               DateTime      @default(now()) @map("created_at")
+  updatedAt               DateTime      @updatedAt @map("updated_at")
+  donationId              String        @map("donation_id") @db.Uuid
+  declaredByUserId        String        @map("declared_by_user_id") @db.Uuid
+  preparationTimeMinutes  Int           @map("preparation_time_minutes")
+  preparationTimeAt       DateTime?     @map("preparation_time_at")
+  preparedAt              DateTime?     @map("prepared_at")
+  storageMethod           StorageMethod @map("storage_method")
+  requiresRefrigeration   Boolean       @default(false) @map("requires_refrigeration")
+  allergens               String?       @db.Text
+  checklistConfirmed      Boolean       @default(false) @map("checklist_confirmed")
+  declaredAt              DateTime      @map("declared_at")
+  status                  String        @default("active")
+
+  donation   Donation @relation("DonationDeclarations", fields: [donationId], references: [id], onDelete: Cascade)
+  declaredBy User     @relation("DeclaredBy", fields: [declaredByUserId], references: [id])
+
+  @@index([donationId])
+  @@map("handling_declarations")
+}
+
+model DonationClaim {
+  id               String      @id @default(uuid()) @db.Uuid
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
+  donationId       String      @map("donation_id") @db.Uuid
+  ngoId            String      @map("ngo_id") @db.Uuid
+  claimedByUserId  String      @map("claimed_by_user_id") @db.Uuid
+  portionsClaimed  Int         @map("portions_claimed")
+  status           ClaimStatus @default(reserved)
+  reservedUntil    DateTime    @map("reserved_until")
+  portionsReceived Int?        @map("portions_received")
+  receivedAt       DateTime?   @map("received_at")
+  portionsReleased Int         @default(0) @map("portions_released")
+
+  donation    Donation     @relation("DonationClaims", fields: [donationId], references: [id], onDelete: Cascade)
+  ngo         Ngo          @relation("NgoClaims", fields: [ngoId], references: [id])
+  claimedBy   User         @relation("ClaimedBy", fields: [claimedByUserId], references: [id])
+  pickupTasks PickupTask[] @relation("ClaimPickupTasks")
+
+  @@index([donationId, status])
+  @@index([ngoId])
+  @@map("donation_claims")
+}
+
+model PickupTask {
+  id               String           @id @default(uuid()) @db.Uuid
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+  donationId       String           @map("donation_id") @db.Uuid
+  claimId          String           @map("claim_id") @db.Uuid
+  volunteerUserId  String?          @map("volunteer_user_id") @db.Uuid
+  portionCount     Int              @map("portion_count")
+  status           PickupTaskStatus @default(open)
+  acceptedAt       DateTime?        @map("accepted_at")
+  collectedAt      DateTime?        @map("collected_at")
+  handedOverAt     DateTime?        @map("handed_over_at")
+  failureReason    String?          @map("failure_reason") @db.Text
+
+  donation    Donation        @relation("DonationPickupTasks", fields: [donationId], references: [id], onDelete: Cascade)
+  claim       DonationClaim   @relation("ClaimPickupTasks", fields: [claimId], references: [id], onDelete: Cascade)
+  volunteer   User?           @relation("PickupVolunteer", fields: [volunteerUserId], references: [id], onDelete: SetNull)
+  statusEvents StatusEvent[]  @relation("PickupStatusEvents")
+
+  @@index([status])
+  @@index([donationId])
+  @@index([claimId])
+  @@index([volunteerUserId])
+  @@map("pickup_tasks")
+}
+
+model StatusEvent {
+  id           String   @id @default(uuid()) @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  donationId   String   @map("donation_id") @db.Uuid
+  pickupTaskId String?  @map("pickup_task_id") @db.Uuid
+  actorUserId  String   @map("actor_user_id") @db.Uuid
+  fromStatus   String?  @map("from_status")
+  toStatus     String   @map("to_status")
+  reason       String?  @db.Text
+  eventType    String   @map("event_type")
+  sequenceNo   Int      @map("sequence_no")
+  recordType   String?  @map("record_type")
+  recordId     String?  @map("record_id")
+
+  donation   Donation    @relation("DonationStatusEvents", fields: [donationId], references: [id], onDelete: Cascade)
+  pickupTask PickupTask? @relation("PickupStatusEvents", fields: [pickupTaskId], references: [id], onDelete: SetNull)
+  actor      User        @relation("StatusActor", fields: [actorUserId], references: [id])
+
+  @@unique([donationId, sequenceNo])
+  @@index([pickupTaskId])
+  @@map("status_events")
+}
+
+model SponsorCampaign {
+  id              String                @id @default(uuid()) @db.Uuid
+  createdAt       DateTime              @default(now()) @map("created_at")
+  updatedAt       DateTime              @updatedAt @map("updated_at")
+  name            String
+  sponsorUserId   String                @map("sponsor_user_id") @db.Uuid
+  recognitionText String?               @map("recognition_text") @db.Text
+  startsOn        DateTime              @map("starts_on") @db.Date
+  endsOn          DateTime              @map("ends_on") @db.Date
+  status          SponsorCampaignStatus @default(draft)
+  costPerPortion  Decimal               @default(0) @map("cost_per_portion") @db.Decimal(10, 2)
+
+  sponsor   User       @relation("SponsorUser", fields: [sponsorUserId], references: [id], onDelete: Cascade)
+  donations Donation[] @relation("CampaignDonations")
+
+  @@index([sponsorUserId])
+  @@index([status])
+  @@map("sponsor_campaigns")
+}
+
+model ImpactReport {
+  id                        String   @id @default(uuid()) @db.Uuid
+  createdAt                 DateTime @default(now()) @map("created_at")
+  updatedAt                 DateTime @updatedAt @map("updated_at")
+  periodStart               DateTime @map("period_start") @db.Date
+  periodEnd                 DateTime @map("period_end") @db.Date
+  confirmedPortions         Int      @default(0) @map("confirmed_portions")
+  kgPerPortionAssumption    Decimal  @default(0.35) @map("kg_per_portion_assumption") @db.Decimal(6, 3)
+  estimatedWasteAvoidedKg   Decimal  @default(0) @map("estimated_waste_avoided_kg") @db.Decimal(12, 3)
+  illustrativeCost          Decimal  @default(0) @map("illustrative_cost") @db.Decimal(14, 2)
+  currency                  String   @default("INR")
+  generatedAt               DateTime @map("generated_at")
+
+  @@map("impact_reports")
+}
