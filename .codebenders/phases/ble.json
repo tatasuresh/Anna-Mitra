@@ -1,0 +1,235 @@
+{
+  "components": [
+    {
+      "name": "RootLayout",
+      "path": "src/app/layout.tsx",
+      "props": [
+        "children"
+      ],
+      "purpose": "Wraps every route with the global shell, session context provider and role-aware navigation."
+    },
+    {
+      "name": "Navbar",
+      "path": "src/components/Navbar.tsx",
+      "props": [
+        "role",
+        "userName",
+        "unreadAlertCount"
+      ],
+      "purpose": "Shows role-specific navigation links, in-app alert count and the profile entry point."
+    },
+    {
+      "name": "RoleEntryPage",
+      "path": "src/app/page.tsx",
+      "props": [],
+      "purpose": "Lets a visitor pick a role and sign in with an instant synthetic demo account."
+    },
+    {
+      "name": "LoginPage",
+      "path": "src/app/login/page.tsx",
+      "props": [],
+      "purpose": "Lets a participant sign in with their email and password."
+    },
+    {
+      "name": "SignUpPage",
+      "path": "src/app/signup/page.tsx",
+      "props": [],
+      "purpose": "Lets donors, NGOs, volunteers and sponsors create an account that awaits admin approval."
+    },
+    {
+      "name": "ForgotPasswordPage",
+      "path": "src/app/forgot-password/page.tsx",
+      "props": [],
+      "purpose": "Lets a participant request a password reset link by email."
+    },
+    {
+      "name": "ResetPasswordPage",
+      "path": "src/app/reset-password/page.tsx",
+      "props": [
+        "token"
+      ],
+      "purpose": "Lets a participant set a new password using the token from the emailed link."
+    },
+    {
+      "name": "ProfilePage",
+      "path": "src/app/profile/page.tsx",
+      "props": [],
+      "purpose": "Shows and updates the user's name, email and password, and provides sign-out."
+    },
+    {
+      "name": "DonorDashboardPage",
+      "path": "src/app/donor-dashboard/page.tsx",
+      "props": [],
+      "purpose": "Shows the restaurant's recent donation activity and a one-tap repeat donation action."
+    },
+    {
+      "name": "RestaurantPreferencesPage",
+      "path": "src/app/restaurant-preferences/page.tsx",
+      "props": [],
+      "purpose": "Lets a donor save restaurant preferences while keeping safety declarations fresh for each post."
+    },
+    {
+      "name": "QuickPostPage",
+      "path": "src/app/quick-post/page.tsx",
+      "props": [],
+      "purpose": "Lets a donor post surplus food by voice, text or manual entry and complete the handling checklist."
+    },
+    {
+      "name": "DonationsTrackingPage",
+      "path": "src/app/donations/page.tsx",
+      "props": [],
+      "purpose": "Lists the donor's donations with their current status."
+    },
+    {
+      "name": "DonationDetailPage",
+      "path": "src/app/donations/[id]/page.tsx",
+      "props": [
+        "params"
+      ],
+      "purpose": "Shows one donation's details, handling declarations and status history to anyone involved."
+    },
+    {
+      "name": "NgoFeedPage",
+      "path": "src/app/ngo-feed/page.tsx",
+      "props": [],
+      "purpose": "Lists eligible nearby donations with match explanations and in-app alerts."
+    },
+    {
+      "name": "NgoClaimPage",
+      "path": "src/app/ngo-claim/page.tsx",
+      "props": [],
+      "purpose": "Lets an NGO claim all or part of a donation within the confirmation window."
+    },
+    {
+      "name": "NgoReceiptPage",
+      "path": "src/app/ngo-receipt/page.tsx",
+      "props": [],
+      "purpose": "Lets an NGO confirm the quantity it actually received."
+    },
+    {
+      "name": "NgoCapacityPage",
+      "path": "src/app/ngo-capacity/page.tsx",
+      "props": [],
+      "purpose": "Lets an NGO set its current need, capacity and availability."
+    },
+    {
+      "name": "VolunteerTasksPage",
+      "path": "src/app/volunteer-tasks/page.tsx",
+      "props": [],
+      "purpose": "Lets a volunteer toggle availability, set carrying capacity and accept pickups."
+    },
+    {
+      "name": "ActiveDeliveryPage",
+      "path": "src/app/active-delivery/page.tsx",
+      "props": [],
+      "purpose": "Lets a volunteer confirm collection and handover and see simple status updates."
+    },
+    {
+      "name": "AdminOperationsPage",
+      "path": "src/app/admin-operations/page.tsx",
+      "props": [],
+      "purpose": "Lets an admin approve or suspend participants, monitor active rescues and resolve failed assignments."
+    },
+    {
+      "name": "SponsorImpactPage",
+      "path": "src/app/sponsor-impact/page.tsx",
+      "props": [],
+      "purpose": "Shows CSR campaign recognition and a transparent impact dashboard with labelled assumptions."
+    },
+    {
+      "name": "AuthForm",
+      "path": "src/components/AuthForm.tsx",
+      "props": [
+        "mode",
+        "onSubmit",
+        "fields"
+      ],
+      "purpose": "Renders the shared email and password form used by login, signup, forgot-password and reset-password."
+    },
+    {
+      "name": "DonationCard",
+      "path": "src/components/DonationCard.tsx",
+      "props": [
+        "donation",
+        "status",
+        "matchExplanation",
+        "onAction"
+      ],
+      "purpose": "Summarises a donation with its status and optional match explanation across donor and NGO views."
+    },
+    {
+      "name": "HandlingChecklist",
+      "path": "src/components/HandlingChecklist.tsx",
+      "props": [
+        "value",
+        "onChange",
+        "required"
+      ],
+      "purpose": "Captures the fresh per-donation handling checklist covering preparation time, storage and allergens."
+    },
+    {
+      "name": "StatusTimeline",
+      "path": "src/components/StatusTimeline.tsx",
+      "props": [
+        "events"
+      ],
+      "purpose": "Renders an ordered list of status events for a donation or pickup task."
+    }
+  ],
+  "architecture": {
+    "layout": "single",
+    "boundaries": [
+      "Public routes (/, /login, /signup, /forgot-password, /reset-password) must not render participant data.",
+      "Role-gated routes (donor, NGO, volunteer, admin, sponsor) are enforced server-side in route handlers and server actions, not only in the UI.",
+      "Safety declarations are per-donation and must never be copied from restaurant preferences.",
+      "Sponsor impact figures are aggregated server-side from confirmed receipts only, never from raw donor input.",
+      "Voice and AI extraction are optional; manual posting must always remain available.",
+      "Pickup and receipt state changes are written as append-only Status Events."
+    ],
+    "state_management": "Server actions for all CRUD and state transitions, with React Context for session and role. Alerts and availability refresh via polling or revalidation, not a global realtime store.",
+    "notable_dirs": [
+      "src/app",
+      "src/components",
+      "src/lib/auth",
+      "src/lib/actions",
+      "src/lib/db",
+      "src/lib/matching",
+      "src/lib/notifications",
+      "src/lib/impact",
+      "src/lib/voice",
+      "src/types"
+    ]
+  },
+  "flows": [
+    {
+      "name": "donor-post-donation",
+      "entry": "src/app/quick-post/page.tsx",
+      "summary": "A donor posts surplus food by one-tap repeat, voice or typing, edits extracted values, completes the handling checklist and publishes."
+    },
+    {
+      "name": "donor-track-donation",
+      "entry": "src/app/donations/page.tsx",
+      "summary": "A donor reviews the status of each donation and opens one to see its handling declarations and status history."
+    },
+    {
+      "name": "ngo-claim-donation",
+      "entry": "src/app/ngo-feed/page.tsx",
+      "summary": "An NGO reviews eligible nearby donations with match explanations, then claims all or part of one within the confirmation window."
+    },
+    {
+      "name": "ngo-confirm-receipt",
+      "entry": "src/app/ngo-receipt/page.tsx",
+      "summary": "An NGO confirms the quantity it received after a handover, which feeds the impact figures."
+    },
+    {
+      "name": "volunteer-accept-and-deliver",
+      "entry": "src/app/volunteer-tasks/page.tsx",
+      "summary": "A volunteer toggles availability, accepts a pickup, then confirms collection and handover on the active delivery screen."
+    },
+    {
+      "name": "admin-approve-and-resolve",
+      "entry": "src/app/admin-operations/page.tsx",
+      "summary": "An admin approves or suspends participants, monitors active rescues and resolves failed assignments."
+    }
+  ]
+}

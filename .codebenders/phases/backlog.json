@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "bl-mws1z8xg-9",
+      "title": "Post food by voice with AI-extracted description, portions and pickup time",
+      "detail": "The PRD asks donors to speak or type a food description and have portions and pickup time extracted, with manual posting as the fallback. Voice capture and the AI extraction layer are a whole part of the app.",
+      "step": "apis",
+      "source": "plan",
+      "priority": "medium",
+      "effort": "L",
+      "tokens": 204750,
+      "status": "open",
+      "why": "Voice capture and AI extraction with fallbacks is a large, integration-heavy part, and donors can already post manually.",
+      "covers": {
+        "endpoints": [
+          "POST /api/donation-extractions",
+          "POST /api/donations/extract",
+          "POST /api/my/donation-extractions"
+        ],
+        "integrations": [
+          "anthropic"
+        ]
+      },
+      "note": "Saved for after the first build."
+    }
+  ],
+  "leftOut": {
+    "at": "2026-11-22T16:30:21.939Z",
+    "items": [
+      {
+        "id": "bl-mws1z8xg-6",
+        "title": "Stop listing donations once their pickup-by time has passed",
+        "detail": "The PRD asks for server-side enforcement of deadline rules and a pickup-by time on each donation. The plan never expires or closes a donation at that time, so NGOs could still claim food that can no longer be collected.",
+        "step": "ble",
+        "source": "plan",
+        "priority": "high",
+        "effort": "S",
+        "tokens": 22562,
+        "status": "open",
+        "needsScheduler": true
+      },
+      {
+        "id": "bl-mws1z8xg-8",
+        "title": "Show the 0.35 kg per portion assumption in settings and on the sponsor dashboard",
+        "detail": "The PRD asks for a configurable impact assumption of 0.35 kg per portion, disclosed in the interface. The Settings screen only covers illustrative cost, so the kg-per-portion value is not configurable or labelled as an assumption.",
+        "step": "pages",
+        "source": "plan",
+        "priority": "medium",
+        "effort": "S",
+        "tokens": 22565,
+        "status": "open"
+      }
+    ],
+    "deferred": [
+      {
+        "id": "bl-mws1z8xg-9",
+        "title": "Post food by voice with AI-extracted description, portions and pickup time",
+        "detail": "The PRD asks donors to speak or type a food description and have portions and pickup time extracted, with manual posting as the fallback. Voice capture and the AI extraction layer are a whole part of the app.",
+        "step": "apis",
+        "source": "plan",
+        "priority": "medium",
+        "effort": "L",
+        "tokens": 204750,
+        "status": "open",
+        "why": "Voice capture and AI extraction with fallbacks is a large, integration-heavy part, and donors can already post manually.",
+        "covers": {
+          "endpoints": [
+            "POST /api/donation-extractions",
+            "POST /api/donations/extract",
+            "POST /api/my/donation-extractions"
+          ],
+          "integrations": [
+            "anthropic"
+          ]
+        }
+      }
+    ]
+  }
+}

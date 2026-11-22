@@ -1,0 +1,12 @@
+{
+  "mode": "greenfield",
+  "verdict": {
+    "filesWritten": 271,
+    "buildClean": false,
+    "typeCheckRan": true,
+    "verifiedIn": "/tmp/nexen-preview-8886ee21-bb71-4bdf-a366-ae58dd7c2203",
+    "verifiedHere": false,
+    "apiValidationRan": true,
+    "finishedAt": "2026-11-22T17:32:30.789Z"
+  }
+}

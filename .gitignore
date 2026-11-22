@@ -2,7 +2,9 @@
 # Nexen — secrets and diagnostics
 .env
 .env.*.local
-.codebenders/
+.codebenders/logs/
+.codebenders/dev-server.json
+.codebenders/backend-session.json
 *.db
 *.db-journal
 *.db-wal

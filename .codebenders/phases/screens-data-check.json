@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "basis": "bfaa3fe35742ed9a",
+  "at": "2026-11-22T15:58:21.986Z",
+  "fields": 61,
+  "missing": [
+    {
+      "key": "notifications.created_at",
+      "screens": [
+        "NGO Feed"
+      ],
+      "example": "2026-11-22T11:52"
+    },
+    {
+      "key": "notifications.donation_id",
+      "screens": [
+        "NGO Feed"
+      ],
+      "example": "d2"
+    },
+    {
+      "key": "notifications.message",
+      "screens": [
+        "NGO Feed"
+      ],
+      "example": "New match: 25 portions of vegetable fried rice from Saffron Buffet."
+    },
+    {
+      "key": "notifications.user_id",
+      "screens": [
+        "NGO Feed"
+      ],
+      "example": "u3"
+    },
+    {
+      "key": "restaurant_preferences.cuisine",
+      "screens": [
+        "Restaurant Preferences"
+      ],
+      "example": "North and South Indian buffet"
+    },
+    {
+      "key": "restaurant_preferences.pickup_contact_phone",
+      "screens": [
+        "Restaurant Preferences"
+      ],
+      "example": "+91 90000 14022"
+    },
+    {
+      "key": "restaurant_preferences.sms_alerts",
+      "screens": [
+        "Restaurant Preferences"
+      ],
+      "example": true
+    },
+    {
+      "key": "restaurants.address",
+      "screens": [
+        "Active Delivery",
+        "Donation Detail",
+        "Donor Dashboard",
+        "Restaurant Preferences"
+      ],
+      "example": "14 100 Feet Road, Velachery, Chennai 600042"
+    },
+    {
+      "key": "settings.key",
+      "screens": [
+        "NGO Claim",
+        "Sponsor Impact"
+      ],
+      "example": "reservation_timeout_minutes"
+    },
+    {
+      "key": "settings.value",
+      "screens": [
+        "NGO Claim",
+        "Sponsor Impact"
+      ],
+      "example": 5
+    }
+  ],
+  "decisions": {}
+}

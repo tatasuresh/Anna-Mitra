@@ -1,0 +1,59 @@
+{
+  "personas": [
+    {
+      "persona_id": "P-F1A049",
+      "name": "Donor",
+      "short_description": "Restaurant staff who post surplus edible food, complete the handling checklist and track each donation's status.",
+      "key_responsibilities": [
+        "Post a repeat donation with one tap",
+        "Speak or type a food description, portions and pickup-by time",
+        "Edit extracted values before publishing",
+        "Complete a fresh handling checklist covering preparation time, storage and allergens",
+        "Publish a donation and track its status",
+        "Post manually when voice or AI is unavailable"
+      ]
+    },
+    {
+      "persona_id": "P-77F91F",
+      "name": "NGO",
+      "short_description": "Charity or food-relief staff who see nearby eligible donations, claim portions they can use and confirm what arrived.",
+      "key_responsibilities": [
+        "See eligible nearby donations with concise match explanations and in-app alerts",
+        "Maintain current need, capacity and availability",
+        "Claim all or part of a donation within a short confirmation window",
+        "Confirm the received quantity"
+      ]
+    },
+    {
+      "persona_id": "P-91514B",
+      "name": "Volunteer / NGO Transporter",
+      "short_description": "Person who goes to a donor to collect claimed food and hands it to the receiving NGO, toggling availability as they go.",
+      "key_responsibilities": [
+        "Toggle availability",
+        "Indicate carrying capacity",
+        "Accept a pickup",
+        "Confirm collection and handover",
+        "See simple status updates"
+      ]
+    },
+    {
+      "persona_id": "P-1CBA3A",
+      "name": "Admin",
+      "short_description": "Platform operator who approves or suspends participants, watches active rescues and resolves failed assignments.",
+      "key_responsibilities": [
+        "Approve or suspend participants",
+        "Monitor active rescues",
+        "Resolve failed assignments"
+      ]
+    },
+    {
+      "persona_id": "P-DE77F7",
+      "name": "CSR Sponsor",
+      "short_description": "Corporate sponsor who reviews campaign recognition and a transparent dashboard of confirmed food rescue impact.",
+      "key_responsibilities": [
+        "See campaign recognition",
+        "View a transparent dashboard of confirmed portions delivered, estimated waste avoided and illustrative costs"
+      ]
+    }
+  ]
+}
