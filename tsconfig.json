@@ -41,6 +41,8 @@
     "**/*.test.tsx",
     "**/__tests__/**",
     ".next",
+    "next-nexen",
+    ".next-nexen",
     "prisma/seed.ts",
     "scripts/**",
     "services/**",

@@ -10,3 +10,9 @@
 
 # Nexen preview build output
 .next-nexen
+
+# Dependencies and build output
+node_modules/
+.next/
+next-nexen/
+*.tsbuildinfo
