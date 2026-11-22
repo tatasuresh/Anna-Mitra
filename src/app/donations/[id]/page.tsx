@@ -1,8 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import HandlingChecklist from '@/components/HandlingChecklist';
 import StatusTimeline from '@/components/StatusTimeline';
 import {
@@ -19,8 +20,8 @@ function formatStatus(status: string): string {
   return status.replace(/_/g, ' ');
 }
 
-export default function DonationDetailPage({ params }: { params: { id: string } }) {
-  const id = params.id;
+export default function DonationDetailPage() {
+  const { id } = useParams<{ id: string }>();
   const router = useRouter();
 
   const [role, setRole] = useState<string | null>(null);

@@ -1,13 +1,9 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
+import { Suspense, useState, type FormEvent } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createAuthResetPassword } from '@/lib/api';
-
-type ResetPasswordPageProps = {
-  searchParams?: { token?: string };
-};
 
 type FieldErrors = { password?: string; confirm?: string };
 
@@ -26,8 +22,8 @@ function validatePasswords(password: string, confirm: string): FieldErrors {
   return errors;
 }
 
-export default function ResetPasswordPage({ searchParams }: ResetPasswordPageProps) {
-  const token = searchParams?.token ?? '';
+function ResetPasswordForm() {
+  const token = useSearchParams().get('token') ?? '';
   const router = useRouter();
 
   const [password, setPassword] = useState('');
@@ -156,5 +152,13 @@ export default function ResetPasswordPage({ searchParams }: ResetPasswordPagePro
         </div>
       </section>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={null}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }
