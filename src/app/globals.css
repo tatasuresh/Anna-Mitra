@@ -339,3 +339,8 @@
   .ui-root .ui-grid-3, .ui-root .ui-grid-4 { grid-template-columns: minmax(0, 1fr); }
 }
 .ui-root .ui-card-footer .ui-actions { flex: 1 1 auto; min-width: 0; max-width: 100%; }
+
+/* Loading placeholders */
+.ui-root .ui-skeleton { border-radius: var(--ui-radius-sm); background: linear-gradient(90deg, var(--ui-surface-2) 0%, var(--ui-surface) 50%, var(--ui-surface-2) 100%); background-size: 800px 100%; animation: ui-shimmer 1.5s linear infinite; }
+@keyframes ui-shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+@media (prefers-reduced-motion: reduce) { .ui-root .ui-skeleton { animation: none; } }
