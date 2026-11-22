@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, type ChangeEvent } from 'react';
-import { updateMyDonationPhoto, deleteMyDonationPhoto } from '@/lib/api';
+import { uploadMyDonationPhoto, deleteMyDonationPhoto } from '@/lib/api';
 
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -49,7 +49,7 @@ export default function PhotoUpload({ donationId, photoUrl, onUploaded }: PhotoU
     setIsUploading(true);
     try {
       const dataUrl = await readAsDataUrl(file);
-      await updateMyDonationPhoto(donationId, { photo_url: dataUrl });
+      await uploadMyDonationPhoto(donationId, file);
       setPreview(dataUrl);
       onUploaded?.();
     } catch (err) {

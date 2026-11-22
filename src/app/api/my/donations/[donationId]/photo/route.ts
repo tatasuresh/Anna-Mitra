@@ -6,6 +6,7 @@ import { randomUUID } from 'crypto';
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db';
 import { requireUser } from '@/lib/session';
+import { DONATION_PHOTO_DIR, DONATION_PHOTO_URL_PREFIX, isStoredPhotoUrl } from '@/lib/uploads';
 
 export const runtime = 'nodejs';
 
@@ -20,7 +21,6 @@ const IMAGE_EXTENSIONS: Record<string, string> = {
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-const UPLOAD_URL_PREFIX = '/uploads/donations/';
 
 type RouteContext = { params: Promise<{ donationId: string }> };
 
@@ -87,13 +87,12 @@ async function handlePhotoUpload(request: Request, context: RouteContext) {
     }
 
     const bytes = Buffer.from(await file.arrayBuffer());
-    const directory = path.join(process.cwd(), 'public', 'uploads', 'donations');
-    await mkdir(directory, { recursive: true });
+    await mkdir(DONATION_PHOTO_DIR, { recursive: true });
 
     const fileName = `${donation.id}-${randomUUID()}.${extension}`;
-    await writeFile(path.join(directory, fileName), bytes);
+    await writeFile(path.join(DONATION_PHOTO_DIR, fileName), bytes);
 
-    const photoUrl = `/uploads/donations/${fileName}`;
+    const photoUrl = `${DONATION_PHOTO_URL_PREFIX}${fileName}`;
 
     const updated = await prisma.donation.update({
       where: { id: donation.id },
@@ -144,12 +143,10 @@ async function handlePhotoRemoval(request: Request, context: RouteContext) {
       data: { photoUrl: null },
     });
 
-    if (previousUrl && previousUrl.startsWith(UPLOAD_URL_PREFIX)) {
+    if (isStoredPhotoUrl(previousUrl)) {
       const fileName = path.basename(previousUrl);
-      const filePath = path.join(process.cwd(), 'public', 'uploads', 'donations', fileName);
       try {
-        await unlink(filePath);
-      } catch (e) {
+        await unlink(path.join(DONATION_PHOTO_DIR, fileName));      } catch (e) {
         const code = (e as NodeJS.ErrnoException).code;
         if (code !== 'ENOENT') {
           console.error('Failed to delete donation photo file', e);

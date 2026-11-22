@@ -1307,6 +1307,18 @@
       "description": "Uploads the optional photo for a draft donation from Quick Post and stores its URL in photo_url; refused for files that are not images."
     },
     {
+      "method": "GET",
+      "path": "/api/uploads/donations/{fileName}",
+      "handler": "donations-53",
+      "auth_required": false,
+      "roles": [],
+      "own_only": false,
+      "group": "Donations",
+      "request_shape": "",
+      "response_shape": "image bytes",
+      "description": "Serves an uploaded donation photo from the upload directory (UPLOAD_DIR, a Railway volume in production); photo_url points here. Only generated file names are accepted."
+    },
+    {
       "method": "POST",
       "path": "/api/donations/extract",
       "handler": "donations-53",

@@ -9,6 +9,7 @@ export interface HandlingDeclaration {
   donationId: string;
   declaredByUserId: string;
   preparationTimeMinutes: number;
+  preparedAt?: string;
   storageMethod: string;
   requiresRefrigeration: boolean;
   allergens?: string | null;
