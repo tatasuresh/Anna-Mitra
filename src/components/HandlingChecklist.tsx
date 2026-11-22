@@ -80,11 +80,15 @@ export default function HandlingChecklist({ donationId, disabled = false, onSave
     }
     setStatus('saving');
     try {
+      // The server expects preparedAt (an instant no later than now) and allergens as a list,
+      // with 'none' meaning none declared. Subtract a minute so clock skew never reads as future.
+      const preparedAt = new Date(Date.now() - Math.max(prep, 1) * 60_000 - 60_000).toISOString();
       await createMyDonationHandlingDeclaration(donationId, {
         preparationTimeMinutes: prep,
+        preparedAt,
         storageMethod: storage,
         requiresRefrigeration: storage === 'refrigerated',
-        allergens: noneDeclared ? 'none' : allergens.join(', '),
+        allergens: (noneDeclared ? ['none'] : allergens) as unknown as string,
         checklistConfirmed: true,
       });
       setStatus('saved');

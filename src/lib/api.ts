@@ -1350,7 +1350,8 @@ async function http(url: string, init?: RequestInit): Promise<any> {
     ...init,
     credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
+      // Let the browser set the multipart boundary for FormData bodies.
+      ...(typeof FormData !== 'undefined' && init?.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...((init?.headers as Record<string, string> | undefined) ?? {}),
     },
@@ -1666,6 +1667,11 @@ export async function getMyDonationById(donationId: string, query?: Record<strin
 }
 export async function deleteMyDonation(donationId: string): Promise<void> {
   return http(`/api/my/donations/${donationId}`, { method: 'DELETE' });
+}
+export async function uploadMyDonationPhoto(donationId: string, file: File): Promise<Donation> {
+  const form = new FormData();
+  form.append('file', file);
+  return http(`/api/my/donations/${donationId}/photo`, { method: 'POST', body: form });
 }
 export async function createMyDonationPhoto(donationId: string, input: Record<string, unknown>): Promise<Donation> {
   return http(`/api/my/donations/${donationId}/photo`, { method: 'POST', body: JSON.stringify(input) });
