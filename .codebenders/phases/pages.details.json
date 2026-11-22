@@ -1,0 +1,1455 @@
+{
+  "version": 1,
+  "details": {
+    "/": {
+      "detail": {
+        "purpose": "Lets a visitor pick one of the five roles (Donor, NGO, Volunteer / NGO Transporter, Admin, CSR Sponsor) and sign in straight away with that role's instant synthetic demo account. It is the front door of the pilot.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Product name 'Anna Mitra' and a one-line description: lets restaurants post surplus edible food, matches it to nearby NGOs, coordinates volunteer pickup and reports confirmed rescue impact."
+          },
+          {
+            "area": "Role choice",
+            "contents": "Five role cards or buttons: Donor, NGO, Volunteer / NGO Transporter, Admin, CSR Sponsor. Each shows the role name and one short line describing what that role does."
+          },
+          {
+            "area": "Demo sign-in",
+            "contents": "After a role is picked, a short panel shows the synthetic demo account for that role and a 'Enter demo' button. Note that all people and details are synthetic."
+          },
+          {
+            "area": "Account links",
+            "contents": "Links to 'Log in with my account' (/login) and 'Create an account' (/signup)."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Role options",
+            "details": "Five roles in this order: Donor, NGO, Volunteer / NGO Transporter, Admin, CSR Sponsor. No counts or totals."
+          },
+          {
+            "item": "Demo account",
+            "details": "Synthetic account for the chosen role, shown so the visitor knows which account they are entering."
+          }
+        ],
+        "actions": [
+          {
+            "who": "Donor",
+            "action": "Picks the Donor role and selects 'Enter demo'.",
+            "result": "Signed in to the demo Donor account and sent to /donor-dashboard."
+          },
+          {
+            "who": "NGO",
+            "action": "Picks the NGO role and selects 'Enter demo'.",
+            "result": "Signed in to the demo NGO account and sent to /ngo-feed."
+          },
+          {
+            "who": "Everyone",
+            "action": "Picks the volunteer role and selects 'Enter demo'.",
+            "result": "Signed in to the demo volunteer account and sent to /volunteer-tasks."
+          },
+          {
+            "who": "Admin",
+            "action": "Picks the Admin role and selects 'Enter demo'.",
+            "result": "Signed in to the demo admin account and sent to /admin-operations."
+          },
+          {
+            "who": "CSR Sponsor",
+            "action": "Picks the CSR Sponsor role and selects 'Enter demo'.",
+            "result": "Signed in to the demo sponsor account and sent to /sponsor-impact."
+          },
+          {
+            "who": "Everyone",
+            "action": "Chooses 'Log in with my account' or 'Create an account' instead of a demo.",
+            "result": "Goes to /login or /signup."
+          }
+        ],
+        "links": [
+          {
+            "to": "/donor-dashboard",
+            "label": "Enter demo (Donor)",
+            "when": "After the Donor role is picked and demo sign-in succeeds."
+          },
+          {
+            "to": "/ngo-feed",
+            "label": "Enter demo (NGO)",
+            "when": "After the NGO role is picked and demo sign-in succeeds."
+          },
+          {
+            "to": "/volunteer-tasks",
+            "label": "Enter demo (Volunteer / NGO Transporter)",
+            "when": "After the volunteer role is picked and demo sign-in succeeds."
+          },
+          {
+            "to": "/admin-operations",
+            "label": "Enter demo (Admin)",
+            "when": "After the Admin role is picked and demo sign-in succeeds."
+          },
+          {
+            "to": "/sponsor-impact",
+            "label": "Enter demo (CSR Sponsor)",
+            "when": "After the CSR Sponsor role is picked and demo sign-in succeeds."
+          },
+          {
+            "to": "/login",
+            "label": "Log in with my account",
+            "when": "A participant already has an account and wants to sign in with it."
+          },
+          {
+            "to": "/signup",
+            "label": "Create an account",
+            "when": "A donor, NGO, volunteer or sponsor wants a new account, which then waits for admin approval."
+          }
+        ],
+        "states": {
+          "empty": "No role picked yet: the demo panel is hidden and only the five role choices and account links show.",
+          "loading": "While the demo account signs in, the chosen role button shows a short busy indicator and is disabled.",
+          "error": "If demo sign-in fails, a short message says the demo could not start and offers 'Log in with my account' instead."
+        },
+        "notes": "Demo accounts are instant and synthetic; no real person, contact detail, address or coordinate is involved. Demo sign-in is for the hackathon pilot only. No OTP or KYC step is shown. Only role choice and demo entry happen here; no location is requested."
+      },
+      "basis": "[\"Role Entry\",\"Where a visitor picks a role and signs in with an instant synthetic demo account.\",[\"Admin\",\"CSR Sponsor\",\"Donor\",\"NGO\",\"Volunteer / NGO Transporter\"],[[\"Admin\",\"pick the admin role and enter the demo account\"],[\"CSR Sponsor\",\"pick the sponsor role and enter the demo account\"],[\"Donor\",\"pick the Donor role and enter the demo account\"],[\"NGO\",\"pick the NGO role and enter the demo account\"],[\"Volunteer / NGO Transporter\",\"pick the volunteer role and enter the demo account\"]]]",
+      "at": "2026-11-22T14:58:35.426Z"
+    },
+    "/signup": {
+      "detail": {
+        "purpose": "Lets a donor, NGO, volunteer / NGO transporter or CSR sponsor create their own account. The account waits for admin approval before the person can use the app.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Create your Anna Mitra account'. A line saying the account will be reviewed by an admin before it can be used."
+          },
+          {
+            "area": "Account type",
+            "contents": "Choice of who is signing up: Donor (restaurant staff), NGO (charity or food-relief organisation), Volunteer / NGO Transporter, or CSR Sponsor."
+          },
+          {
+            "area": "Sign-up form",
+            "contents": "Fields for name, email and password, and a 'Create account' button. The exact extra fields for each account type are not specified in the requirements."
+          },
+          {
+            "area": "Log-in link",
+            "contents": "Text 'Already have an account? Log in' with a link to Login."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Account type choice",
+            "details": "Four options, one per persona: Donor, NGO, Volunteer / NGO Transporter, CSR Sponsor."
+          },
+          {
+            "item": "Pending approval notice",
+            "details": "Text saying the account waits for admin approval before sign-in works."
+          }
+        ],
+        "actions": [
+          {
+            "who": "Donor",
+            "action": "Creates a restaurant account by choosing Donor and filling in the form.",
+            "result": "Account is saved as pending admin approval. The person is told it is awaiting approval."
+          },
+          {
+            "who": "NGO",
+            "action": "Creates an organisation account by choosing NGO and filling in the form.",
+            "result": "Account is saved as pending admin approval. The person is told it is awaiting approval."
+          },
+          {
+            "who": "Everyone",
+            "action": "Creates a volunteer account by choosing Volunteer / NGO Transporter and filling in the form.",
+            "result": "Account is saved as pending admin approval. The person is told it is awaiting approval."
+          },
+          {
+            "who": "CSR Sponsor",
+            "action": "Creates a sponsor account by choosing CSR Sponsor and filling in the form.",
+            "result": "Account is saved as pending admin approval. The person is told it is awaiting approval."
+          }
+        ],
+        "links": [
+          {
+            "to": "/login",
+            "label": "Log in",
+            "when": "The person already has an account and wants to sign in."
+          }
+        ],
+        "states": {
+          "empty": "Blank form with the account type unselected and the create button ready.",
+          "loading": "Create button is disabled with a progress indicator while the account is being saved.",
+          "error": "Problem message beside the field at fault (for example missing name, invalid email or weak password), and the form keeps what was typed."
+        },
+        "notes": "Accounts are created pending admin approval; admins approve or suspend them on Admin Operations. No production OTP or KYC verification step is shown. All names, emails and details are synthetic for the hackathon. Password rules and any further required fields are not specified in the requirements."
+      },
+      "basis": "[\"Sign Up\",\"Where donors, NGOs, volunteers and sponsors create their own account, pending admin approval.\",[\"CSR Sponsor\",\"Donor\",\"NGO\",\"Volunteer / NGO Transporter\"],[[\"CSR Sponsor\",\"create a sponsor account, pending approval\"],[\"Donor\",\"create a restaurant account, pending approval\"],[\"NGO\",\"create an organisation account, pending approval\"],[\"Volunteer / NGO Transporter\",\"create a volunteer account, pending approval\"]]]",
+      "at": "2026-11-22T14:58:46.458Z"
+    },
+    "/login": {
+      "detail": {
+        "purpose": "Where a participant signs in with their account to reach their role's screens. Donors, NGOs, volunteers, admins and CSR sponsors all come here.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Sign in to Anna Mitra' with a line saying participants sign in with their own account."
+          },
+          {
+            "area": "Sign-in form",
+            "contents": "Email field, password field, and a 'Sign in' button."
+          },
+          {
+            "area": "Secondary links",
+            "contents": "'Forgot password?' link and a 'Create an account' link for new participants."
+          },
+          {
+            "area": "Message area",
+            "contents": "Shows a sign-in error below the form when sign-in fails."
+          }
+        ],
+        "shows": [],
+        "actions": [
+          {
+            "who": "Donor",
+            "action": "Enters email and password and taps 'Sign in' to post and track donations.",
+            "result": "Signed in and taken to Donor Dashboard."
+          },
+          {
+            "who": "NGO",
+            "action": "Enters email and password and taps 'Sign in' to see and claim donations.",
+            "result": "Signed in and taken to NGO Feed."
+          },
+          {
+            "who": "Everyone",
+            "action": "Enters email and password and taps 'Sign in' to take pickups.",
+            "result": "Signed in and taken to Volunteer Tasks."
+          },
+          {
+            "who": "Admin",
+            "action": "Enters email and password and taps 'Sign in' to run operations.",
+            "result": "Signed in and taken to Admin Operations."
+          },
+          {
+            "who": "CSR Sponsor",
+            "action": "Enters email and password and taps 'Sign in' to view impact.",
+            "result": "Signed in and taken to Sponsor Impact."
+          },
+          {
+            "who": "Everyone",
+            "action": "Taps 'Forgot password?' to request a reset link by email.",
+            "result": "Opens the Forgot Password screen."
+          }
+        ],
+        "links": [
+          {
+            "to": "/donor-dashboard",
+            "label": "Sign in (Donor)",
+            "when": "After a successful sign-in by a donor."
+          },
+          {
+            "to": "/ngo-feed",
+            "label": "Sign in (NGO)",
+            "when": "After a successful sign-in by an NGO."
+          },
+          {
+            "to": "/volunteer-tasks",
+            "label": "Sign in (Volunteer / NGO Transporter)",
+            "when": "After a successful sign-in by a volunteer or NGO transporter."
+          },
+          {
+            "to": "/admin-operations",
+            "label": "Sign in (Admin)",
+            "when": "After a successful sign-in by an admin."
+          },
+          {
+            "to": "/sponsor-impact",
+            "label": "Sign in (CSR Sponsor)",
+            "when": "After a successful sign-in by a CSR sponsor."
+          },
+          {
+            "to": "/forgot-password",
+            "label": "Forgot password?",
+            "when": "When the participant cannot remember their password."
+          },
+          {
+            "to": "/signup",
+            "label": "Create an account",
+            "when": "When a new donor, NGO, volunteer or sponsor needs an account, which then waits for admin approval."
+          }
+        ],
+        "states": {
+          "empty": "Empty email and password fields with the 'Sign in' button available.",
+          "loading": "The 'Sign in' button is disabled while the sign-in request is in progress.",
+          "error": "A message below the form says the sign-in failed, and the entered details stay in place."
+        },
+        "notes": "Only approved accounts can use the app; accounts pending approval or suspended by an admin should not get past sign-in. The requirements do not specify the exact wording of these messages. Production-grade OTP or KYC verification is out of scope, so sign-in is email and password only. Demo sign-in is on Role Entry, not here."
+      },
+      "basis": "[\"Login\",\"Where a participant signs in with their account.\",[\"Admin\",\"CSR Sponsor\",\"Donor\",\"NGO\",\"Volunteer / NGO Transporter\"],[[\"Admin\",\"sign in to run operations\"],[\"CSR Sponsor\",\"sign in to view impact\"],[\"Donor\",\"sign in to post and track donations\"],[\"NGO\",\"sign in to see and claim donations\"],[\"Volunteer / NGO Transporter\",\"sign in to take pickups\"]]]",
+      "at": "2026-11-22T14:58:48.752Z"
+    },
+    "/forgot-password": {
+      "detail": {
+        "purpose": "Where a participant asks for a password reset link by email. Donors, NGOs, volunteers, admins and CSR sponsors all use it when they cannot sign in.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading \"Forgot password\" with a short line saying a reset link will be emailed to the account's address."
+          },
+          {
+            "area": "Reset request form",
+            "contents": "One email field and a \"Send reset link\" button."
+          },
+          {
+            "area": "Confirmation message",
+            "contents": "Appears after submitting. Says a reset link has been sent to the email if it belongs to an account, and tells the person to check their inbox."
+          },
+          {
+            "area": "Back to sign in",
+            "contents": "A \"Back to sign in\" link below the form."
+          }
+        ],
+        "shows": [],
+        "actions": [
+          {
+            "who": "Everyone",
+            "action": "Enters the account email and taps \"Send reset link\".",
+            "result": "A reset link is emailed to that address and the confirmation message appears. The person then follows the emailed link to the Reset Password screen."
+          }
+        ],
+        "links": [
+          {
+            "to": "/login",
+            "label": "Back to sign in",
+            "when": "The person remembers their password or wants to return to sign in without resetting."
+          },
+          {
+            "to": "/reset-password",
+            "label": "Reset link in the email",
+            "when": "The person opens the emailed link to set a new password. This is opened from the email, not from this screen."
+          }
+        ],
+        "states": {
+          "empty": "Email field is blank and the send button is disabled until something is typed.",
+          "loading": "Send button shows a pending state and the form cannot be submitted again until the request finishes.",
+          "error": "If the request cannot be sent, a message says the reset link could not be sent and the person can try again."
+        },
+        "notes": "The emailed link is the only route to Reset Password; the screen itself has no link to it. Email is synthetic for the hackathon. The notification service is used when configured; if it is not configured, the app must still provide an explicit working fallback for resetting a password, which the requirements do not describe. Production-grade OTP or KYC verification is out of scope."
+      },
+      "basis": "[\"Forgot Password\",\"Where a participant asks for a password reset link by email.\",[\"Admin\",\"CSR Sponsor\",\"Donor\",\"NGO\",\"Volunteer / NGO Transporter\"],[[\"Admin\",\"request a reset link by email\"],[\"CSR Sponsor\",\"request a reset link by email\"],[\"Donor\",\"request a reset link by email\"],[\"NGO\",\"request a reset link by email\"],[\"Volunteer / NGO Transporter\",\"request a reset link by email\"]]]",
+      "at": "2026-11-22T14:58:57.599Z"
+    },
+    "/reset-password": {
+      "detail": {
+        "purpose": "Lets a participant set a new password from the reset link in their email. Any signed-in-out participant (donor, NGO, volunteer or transporter, admin, or CSR sponsor) arrives here from that link.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Set a new password' with a short line saying the password will be changed for this account."
+          },
+          {
+            "area": "Reset form",
+            "contents": "'New password' field, 'Confirm new password' field, and a 'Save new password' button."
+          },
+          {
+            "area": "Link help",
+            "contents": "Text link 'Request a new reset link' for when the link has expired or does not work, and a 'Back to sign in' link."
+          }
+        ],
+        "shows": [],
+        "actions": [
+          {
+            "who": "Everyone",
+            "action": "Enters a new password and the same password again, then selects 'Save new password'.",
+            "result": "The password is changed for the account named in the emailed link and the person is taken to /login to sign in with the new password."
+          },
+          {
+            "who": "Everyone",
+            "action": "Selects 'Request a new reset link'.",
+            "result": "The person is taken to /forgot-password to ask for a fresh emailed link."
+          }
+        ],
+        "links": [
+          {
+            "to": "/login",
+            "label": "Back to sign in",
+            "when": "The person wants to sign in without resetting, or after a successful save."
+          },
+          {
+            "to": "/forgot-password",
+            "label": "Request a new reset link",
+            "when": "The link has expired, was already used, or does not work."
+          }
+        ],
+        "states": {
+          "empty": "If the page is opened without a valid reset link, show a message that the link is missing and offer 'Request a new reset link'.",
+          "loading": "While the new password is being saved, the button is disabled and shows a saving indicator.",
+          "error": "If the link is invalid or expired, or the two passwords do not match, show a plain message above the form and keep the entered values."
+        },
+        "notes": "The emailed link is the only check; there is no OTP or KYC step. Password strength rules are not set in the requirements. The two password fields must match before saving. Permissions and the reset itself are enforced on the server."
+      },
+      "basis": "[\"Reset Password\",\"Where a participant sets a new password from the emailed link.\",[\"Admin\",\"CSR Sponsor\",\"Donor\",\"NGO\",\"Volunteer / NGO Transporter\"],[[\"Admin\",\"set a new password from the link\"],[\"CSR Sponsor\",\"set a new password from the link\"],[\"Donor\",\"set a new password from the link\"],[\"NGO\",\"set a new password from the link\"],[\"Volunteer / NGO Transporter\",\"set a new password from the link\"]]]",
+      "at": "2026-11-22T14:58:59.892Z"
+    },
+    "/profile": {
+      "detail": {
+        "purpose": "Lets any signed-in participant (donor, NGO, volunteer/transporter, admin or CSR sponsor) see their own account details, change their name, email or password, and sign out.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Profile' with a one-line note that these details belong to the signed-in account."
+          },
+          {
+            "area": "Account details card",
+            "contents": "Shows the current name and email, each with an Edit control. Shows the participant's role (Donor, NGO, Volunteer / NGO Transporter, Admin or CSR Sponsor) as read-only text."
+          },
+          {
+            "area": "Change name form",
+            "contents": "Single 'Name' field pre-filled with the current name, and a 'Save name' button."
+          },
+          {
+            "area": "Change email form",
+            "contents": "'New email' field and a 'Save email' button."
+          },
+          {
+            "area": "Change password form",
+            "contents": "'Current password', 'New password' and 'Confirm new password' fields, and a 'Change password' button."
+          },
+          {
+            "area": "Sign out",
+            "contents": "A 'Sign out' button at the bottom of the screen."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Signed-in account",
+            "details": "Name, email and role of the current user. Password is never shown."
+          }
+        ],
+        "actions": [
+          {
+            "who": "Everyone",
+            "action": "Change name",
+            "result": "Name is saved and the new name is shown on the account details card."
+          },
+          {
+            "who": "Everyone",
+            "action": "Change email",
+            "result": "Email is saved and the new email is shown on the account details card."
+          },
+          {
+            "who": "Everyone",
+            "action": "Change password",
+            "result": "Password is updated after the current password is checked and the new password is confirmed."
+          },
+          {
+            "who": "Everyone",
+            "action": "Sign out",
+            "result": "The session ends and the user returns to Role Entry."
+          }
+        ],
+        "links": [
+          {
+            "to": "/",
+            "label": "Sign out",
+            "when": "When the user ends their session."
+          }
+        ],
+        "states": {
+          "empty": "",
+          "loading": "Account details show a loading placeholder until the current user is fetched.",
+          "error": "A failed save shows an inline message beside the form and keeps the entered values; a wrong current password shows a message beside the password fields."
+        },
+        "notes": "Each participant changes only their own name, email and password. Changing the password requires the current password. Email and password changes are enforced on the server. Production-grade OTP or KYC verification is not part of this screen. Synthetic accounts only."
+      },
+      "basis": "[\"Profile\",\"Where a person sees and changes their name, email and password, and signs out.\",[\"Admin\",\"CSR Sponsor\",\"Donor\",\"NGO\",\"Volunteer / NGO Transporter\"],[[\"Admin\",\"change name, email or password, then sign out\"],[\"CSR Sponsor\",\"change name, email or password, then sign out\"],[\"Donor\",\"change name, email or password, then sign out\"],[\"NGO\",\"change name, email or password, then sign out\"],[\"Volunteer / NGO Transporter\",\"change name, email or password, then sign out\"]]]",
+      "at": "2026-11-22T14:59:06.216Z"
+    },
+    "/donor-dashboard": {
+      "detail": {
+        "purpose": "Where a donor sees their restaurant's recent donation activity and starts a new post. The donor lands here after signing in and uses it as the starting point for posting surplus food.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading with the restaurant's name and a primary button \"Post surplus food\"; a secondary control \"Repeat last donation\" for one-tap repeat posting."
+          },
+          {
+            "area": "Recent activity list",
+            "contents": "Recent donations of this restaurant, newest first, each row showing the food description, portions, pickup-by time and current status; each row opens its donation detail."
+          },
+          {
+            "area": "Status summary",
+            "contents": "Simple counts of this restaurant's donations by status (for example published, claimed, delivered), so the donor sees where things stand at a glance."
+          },
+          {
+            "area": "Quick links",
+            "contents": "Links to restaurant preferences and to the full donation tracking list."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Recent donations",
+            "details": "Food description, portions, pickup-by time and status per donation; newest first; each row links to its detail."
+          },
+          {
+            "item": "Status counts",
+            "details": "Number of this restaurant's donations in each status."
+          }
+        ],
+        "actions": [
+          {
+            "who": "Donor",
+            "action": "Starts a new post with the primary button.",
+            "result": "Opens the Quick Post screen to post by voice, typing or manually."
+          },
+          {
+            "who": "Donor",
+            "action": "Taps Repeat last donation.",
+            "result": "Opens Quick Post with the previous donation's details prefilled so it can be published with one tap."
+          },
+          {
+            "who": "Donor",
+            "action": "Opens a recent donation row.",
+            "result": "Opens that donation's detail screen."
+          }
+        ],
+        "links": [
+          {
+            "to": "/quick-post",
+            "label": "Post surplus food",
+            "when": "When the donor has surplus food to post."
+          },
+          {
+            "to": "/donations/[id]",
+            "label": "Recent donation row",
+            "when": "When the donor wants to see one donation's details or status history."
+          },
+          {
+            "to": "/donations",
+            "label": "View all donations",
+            "when": "When the donor wants the full list of their donations and statuses."
+          },
+          {
+            "to": "/restaurant-preferences",
+            "label": "Restaurant preferences",
+            "when": "When the donor wants to save or change restaurant preferences."
+          }
+        ],
+        "states": {
+          "empty": "No donations yet: a short message invites the donor to post their first surplus food, with the primary button shown.",
+          "loading": "Activity list and counts show placeholder rows until data arrives.",
+          "error": "A message says recent activity could not be loaded, with a retry button."
+        },
+        "notes": "Only this restaurant's donations are shown to the donor. Repeat posting must not reuse safety declarations; the donor completes a fresh handling checklist before publishing."
+      },
+      "basis": "[\"Donor Dashboard\",\"Where a donor sees their restaurant's activity and starts a new post.\",[\"Donor\"],[[\"Donor\",\"see recent activity and start a new post\"]]]",
+      "at": "2026-11-22T14:59:11.065Z"
+    },
+    "/restaurant-preferences": {
+      "detail": {
+        "purpose": "Lets a donor save their restaurant's standing preferences for future donations. Safety declarations are deliberately not saved or reused here, so each donation's handling checklist is completed fresh.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Restaurant preferences' with a short line saying these settings are saved, but safety declarations are not reused and must be completed fresh for each donation."
+          },
+          {
+            "area": "Preferences form",
+            "contents": "Form fields for the restaurant's saved donation preferences, as the requirements define them. The requirements do not list specific fields."
+          },
+          {
+            "area": "Safety declarations notice",
+            "contents": "A note that preparation time, storage/handling and allergen declarations are not saved here. They are blank by design and are completed fresh in Quick Post for each donation."
+          },
+          {
+            "area": "Save bar",
+            "contents": "A 'Save preferences' button and a 'Back to dashboard' link."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Restaurant preferences",
+            "details": "The donor's saved preferences for the restaurant, shown as editable form fields with their current saved values."
+          },
+          {
+            "item": "Safety declarations",
+            "details": "Not shown as saved values. The preparation time, storage/handling and allergen declarations are never pre-filled from earlier entries or from these preferences."
+          }
+        ],
+        "actions": [
+          {
+            "who": "Donor",
+            "action": "Edit the restaurant preferences and tap 'Save preferences'.",
+            "result": "The preferences are saved for the restaurant. Safety declarations stay blank and are not stored from this screen."
+          },
+          {
+            "who": "Donor",
+            "action": "Leave the safety declarations blank.",
+            "result": "Nothing is saved for safety declarations. Each new donation requires a fresh handling checklist."
+          },
+          {
+            "who": "Donor",
+            "action": "Tap 'Back to dashboard' without saving.",
+            "result": "Returns to the donor dashboard with no changes saved."
+          }
+        ],
+        "links": [
+          {
+            "to": "/donor-dashboard",
+            "label": "Back to dashboard",
+            "when": "The donor leaves this screen after saving or without saving."
+          }
+        ],
+        "states": {
+          "empty": "No preferences saved yet: the form shows blank or default fields and the safety declarations notice still appears.",
+          "loading": "The form shows a loading indicator while saved preferences are fetched.",
+          "error": "If saving fails, an error message appears, the entered values stay on the form and nothing is saved."
+        },
+        "notes": "Safety declarations (preparation time, storage/handling, allergens) must never be saved as preferences or pre-filled from them. Preferences and safety declarations are kept separate. Only Donors can use this screen."
+      },
+      "basis": "[\"Restaurant Preferences\",\"Where a donor saves restaurant preferences, without reusing safety declarations.\",[\"Donor\"],[[\"Donor\",\"save restaurant preferences, leaving safety declarations blank\"]]]",
+      "at": "2026-11-22T14:59:18.568Z"
+    },
+    "/quick-post": {
+      "detail": {
+        "purpose": "Where a donor posts surplus edible food by voice, typing or manually, or repeats a past donation with one tap, then completes a fresh handling checklist and publishes it. Only donors use this screen.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Quick Post' with a short line saying the donation is posted in under 60 seconds. A 'Cancel' link back to the donor dashboard."
+          },
+          {
+            "area": "Repeat donation strip",
+            "contents": "A 'Repeat last donation' one-tap button that fills the food description, portions and pickup-by time from the restaurant's previous donation. Shown only when a previous donation exists."
+          },
+          {
+            "area": "Describe the food",
+            "contents": "A 'Speak' button and a text box for the food description, plus a 'Type manually' option when voice or AI is unavailable. Fields for number of portions and pickup-by time are beside or below the text box."
+          },
+          {
+            "area": "Review extracted values",
+            "contents": "Editable fields for food description, portions and pickup-by time, pre-filled from the spoken or typed text. Each value can be edited before publishing. Shows a notice when AI extraction is unavailable and values must be entered by hand."
+          },
+          {
+            "area": "Handling checklist",
+            "contents": "A fresh checklist with three sections: preparation time, storage and handling, and allergens. Each section has the fields the donor must answer; none are pre-ticked from earlier posts or from restaurant preferences."
+          },
+          {
+            "area": "Optional photo and publish",
+            "contents": "An optional 'Add photo' control. A 'Publish donation' primary button at the bottom."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Repeat donation source",
+            "details": "Food description, portions and pickup-by time of the restaurant's last donation, used only to pre-fill the form."
+          },
+          {
+            "item": "Extracted donation values",
+            "details": "Food description, number of portions and pickup-by time, in that order, each editable before publishing."
+          },
+          {
+            "item": "Handling checklist",
+            "details": "Preparation time, storage and handling, allergens. All blank at the start of each post."
+          },
+          {
+            "item": "Photo",
+            "details": "Optional single photo preview once added."
+          }
+        ],
+        "actions": [
+          {
+            "who": "Donor",
+            "action": "Tap 'Repeat last donation'",
+            "result": "Food description, portions and pickup-by time fill in; the donor still completes the checklist before publishing."
+          },
+          {
+            "who": "Donor",
+            "action": "Speak or type the food description, portions and pickup-by time",
+            "result": "Values are extracted into the review fields for editing."
+          },
+          {
+            "who": "Donor",
+            "action": "Post manually when voice or AI is unavailable",
+            "result": "The donor enters every value by hand in the same fields."
+          },
+          {
+            "who": "Donor",
+            "action": "Edit extracted values",
+            "result": "Edited values replace the extracted ones before publishing."
+          },
+          {
+            "who": "Donor",
+            "action": "Complete the handling checklist",
+            "result": "Preparation time, storage and allergen answers are recorded for this donation only."
+          },
+          {
+            "who": "Donor",
+            "action": "Add an optional photo",
+            "result": "The photo is attached to the donation."
+          },
+          {
+            "who": "Donor",
+            "action": "Publish donation",
+            "result": "The donation is published with status updated; the donor goes to its detail page."
+          }
+        ],
+        "links": [
+          {
+            "to": "/donor-dashboard",
+            "label": "Cancel",
+            "when": "Donor leaves without posting."
+          },
+          {
+            "to": "/donations/[id]",
+            "label": "View donation",
+            "when": "After publishing, to see the new donation's details and status."
+          },
+          {
+            "to": "/donations",
+            "label": "Track donations",
+            "when": "After publishing, to follow all donations' status."
+          }
+        ],
+        "states": {
+          "empty": "No previous donation: the repeat strip is hidden and the form opens blank for a new post.",
+          "loading": "While voice or AI extraction runs, the review fields show a spinner and remain editable manually.",
+          "error": "If extraction, microphone or photo upload fails, a message explains the fallback and the donor can type or enter values manually; publishing is blocked until required fields and checklist are complete"
+        },
+        "notes": "Only the Donor may use this screen. Server must enforce that pickup-by time is in the future and portions are a positive whole number. Checklist answers are required before publishing. Safety declarations are never pre-filled from restaurant preferences or earlier donations; repeat posting copies only food details. Extraction is a convenience: manual entry must always work. Voice needs microphone permission; if denied or unsupported, use typing. No live location is captured."
+      },
+      "basis": "[\"Quick Post\",\"Where a donor posts surplus food by voice or typing, or manually, and completes the handling checklist.\",[\"Donor\"],[[\"Donor\",\"post a repeat donation with one tap, or describe food by voice or text, edit values, complete the checklist, add an optional photo and publish\"]]]",
+      "at": "2026-11-22T14:59:26.475Z"
+    },
+    "/donations": {
+      "detail": {
+        "purpose": "Where a donor follows the status of each of their restaurant's donations, from posting to rescue. Donors open this screen to check what has happened to a donation and to open its details.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Your donations' with a 'New post' button that opens Quick Post."
+          },
+          {
+            "area": "Donations list",
+            "contents": "One row per donation the donor's restaurant has posted, showing food description, portions, pickup-by time and current status. Each row opens that donation's detail."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Donation",
+            "details": "Food description, number of portions, pickup-by time, current status. Listed for the donor's restaurant only."
+          }
+        ],
+        "actions": [
+          {
+            "who": "Donor",
+            "action": "Follow the status of a donation by reading its row",
+            "result": "The donor sees the donation's current status on the list."
+          },
+          {
+            "who": "Donor",
+            "action": "Open a donation row",
+            "result": "The donor opens Donation Detail to see its details, handling declarations and status history."
+          },
+          {
+            "who": "Donor",
+            "action": "Tap 'New post'",
+            "result": "The donor opens Quick Post to post new surplus food."
+          }
+        ],
+        "links": [
+          {
+            "to": "/donations/[id]",
+            "label": "Donation row",
+            "when": "When the donor wants the full details, handling declarations and status history of one donation."
+          },
+          {
+            "to": "/quick-post",
+            "label": "New post",
+            "when": "When the donor wants to post another surplus donation."
+          }
+        ],
+        "states": {
+          "empty": "No donations yet, with a short prompt to post surplus food and a 'New post' button.",
+          "loading": "Placeholder rows while the donation list loads.",
+          "error": "A message that donations could not be loaded, with a retry option."
+        },
+        "notes": "Donors see only their own restaurant's donations. Status is shown as the app records it; do not show NGO-confirmed impact figures here."
+      },
+      "basis": "[\"Tracking\",\"Where a donor follows the status of each of their donations.\",[\"Donor\"],[[\"Donor\",\"follow the status of each donation\"]]]",
+      "at": "2026-11-22T14:59:31.329Z"
+    },
+    "/donations/{}": {
+      "detail": {
+        "purpose": "Lets anyone involved in one donation (donor, receiving NGO, volunteer transporter or admin) read its food details, handling declarations and status history. Viewing only: nothing is changed on this screen.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Donation title or food description, current status badge, and the donor restaurant name. A back link to the screen the person came from."
+          },
+          {
+            "area": "Donation details",
+            "contents": "Food description, number of portions, pickup-by time, donor restaurant, and the optional photo if one was added."
+          },
+          {
+            "area": "Handling declarations",
+            "contents": "The fresh handling checklist for this donation: preparation time, storage and handling, and allergens."
+          },
+          {
+            "area": "Status history",
+            "contents": "Timeline of status changes for this donation, each with its date and time, oldest to newest or newest first."
+          },
+          {
+            "area": "Next step button",
+            "contents": "One button for the viewer's next step, shown only when it applies to them (see links)."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Donation details",
+            "details": "Food description, portions, pickup-by time, donor restaurant, optional photo. Shown as one card."
+          },
+          {
+            "item": "Handling declarations",
+            "details": "Preparation time, storage and handling, allergens. Taken from this donation's own checklist, not from restaurant preferences."
+          },
+          {
+            "item": "Status history",
+            "details": "Each status change with its date and time, in order."
+          }
+        ],
+        "actions": [
+          {
+            "who": "Donor",
+            "action": "Reviews the details, handling declarations and status history of their donation",
+            "result": "Nothing changes; the donor can return to the tracking list."
+          },
+          {
+            "who": "NGO",
+            "action": "Reviews the details and handling declarations before deciding to claim",
+            "result": "Nothing changes; the NGO can continue to the claim screen."
+          },
+          {
+            "who": "Everyone",
+            "action": "Reviews pickup details and handling declarations",
+            "result": "Nothing changes; the volunteer can continue to the active delivery screen."
+          },
+          {
+            "who": "Admin",
+            "action": "Reviews the details and status history of a rescue",
+            "result": "Nothing changes; the admin can return to operations."
+          }
+        ],
+        "links": [
+          {
+            "to": "/donations",
+            "label": "Back to tracking",
+            "when": "Donor leaves the detail after checking a donation's status."
+          },
+          {
+            "to": "/ngo-feed",
+            "label": "Back to feed",
+            "when": "NGO returns to the list of eligible donations without claiming."
+          },
+          {
+            "to": "/ngo-claim",
+            "label": "Claim this donation",
+            "when": "NGO has reviewed the details and declarations and wants to claim all or part of the donation."
+          },
+          {
+            "to": "/active-delivery",
+            "label": "Go to delivery",
+            "when": "Volunteer reviews the pickup and then goes to confirm collection and handover."
+          },
+          {
+            "to": "/admin-operations",
+            "label": "Back to operations",
+            "when": "Admin finishes reviewing a rescue and returns to monitoring active rescues."
+          }
+        ],
+        "states": {
+          "empty": "A donation with no status changes yet shows only its creation entry in the history.",
+          "loading": "Skeleton placeholders for the details card, declarations and timeline until the donation loads.",
+          "error": "If the donation cannot be found or the viewer is not involved, show a not-available message with a link back to the viewer's home screen."
+        },
+        "notes": "Only people involved in the donation may open this screen; the server must enforce this and return an error to anyone else. Declarations here belong to this donation only and are never copied from restaurant preferences. No edit controls appear on this screen. Status history is read-only."
+      },
+      "basis": "[\"Donation Detail\",\"Where anyone involved sees one donation's details, handling declarations and status history.\",[\"Admin\",\"Donor\",\"NGO\",\"Volunteer / NGO Transporter\"],[[\"Admin\",\"review details and status history of a rescue\"],[\"Donor\",\"review details, handling declarations and status history\"],[\"NGO\",\"review details and handling declarations before claiming\"],[\"Volunteer / NGO Transporter\",\"review pickup details and handling declarations\"]]]",
+      "at": "2026-11-22T14:59:41.472Z"
+    },
+    "/ngo-feed": {
+      "detail": {
+        "purpose": "Where an NGO sees eligible nearby food donations, each with a short explanation of why it matches, plus in-app alerts for new matches. NGO staff come here to find portions they can use and then claim them.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Nearby donations' with a line saying these are eligible surplus donations matched to your need and capacity. A link to 'Update need and capacity' opens /ngo-capacity."
+          },
+          {
+            "area": "Alerts strip",
+            "contents": "In-app alerts for newly matched donations, shown at the top when present. Each alert names the donation and links to its entry in the list."
+          },
+          {
+            "area": "Donation list",
+            "contents": "Eligible nearby donations, one card each. Each card shows the food description, portions available, pickup-by time, donor restaurant name, and a concise match explanation (for example why it fits the need or capacity). Each card has a 'Claim' button."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Eligible nearby donations",
+            "details": "Only donations that pass the eligibility and matching rules for this NGO. Each card shows food description, portions available, pickup-by time, donor restaurant name."
+          },
+          {
+            "item": "Match explanation",
+            "details": "One concise line per donation stating why it matches this NGO's current need, capacity and availability."
+          },
+          {
+            "item": "In-app alerts",
+            "details": "Notices of newly matched donations for this NGO, shown above the list."
+          }
+        ],
+        "actions": [
+          {
+            "who": "NGO",
+            "action": "Browse eligible nearby donations and read the match explanations",
+            "result": "The list shows the donations currently open to this NGO."
+          },
+          {
+            "who": "NGO",
+            "action": "Tap 'Claim' on a donation",
+            "result": "Opens the claim screen to claim all or part of that donation within the confirmation window."
+          },
+          {
+            "who": "NGO",
+            "action": "Open an alert",
+            "result": "Goes to the matching donation in the list."
+          },
+          {
+            "who": "NGO",
+            "action": "Tap 'Update need and capacity'",
+            "result": "Opens the capacity screen to change current need, capacity and availability, which changes what matches."
+          }
+        ],
+        "links": [
+          {
+            "to": "/ngo-claim",
+            "label": "Claim",
+            "when": "When the NGO wants to claim all or part of a donation from the list."
+          },
+          {
+            "to": "/ngo-capacity",
+            "label": "Update need and capacity",
+            "when": "When the NGO's need, capacity or availability has changed and the matches should change."
+          }
+        ],
+        "states": {
+          "empty": "No eligible nearby donations yet; the list shows a short message saying none match right now.",
+          "loading": "A placeholder list of cards while donations and alerts load.",
+          "error": "A message that donations could not be loaded, with a retry option."
+        },
+        "notes": "Only approved NGO accounts see this screen. Matching is driven by the NGO's current need, capacity and availability. Claims are limited to the confirmation window; the reservation timeout (default 5 minutes) releases unconfirmed portions. Donations already fully allocated do not appear as claimable. Location is based on synthetic coordinates; no live GPS."
+      },
+      "basis": "[\"NGO Feed\",\"Where an NGO sees eligible nearby donations with match explanations and alerts.\",[\"NGO\"],[[\"NGO\",\"browse eligible nearby donations with match explanations and in-app alerts\"]]]",
+      "at": "2026-11-22T14:59:43.245Z"
+    },
+    "/ngo-claim": {
+      "detail": {
+        "purpose": "Where an NGO claims all or part of one donation before its confirmation window closes. The NGO staff member who can use the food comes here straight from the NGO Feed.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Claim donation' with a back link to NGO Feed (/ngo-feed)."
+          },
+          {
+            "area": "Donation summary card",
+            "contents": "Food description, portions still available, pickup-by time, and the donor restaurant name. Shows the match explanation the NGO saw in the feed."
+          },
+          {
+            "area": "Claim form",
+            "contents": "Choice of 'Claim all' or 'Claim part', a portions field that appears for part claims and is limited to portions still available, and a 'Confirm claim' button."
+          },
+          {
+            "area": "Confirmation window timer",
+            "contents": "Countdown showing time left to confirm the claim, starting at the reservation timeout (default 5 minutes). Shows a notice that unconfirmed portions are released when it runs out."
+          },
+          {
+            "area": "Claim result panel",
+            "contents": "After confirming, shows the portions reserved for the NGO, the pickup-by time, and a button 'View donation' to the donation's details. Shows a clear message if the claim failed."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Donation being claimed",
+            "details": "Food description, portions available, pickup-by time, donor restaurant name, match explanation from the feed."
+          },
+          {
+            "item": "Portions still available",
+            "details": "Live remaining count after other claims; portions reserved by others are not offered."
+          },
+          {
+            "item": "Confirmation window",
+            "details": "Countdown in minutes and seconds to the window close, default 5 minutes and configurable."
+          },
+          {
+            "item": "Claim result",
+            "details": "Portions reserved for this NGO and the pickup-by time, once confirmed."
+          }
+        ],
+        "actions": [
+          {
+            "who": "NGO",
+            "action": "Chooses 'Claim all' or 'Claim part' and enters the portions to claim when claiming part.",
+            "result": "Form checks the quantity is at least 1 and no more than the portions still available."
+          },
+          {
+            "who": "NGO",
+            "action": "Confirms the claim before the window closes.",
+            "result": "The portions are reserved for this NGO and the claim result panel shows them. Portions cannot be over-allocated to two NGOs."
+          },
+          {
+            "who": "NGO",
+            "action": "Lets the confirmation window run out without confirming.",
+            "result": "The reservation is released and the portions return to the feed for other NGOs."
+          }
+        ],
+        "links": [
+          {
+            "to": "/ngo-feed",
+            "label": "Back to feed",
+            "when": "The NGO leaves without claiming, or after the window closes."
+          },
+          {
+            "to": "/donations/[id]",
+            "label": "View donation",
+            "when": "After a successful claim, to see the donation's details and status history."
+          }
+        ],
+        "states": {
+          "empty": "If no donation is selected or it is no longer available, shows 'This donation is no longer available' with a link back to the feed.",
+          "loading": "Shows a skeleton of the donation summary and disables the claim button until the donation and remaining portions load.",
+          "error": "If another NGO took the portions or the window has closed, shows the reason and the portions left, and offers 'Back to feed'."
+        },
+        "notes": "Server-side enforcement of quantity limits, the claim deadline and the window; claims use transactions or equivalent concurrency controls so portions are never over-allocated. Only NGO accounts that are approved can claim. Reservation timeout is configurable, default 5 minutes. No live location is used. In-app alerts may prompt the NGO to return here but are delivered by the notification service only when configured."
+      },
+      "basis": "[\"NGO Claim\",\"Where an NGO claims all or part of a donation within the confirmation window.\",[\"NGO\"],[[\"NGO\",\"claim all or part of a donation before the window closes\"]]]",
+      "at": "2026-11-22T14:59:54.593Z"
+    },
+    "/ngo-receipt": {
+      "detail": {
+        "purpose": "Where an NGO confirms how many portions it actually received from a donation it claimed. Only NGO-confirmed quantities count as rescued food in the impact reporting.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Confirm received quantity' with a short line saying the confirmed amount is what counts as rescued food."
+          },
+          {
+            "area": "Claim summary",
+            "contents": "Donation's food description, pickup-by time, donor restaurant name, and the portions the NGO claimed."
+          },
+          {
+            "area": "Received quantity form",
+            "contents": "Number input for portions received, pre-filled with the claimed portions, plus an optional note field."
+          },
+          {
+            "area": "Confirm action",
+            "contents": "Button labelled 'Confirm received' with a line that confirmation is final."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Claimed donation",
+            "details": "Food description, donor restaurant name, pickup-by time, claimed portions."
+          },
+          {
+            "item": "Received quantity",
+            "details": "Editable portions number, defaulting to the claimed portions."
+          }
+        ],
+        "actions": [
+          {
+            "who": "NGO",
+            "action": "Enter the portions received and confirm",
+            "result": "The received quantity is saved and the donation is marked confirmed as delivered, so it counts toward rescued food."
+          },
+          {
+            "who": "NGO",
+            "action": "Enter fewer portions than claimed",
+            "result": "The confirmed quantity is recorded as the lower figure; the rest is not counted as rescued."
+          }
+        ],
+        "links": [
+          {
+            "to": "/donations/[id]",
+            "label": "View donation",
+            "when": "After confirming, to see the donation's details and status history."
+          }
+        ],
+        "states": {
+          "empty": "No claimed donation awaiting receipt: a short message saying there is nothing to confirm, with no form.",
+          "loading": "Claim details show a loading placeholder while fetching.",
+          "error": "If saving fails, a message says the confirmation was not saved and the entered quantity stays on screen for retry."
+        },
+        "notes": "Received quantity cannot exceed the portions the NGO claimed; the server enforces this. Only the NGO that claimed the donation may confirm it. Confirmed portions feed the CSR sponsor dashboard. Requirements do not say how the screen is reached for a specific claim."
+      },
+      "basis": "[\"NGO Receipt\",\"Where an NGO confirms the quantity it received.\",[\"NGO\"],[[\"NGO\",\"confirm the quantity received\"]]]",
+      "at": "2026-11-22T14:59:55.413Z"
+    },
+    "/ngo-capacity": {
+      "detail": {
+        "purpose": "Where an NGO sets its current need, capacity and availability so the matching feed offers it suitable donations. NGO staff use it whenever their needs or intake capacity change.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Capacity' with a line saying this sets what your NGO can take now, and a note that the feed uses these settings to match donations."
+          },
+          {
+            "area": "Availability toggle",
+            "contents": "A single switch labelled 'Accepting donations now' with on/off state text."
+          },
+          {
+            "area": "Current need field",
+            "contents": "Input for current need, in portions, with a short hint saying how many portions you can use now."
+          },
+          {
+            "area": "Capacity field",
+            "contents": "Input for capacity, in portions, with a short hint saying the most your NGO can receive in one go."
+          },
+          {
+            "area": "Save bar",
+            "contents": "A 'Save' button and a 'Cancel' link; a line showing when capacity was last updated."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Current need",
+            "details": "Current need value in portions, shown as an editable field."
+          },
+          {
+            "item": "Capacity",
+            "details": "Capacity value in portions, shown as an editable field."
+          },
+          {
+            "item": "Availability",
+            "details": "On/off state of accepting donations, with the time it was last changed."
+          }
+        ],
+        "actions": [
+          {
+            "who": "NGO",
+            "action": "Change the availability switch on or off",
+            "result": "The NGO's availability is updated and it is shown as accepting or not accepting donations in the matching feed."
+          },
+          {
+            "who": "NGO",
+            "action": "Enter current need and capacity in portions and press Save",
+            "result": "The values are saved and the page shows a confirmation with the new last-updated time."
+          },
+          {
+            "who": "NGO",
+            "action": "Enter a value that breaks a quantity rule and press Save",
+            "result": "The save is refused and the page explains which field is not allowed, leaving the entered values in place."
+          }
+        ],
+        "links": [
+          {
+            "to": "/ngo-feed",
+            "label": "View matching donations",
+            "when": "After saving, to see which nearby donations now fit the updated need and capacity."
+          }
+        ],
+        "states": {
+          "empty": "No capacity saved yet: fields are blank with a prompt to enter current need and capacity before saving.",
+          "loading": "Form shows placeholder fields while the saved capacity settings load.",
+          "error": "A red message appears above the form if saving fails, and entered values stay on screen for retry."
+        },
+        "notes": "Only an approved NGO can see and change its own capacity; the server enforces this and the quantity rules. Quantities are in portions. No live location is used; the NGO sets its availability manually. Changes apply to future matching and do not alter donations already claimed."
+      },
+      "basis": "[\"NGO Capacity\",\"Where an NGO sets its current need, capacity and availability.\",[\"NGO\"],[[\"NGO\",\"set current need, capacity and availability\"]]]",
+      "at": "2026-11-22T15:00:06.262Z"
+    },
+    "/volunteer-tasks": {
+      "detail": {
+        "purpose": "Where a volunteer or NGO transporter turns availability on or off, sets how much they can carry, and accepts a pickup to collect claimed food from a donor and hand it to the receiving NGO. Only approved participants use it.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Volunteer tasks' with a short line saying you accept pickups when you are available."
+          },
+          {
+            "area": "Availability card",
+            "contents": "A single on/off toggle labelled 'Available for pickups' with its current state shown in words (Available / Not available)."
+          },
+          {
+            "area": "Carrying capacity form",
+            "contents": "A capacity field labelled 'Carrying capacity' with a save button. Shows the current saved value."
+          },
+          {
+            "area": "Available pickups list",
+            "contents": "Cards for claimed donations that need a transporter, each with the donor, receiving NGO, food description, portions, pickup-by time and an 'Accept pickup' button."
+          },
+          {
+            "area": "Accepted pickups",
+            "contents": "Cards for pickups this volunteer has already accepted, each with its status and an 'Open' button."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Availability status",
+            "details": "One toggle showing whether the volunteer is currently available."
+          },
+          {
+            "item": "Carrying capacity",
+            "details": "The volunteer's saved carrying capacity, shown next to its edit field."
+          },
+          {
+            "item": "Available pickups",
+            "details": "Claimed donations awaiting a transporter: food description, portions, pickup-by time, donor name, receiving NGO name, ordered by soonest pickup-by time."
+          },
+          {
+            "item": "Accepted pickups",
+            "details": "Pickups this volunteer has accepted: food description, portions, pickup-by time, donor, receiving NGO and current status."
+          }
+        ],
+        "actions": [
+          {
+            "who": "Everyone",
+            "action": "Turn availability on or off",
+            "result": "The availability status updates and the volunteer's availability is saved."
+          },
+          {
+            "who": "Everyone",
+            "action": "Set carrying capacity and save",
+            "result": "The new carrying capacity is saved and shown on the screen."
+          },
+          {
+            "who": "Everyone",
+            "action": "Accept a pickup",
+            "result": "The pickup moves to accepted pickups under this volunteer; the volunteer is taken to Active Delivery for that pickup."
+          }
+        ],
+        "links": [
+          {
+            "to": "/active-delivery",
+            "label": "Accept pickup",
+            "when": "After a pickup is accepted, to confirm collection and handover."
+          }
+        ],
+        "states": {
+          "empty": "No pickups available: 'No pickups need a transporter right now.' Accepted list shows 'You have not accepted any pickups yet.'",
+          "loading": "Skeleton placeholders for the toggle, capacity field and pickup cards.",
+          "error": "A message saying availability, capacity or the pickup could not be saved, with a retry button; the previous value stays shown."
+        },
+        "notes": "Carrying capacity unit is not specified in the requirements; use one consistent unit and state it next to the field. Only approved participants can sign in here (admin approval applies). No live GPS or continuous location tracking: do not show a live map or tracked position. Server-side enforcement of status transitions: a pickup already accepted cannot be accepted by another volunteer."
+      },
+      "basis": "[\"Volunteer Tasks\",\"Where a volunteer toggles availability, sets carrying capacity and accepts pickups.\",[\"Volunteer / NGO Transporter\"],[[\"Volunteer / NGO Transporter\",\"toggle availability, set carrying capacity and accept pickups\"]]]",
+      "at": "2026-11-22T15:00:08.573Z"
+    },
+    "/admin-operations": {
+      "detail": {
+        "purpose": "Where an admin approves or suspends participants, watches active rescues and resolves failed assignments. Used by the Admin persona to keep the pilot network running.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Admin Operations' with a one-line description of approving participants, monitoring rescues and resolving failed assignments."
+          },
+          {
+            "area": "Participants approval panel",
+            "contents": "List of pending and existing participants (donors, NGOs, volunteers, sponsors) showing name, role, status and an 'Approve' or 'Suspend' button per row."
+          },
+          {
+            "area": "Active rescues panel",
+            "contents": "List of in-progress rescues showing donation, claiming NGO, volunteer, current status and time since last status update."
+          },
+          {
+            "area": "Failed assignments panel",
+            "contents": "List of assignments that failed (for example unaccepted or unconfirmed pickups) with the reason and resolve actions."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Participants",
+            "details": "Name, role, account status (pending, approved, suspended), grouped by status with pending first."
+          },
+          {
+            "item": "Active rescues",
+            "details": "Donation, claiming NGO, assigned volunteer, current status, grouped by rescue with counts for active rescues."
+          },
+          {
+            "item": "Failed assignments",
+            "details": "Donation, assignment, failure reason, time of failure, listed for resolution."
+          }
+        ],
+        "actions": [
+          {
+            "who": "Admin",
+            "action": "Approve a pending participant",
+            "result": "Participant status changes to approved and they can sign in and use their role's screens."
+          },
+          {
+            "who": "Admin",
+            "action": "Suspend a participant",
+            "result": "Participant status changes to suspended and they can no longer sign in or act."
+          },
+          {
+            "who": "Admin",
+            "action": "Monitor active rescues",
+            "result": "Admin views current status of each rescue in progress without changing it."
+          },
+          {
+            "who": "Admin",
+            "action": "Resolve a failed assignment",
+            "result": "Failed assignment is resolved and its donation returns to a state where it can be reassigned or closed."
+          }
+        ],
+        "links": [
+          {
+            "to": "/donations/[id]",
+            "label": "Donation ID",
+            "when": "Admin opens a rescue or failed assignment to see its full details and status history."
+          }
+        ],
+        "states": {
+          "empty": "No pending participants, active rescues or failed assignments; each panel shows a short 'Nothing to review' message.",
+          "loading": "Panels show skeleton rows while participants, rescues and failures load.",
+          "error": "A failed load shows an error message with a retry button in the affected panel."
+        },
+        "notes": "Only the Admin persona may approve, suspend or resolve. Status transitions are enforced on the server. Participants are synthetic in the hackathon pilot."
+      },
+      "basis": "[\"Admin Operations\",\"Where an admin approves or suspends participants, monitors active rescues and resolves failed assignments.\",[\"Admin\"],[[\"Admin\",\"approve or suspend participants, monitor active rescues and resolve failed assignments\"]]]",
+      "at": "2026-11-22T15:00:17.193Z"
+    },
+    "/active-delivery": {
+      "detail": {
+        "purpose": "Where a volunteer or NGO transporter confirms that they have collected a claimed donation and handed it over to the receiving NGO, and sees the pickup's simple status updates. Used during the pickup itself, after the volunteer has accepted it on Volunteer Tasks.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Active delivery' and a one-line note that collection and handover are confirmed here; a link back to Volunteer Tasks."
+          },
+          {
+            "area": "Current pickup card",
+            "contents": "The accepted pickup: donation food description, portions, pickup-by time, donor restaurant name, receiving NGO name, and a 'View donation' link."
+          },
+          {
+            "area": "Status updates",
+            "contents": "A simple list of status updates for this pickup, newest first, each with status name and time. Shows the current status prominently."
+          },
+          {
+            "area": "Collection step",
+            "contents": "A 'Confirm collection' button with the collected portions shown, and a note that the donation is collected once confirmed."
+          },
+          {
+            "area": "Handover step",
+            "contents": "A 'Confirm handover' button, enabled only after collection is confirmed, with a note that handover passes the food to the receiving NGO."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Active pickup",
+            "details": "Food description, portions, pickup-by time, donor restaurant, receiving NGO, current status."
+          },
+          {
+            "item": "Status updates",
+            "details": "Simple list of status changes for this pickup, newest first, with time."
+          },
+          {
+            "item": "Portions being carried",
+            "details": "Claimed portions for this pickup, matching the carrying capacity the volunteer indicated."
+          }
+        ],
+        "actions": [
+          {
+            "who": "Everyone",
+            "action": "Confirm collection of the food from the donor",
+            "result": "The pickup status moves to collected and the collection step is locked; handover becomes available."
+          },
+          {
+            "who": "Everyone",
+            "action": "Confirm handover of the food to the receiving NGO",
+            "result": "The pickup status moves to handed over; the NGO is then asked to confirm the received quantity on its Receipt screen."
+          },
+          {
+            "who": "Everyone",
+            "action": "Open the donation's full details",
+            "result": "Opens the donation detail screen."
+          }
+        ],
+        "links": [
+          {
+            "to": "/volunteer-tasks",
+            "label": "Back to tasks",
+            "when": "After handover, or when the volunteer wants to return to availability and pickups."
+          },
+          {
+            "to": "/donations/[id]",
+            "label": "View donation",
+            "when": "When the volunteer wants to check the donation's handling declarations or status history before collecting."
+          }
+        ],
+        "states": {
+          "empty": "No accepted pickup: a short message saying there is no active delivery, with a link to Volunteer Tasks to accept one.",
+          "loading": "Pickup details and status updates show a loading placeholder until fetched.",
+          "error": "If a confirmation fails, the status does not change, an error message shows, and the volunteer can retry."
+        },
+        "notes": "No live GPS or location tracking; collection and handover are confirmed by the volunteer's own action only. Status transitions are enforced on the server and cannot be skipped (handover only after collection). Volunteers see only pickups they have accepted. Rescued impact is counted only after the NGO confirms the received quantity, not on handover."
+      },
+      "basis": "[\"Active Delivery\",\"Where a volunteer confirms collection and handover and sees simple status updates.\",[\"Volunteer / NGO Transporter\"],[[\"Volunteer / NGO Transporter\",\"confirm collection and handover and see status updates\"]]]",
+      "at": "2026-11-22T15:00:18.687Z"
+    },
+    "/sponsor-impact": {
+      "detail": {
+        "purpose": "Where a CSR sponsor sees campaign recognition and a transparent dashboard of confirmed rescue impact, with its assumptions labelled. Only NGO-confirmed deliveries count toward the figures.",
+        "layout": [
+          {
+            "area": "Page header",
+            "contents": "Heading 'Sponsor Impact' and a line saying the figures count only NGO-confirmed deliveries."
+          },
+          {
+            "area": "Campaign recognition",
+            "contents": "The sponsor's campaign recognition, shown as read-only content."
+          },
+          {
+            "area": "Impact summary cards",
+            "contents": "Three cards: confirmed portions delivered, estimated waste avoided (kg), and illustrative costs. Each card is labelled as derived from confirmed data."
+          },
+          {
+            "area": "Assumptions panel",
+            "contents": "Labelled assumptions: waste avoided = portions × 0.35 kg per portion (configurable, disclosed here); illustrative costs are not actual payments; no tax or legal-benefit claim is made."
+          }
+        ],
+        "shows": [
+          {
+            "item": "Campaign recognition",
+            "details": "The sponsor's campaign recognition content, read-only."
+          },
+          {
+            "item": "Confirmed portions delivered",
+            "details": "Total portions from NGO-confirmed receipts only; a single total figure."
+          },
+          {
+            "item": "Estimated waste avoided",
+            "details": "Kilograms, calculated as confirmed portions × 0.35 kg; the 0.35 kg factor is shown beside it."
+          },
+          {
+            "item": "Illustrative costs",
+            "details": "Figures labelled as illustrative, not billed or paid amounts."
+          },
+          {
+            "item": "Assumptions",
+            "details": "Per-portion factor, that only confirmed deliveries count, and the no-certification and no-tax-claim disclaimers."
+          }
+        ],
+        "actions": [
+          {
+            "who": "CSR Sponsor",
+            "action": "Reads campaign recognition and the impact dashboard.",
+            "result": "Nothing changes; the screen shows the current confirmed figures and labelled assumptions."
+          }
+        ],
+        "links": [],
+        "states": {
+          "empty": "No confirmed deliveries yet: portions, waste avoided and costs show zero, with the assumptions still visible.",
+          "loading": "Shows placeholder cards and a loading indicator while figures are fetched.",
+          "error": "Shows a message that the impact figures could not be loaded, with a retry option."
+        },
+        "notes": "Read-only screen; no editing, exporting or payment actions. Totals must come from NGO-confirmed receipts only. The 0.35 kg per portion factor is configurable and must be disclosed on the screen. Do not present illustrative costs as payments, billing or tax or legal benefits. Do not state food safety certification."
+      },
+      "basis": "[\"Sponsor Impact\",\"Where a CSR sponsor sees campaign recognition and the transparent impact dashboard, with assumptions labelled.\",[\"CSR Sponsor\"],[[\"CSR Sponsor\",\"see campaign recognition and the impact dashboard with assumptions labelled\"]]]",
+      "at": "2026-11-22T15:00:28.283Z"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "prdHash": "813ff0033082b527065b5c3e4a3d7aacb959f67c",
+  "generatedAt": "2026-11-22T14:50:26.082Z",
+  "agent_type": "brand-preview-html",
+  "style": "glass",
+  "designSpec": {
+    "layout_archetype": "Marketing hero, feature grid, CSR dashboard, live-status list",
+    "nav_pattern": "Sticky frosted top bar with wordmark, centered links, and a primary Get started action",
+    "surface": "Translucent card glass over a soft radial gradient background",
+    "card_treatment": "Bordered cards with shadow-sm, glass hero panel with shadow-lg and blurred glows",
+    "density": "Comfortable, with 3rem section gaps and 1.5rem card gaps",
+    "elevation": "Layered via var(--shadow-sm), var(--shadow), and var(--shadow-lg) plus backdrop blur",
+    "radius_language": "Token radius for cards and buttons, nested inner radius, and pill badges",
+    "signature_motifs": "Frosted glass panels, blurred color glows, donation ID codes, claim-window progress bar, impact bar chart"
+  }
+}

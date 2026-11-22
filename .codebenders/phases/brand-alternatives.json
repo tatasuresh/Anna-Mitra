@@ -1,0 +1,114 @@
+{
+  "prdHash": "09966dfc66fb03f6d8af0477222530593939e975",
+  "brief": "",
+  "alternatives": [
+    {
+      "id": "kitchen-ticket-ledger",
+      "label": "Kitchen Ticket Ledger",
+      "colors": {
+        "primary": "#2B2A27",
+        "secondary": "#C9B79C",
+        "accent": "#E8402A",
+        "bg": "#F7F3EA",
+        "surface": "#FFFDF8",
+        "text": "#1F1E1B",
+        "muted": "#6E675C",
+        "success": "#2F6B3A",
+        "danger": "#C0301E"
+      },
+      "typography": {
+        "font_family": "Barlow, system-ui, sans-serif",
+        "font_family_heading": "Barlow Condensed, Arial Narrow, sans-serif",
+        "font_family_mono": "JetBrains Mono, ui-monospace, tabular-nums, monospace"
+      },
+      "spacing": {
+        "base": "4px"
+      },
+      "radius": {
+        "base": "8px"
+      },
+      "reason": "Warm paper and charcoal ink give high-contrast, kitchen-order-ticket clarity, with tomato red reserved strictly for urgent pickups and set against condensed headings and tabular mono quantities so portion counts and pickup-by times read like kitchen tickets."
+    },
+    {
+      "id": "monsoon-dispatch-dusk",
+      "label": "Monsoon Dispatch Dusk",
+      "colors": {
+        "primary": "#3E8C86",
+        "secondary": "#2F4A52",
+        "accent": "#E8B65B",
+        "bg": "#132A31",
+        "surface": "#1E3D40",
+        "text": "#E9F1EC",
+        "muted": "#8FA8A2",
+        "success": "#6CC3A0",
+        "danger": "#E07A6A"
+      },
+      "typography": {
+        "font_family": "Nunito Sans, Source Sans 3, Segoe UI, sans-serif",
+        "font_family_heading": "Nunito, Nunito Sans, Segoe UI, sans-serif",
+        "font_family_mono": "JetBrains Mono, ui-monospace, monospace"
+      },
+      "spacing": {
+        "base": "4px"
+      },
+      "radius": {
+        "base": "8px"
+      },
+      "reason": "A deep slate-teal base with muted sea-green surfaces, soft amber accents, and gently glowing status tones keeps contrast comfortable for low-light evening runs while a rounded humanist sans and generous tap targets let volunteers scan routes one-handed."
+    },
+    {
+      "id": "civic-ration-record",
+      "label": "Civic Ration Record",
+      "colors": {
+        "primary": "#1F2A3C",
+        "secondary": "#7C8B82",
+        "accent": "#9A7B4F",
+        "bg": "#F4F1E8",
+        "surface": "#E9EDE7",
+        "text": "#1B2433",
+        "muted": "#5F6B66",
+        "success": "#3E6B4F",
+        "danger": "#8A3B35"
+      },
+      "typography": {
+        "font_family": "Source Sans 3, Helvetica Neue, Arial, sans-serif",
+        "font_family_heading": "Libre Baskerville, Baskerville, Georgia, serif",
+        "font_family_mono": "IBM Plex Mono, ui-monospace, Menlo, monospace"
+      },
+      "spacing": {
+        "base": "4px"
+      },
+      "radius": {
+        "base": "8px"
+      },
+      "reason": "A bone page with sage-grey panels, ink-navy type and a transitional serif for headings gives the calm, ledger-like feel of an audit record, so confirmed rescues and their labelled assumptions read as trustworthy documentation."
+    },
+    {
+      "id": "countdown-signal-board",
+      "label": "Countdown Signal Board",
+      "colors": {
+        "primary": "#FFD60A",
+        "secondary": "#D9D7D2",
+        "accent": "#4A4F57",
+        "bg": "#0B0B0C",
+        "surface": "#17181A",
+        "text": "#F5F3EE",
+        "muted": "#8C9099",
+        "success": "#2FBF71",
+        "danger": "#FF3B30"
+      },
+      "typography": {
+        "font_family": "Barlow",
+        "font_family_heading": "Barlow Condensed",
+        "font_family_mono": "JetBrains Mono"
+      },
+      "spacing": {
+        "base": "4px"
+      },
+      "radius": {
+        "base": "2px"
+      },
+      "reason": "A near-black, high-contrast interface with one saturated signal yellow reserved for claim windows and reservation timers, set in bold condensed type on flat hard-edged surfaces, so time-critical actions stay legible and unmistakable on a phone in bright outdoor light."
+    }
+  ]
+}

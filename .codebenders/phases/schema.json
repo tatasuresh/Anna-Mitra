@@ -1,0 +1,936 @@
+{
+  "orm": "prisma",
+  "models": [
+    {
+      "name": "users",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "pk": true
+        },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "nullable": false,
+          "unique": true
+        },
+        {
+          "name": "password_hash",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "role",
+          "type": "enum(donor|ngo|volunteer|admin|csr_sponsor)",
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "enum(pending_approval|approved|suspended)",
+          "nullable": false,
+          "default": "pending_approval"
+        },
+        {
+          "name": "is_demo",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "restaurant_id",
+          "type": "uuid",
+          "nullable": true,
+          "fk": "restaurants.id"
+        },
+        {
+          "name": "ngo_id",
+          "type": "uuid",
+          "nullable": true,
+          "fk": "ngos.id"
+        },
+        {
+          "name": "is_available",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "carrying_capacity",
+          "type": "int",
+          "nullable": true
+        },
+        {
+          "name": "decided_at",
+          "type": "datetime",
+          "nullable": true
+        },
+        {
+          "name": "decided_by_user_id",
+          "type": "uuid",
+          "nullable": true,
+          "fk": "users.id"
+        },
+        {
+          "name": "last_signed_out_at",
+          "type": "datetime",
+          "nullable": true
+        }
+      ],
+      "persona_access": {
+        "Donor": "read_write_own",
+        "NGO": "read_write_own",
+        "Volunteer / NGO Transporter": "read_write_own",
+        "Admin": "full",
+        "CSR Sponsor": "read_write_own"
+      }
+    },
+    {
+      "name": "password_reset_tokens",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "pk": true
+        },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "users.id"
+        },
+        {
+          "name": "token_hash",
+          "type": "string",
+          "nullable": false,
+          "unique": true
+        },
+        {
+          "name": "requested_at",
+          "type": "datetime",
+          "nullable": false
+        },
+        {
+          "name": "expires_at",
+          "type": "datetime",
+          "nullable": false
+        },
+        {
+          "name": "used_at",
+          "type": "datetime",
+          "nullable": true
+        }
+      ],
+      "persona_access": {
+        "Donor": "none",
+        "NGO": "none",
+        "Volunteer / NGO Transporter": "none",
+        "Admin": "none",
+        "CSR Sponsor": "none"
+      }
+    },
+    {
+      "name": "restaurants",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "pk": true
+        },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "owner_user_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "users.id"
+        },
+        {
+          "name": "latitude",
+          "type": "decimal",
+          "nullable": false
+        },
+        {
+          "name": "longitude",
+          "type": "decimal",
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "enum(pending_approval|approved|suspended)",
+          "nullable": false,
+          "default": "pending_approval"
+        }
+      ],
+      "persona_access": {
+        "Donor": "read_write_own",
+        "NGO": "read",
+        "Volunteer / NGO Transporter": "read",
+        "Admin": "full",
+        "CSR Sponsor": "none"
+      }
+    },
+    {
+      "name": "restaurant_preferences",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "pk": true
+        },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "restaurant_id",
+          "type": "uuid",
+          "nullable": false,
+          "unique": true,
+          "fk": "restaurants.id"
+        },
+        {
+          "name": "default_portions",
+          "type": "int",
+          "nullable": true
+        },
+        {
+          "name": "preferred_pickup_start",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "preferred_pickup_end",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "pickup_notes",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "updated_by_user_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "users.id"
+        }
+      ],
+      "persona_access": {
+        "Donor": "read_write_own",
+        "NGO": "none",
+        "Volunteer / NGO Transporter": "none",
+        "Admin": "full",
+        "CSR Sponsor": "none"
+      }
+    },
+    {
+      "name": "ngos",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "pk": true
+        },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "latitude",
+          "type": "decimal",
+          "nullable": false
+        },
+        {
+          "name": "longitude",
+          "type": "decimal",
+          "nullable": false
+        },
+        {
+          "name": "service_radius_km",
+          "type": "decimal",
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "enum(pending_approval|approved|suspended)",
+          "nullable": false,
+          "default": "pending_approval"
+        }
+      ],
+      "persona_access": {
+        "Donor": "read",
+        "NGO": "read",
+        "Volunteer / NGO Transporter": "read",
+        "Admin": "full",
+        "CSR Sponsor": "none"
+      }
+    },
+    {
+      "name": "ngo_capacities",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "pk": true
+        },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "ngo_id",
+          "type": "uuid",
+          "nullable": false,
+          "unique": true,
+          "fk": "ngos.id"
+        },
+        {
+          "name": "current_need_portions",
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "capacity_portions",
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "max_portions_per_claim",
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "has_cold_storage",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "is_available",
+          "type": "boolean",
+          "nullable": false,
+          "default": "true"
+        }
+      ],
+      "persona_access": {
+        "Donor": "none",
+        "NGO": "read_write_own",
+        "Volunteer / NGO Transporter": "none",
+        "Admin": "full",
+        "CSR Sponsor": "none"
+      }
+    },
+    {
+      "name": "donations",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "pk": true
+        },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "restaurant_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "restaurants.id"
+        },
+        {
+          "name": "posted_by_user_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "users.id"
+        },
+        {
+          "name": "repeated_from_donation_id",
+          "type": "uuid",
+          "nullable": true,
+          "fk": "donations.id"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "portions_total",
+          "type": "int",
+          "nullable": false
+        },
+        {
+          "name": "portions_remaining",
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "pickup_location",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "pickup_by_at",
+          "type": "datetime",
+          "nullable": false
+        },
+        {
+          "name": "input_method",
+          "type": "enum(voice|text|manual|repeat)",
+          "nullable": false,
+          "default": "text"
+        },
+        {
+          "name": "ai_extracted",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "photo_url",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "status",
+          "type": "enum(draft|published|claimed|partially_claimed|in_transit|received|expired|cancelled|failed)",
+          "nullable": false,
+          "default": "draft"
+        },
+        {
+          "name": "published_at",
+          "type": "datetime",
+          "nullable": true
+        }
+      ],
+      "persona_access": {
+        "Donor": "read_write_own",
+        "NGO": "read",
+        "Volunteer / NGO Transporter": "read",
+        "Admin": "full",
+        "CSR Sponsor": "none"
+      }
+    },
+    {
+      "name": "handling_declarations",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "pk": true
+        },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "donation_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "donations.id"
+        },
+        {
+          "name": "declared_by_user_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "users.id"
+        },
+        {
+          "name": "preparation_time_minutes",
+          "type": "int",
+          "nullable": false
+        },
+        {
+          "name": "storage_method",
+          "type": "enum(refrigerated|hot_held|ambient|frozen)",
+          "nullable": false
+        },
+        {
+          "name": "requires_refrigeration",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "allergens",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "checklist_confirmed",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "declared_at",
+          "type": "datetime",
+          "nullable": false
+        }
+      ],
+      "persona_access": {
+        "Donor": "read_write_own",
+        "NGO": "read",
+        "Volunteer / NGO Transporter": "read",
+        "Admin": "full",
+        "CSR Sponsor": "none"
+      }
+    },
+    {
+      "name": "donation_claims",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "pk": true
+        },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "donation_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "donations.id"
+        },
+        {
+          "name": "ngo_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "ngos.id"
+        },
+        {
+          "name": "claimed_by_user_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "users.id"
+        },
+        {
+          "name": "portions_claimed",
+          "type": "int",
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "enum(reserved|confirmed|released|expired)",
+          "nullable": false,
+          "default": "reserved"
+        },
+        {
+          "name": "reserved_until",
+          "type": "datetime",
+          "nullable": false
+        },
+        {
+          "name": "portions_received",
+          "type": "int",
+          "nullable": true
+        },
+        {
+          "name": "received_at",
+          "type": "datetime",
+          "nullable": true
+        }
+      ],
+      "persona_access": {
+        "Donor": "none",
+        "NGO": "read_write_own",
+        "Volunteer / NGO Transporter": "read",
+        "Admin": "full",
+        "CSR Sponsor": "none"
+      }
+    },
+    {
+      "name": "pickup_tasks",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "pk": true
+        },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "donation_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "donations.id"
+        },
+        {
+          "name": "claim_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "donation_claims.id"
+        },
+        {
+          "name": "volunteer_user_id",
+          "type": "uuid",
+          "nullable": true,
+          "fk": "users.id"
+        },
+        {
+          "name": "portion_count",
+          "type": "int",
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "enum(open|accepted|collected|handed_over|failed)",
+          "nullable": false,
+          "default": "open"
+        },
+        {
+          "name": "accepted_at",
+          "type": "datetime",
+          "nullable": true
+        },
+        {
+          "name": "collected_at",
+          "type": "datetime",
+          "nullable": true
+        },
+        {
+          "name": "handed_over_at",
+          "type": "datetime",
+          "nullable": true
+        },
+        {
+          "name": "failure_reason",
+          "type": "text",
+          "nullable": true
+        }
+      ],
+      "persona_access": {
+        "Donor": "none",
+        "NGO": "read",
+        "Volunteer / NGO Transporter": "read_write_own",
+        "Admin": "full",
+        "CSR Sponsor": "none"
+      }
+    },
+    {
+      "name": "status_events",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "pk": true
+        },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "donation_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "donations.id"
+        },
+        {
+          "name": "pickup_task_id",
+          "type": "uuid",
+          "nullable": true,
+          "fk": "pickup_tasks.id"
+        },
+        {
+          "name": "actor_user_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "users.id"
+        },
+        {
+          "name": "from_status",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "to_status",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "nullable": true
+        }
+      ],
+      "persona_access": {
+        "Donor": "read",
+        "NGO": "read",
+        "Volunteer / NGO Transporter": "read",
+        "Admin": "full",
+        "CSR Sponsor": "none"
+      }
+    },
+    {
+      "name": "sponsor_campaigns",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "pk": true
+        },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "sponsor_user_id",
+          "type": "uuid",
+          "nullable": false,
+          "fk": "users.id"
+        },
+        {
+          "name": "recognition_text",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "starts_on",
+          "type": "date",
+          "nullable": false
+        },
+        {
+          "name": "ends_on",
+          "type": "date",
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "enum(draft|active|ended)",
+          "nullable": false,
+          "default": "draft"
+        }
+      ],
+      "persona_access": {
+        "Donor": "none",
+        "NGO": "none",
+        "Volunteer / NGO Transporter": "none",
+        "Admin": "full",
+        "CSR Sponsor": "read_own"
+      }
+    },
+    {
+      "name": "impact_reports",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "pk": true
+        },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": "now"
+        },
+        {
+          "name": "period_start",
+          "type": "date",
+          "nullable": false
+        },
+        {
+          "name": "period_end",
+          "type": "date",
+          "nullable": false
+        },
+        {
+          "name": "confirmed_portions",
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "kg_per_portion_assumption",
+          "type": "decimal",
+          "nullable": false,
+          "default": "0.35"
+        },
+        {
+          "name": "estimated_waste_avoided_kg",
+          "type": "decimal",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "illustrative_cost",
+          "type": "decimal",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "nullable": false,
+          "default": "INR"
+        },
+        {
+          "name": "generated_at",
+          "type": "datetime",
+          "nullable": false
+        }
+      ],
+      "persona_access": {
+        "Donor": "none",
+        "NGO": "none",
+        "Volunteer / NGO Transporter": "none",
+        "Admin": "full",
+        "CSR Sponsor": "read"
+      }
+    }
+  ]
+}

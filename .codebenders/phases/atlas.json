@@ -1,0 +1,1890 @@
+{
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/api/auth/register",
+      "handler": "auth-1",
+      "auth_required": false,
+      "group": "Auth",
+      "request_shape": "{name: string, email: string, password: string, role: string}",
+      "response_shape": "User",
+      "description": "Creates a donor, NGO, volunteer or sponsor account with account_status pending_approval, used by the Sign Up screen; admin accounts are never created here and an existing email is refused with 409."
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/demo-login",
+      "handler": "auth-2",
+      "auth_required": false,
+      "group": "Auth",
+      "request_shape": "{role: string}",
+      "response_shape": "{user: User}",
+      "description": "Signs in the seeded synthetic demo account for the chosen role, used by the Role Entry screen; refused when demo accounts are switched off."
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "handler": "auth-3",
+      "auth_required": false,
+      "group": "Auth",
+      "request_shape": "{email: string, password: string}",
+      "response_shape": "{user: User}",
+      "description": "Signs a participant in with email and password, used by the Login screen; accounts that are pending_approval or suspended are refused with 403."
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/logout",
+      "handler": "auth-4",
+      "auth_required": true,
+      "group": "Auth",
+      "request_shape": "",
+      "response_shape": "",
+      "description": "Ends the current session, used by the Profile screen's sign-out action."
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "handler": "auth-5",
+      "auth_required": true,
+      "own_only": true,
+      "group": "Auth",
+      "request_shape": "",
+      "response_shape": "User",
+      "description": "Returns the signed-in user without password_hash, used by every screen to know who is signed in and which role applies."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/auth/me",
+      "handler": "auth-6",
+      "auth_required": true,
+      "own_only": true,
+      "group": "Auth",
+      "request_shape": "{name?: string, email?: string}",
+      "response_shape": "User",
+      "description": "Changes the caller's own name and email, used by the Profile screen; role and account_status cannot be changed here and a taken email is refused."
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/change-password",
+      "handler": "auth-7",
+      "auth_required": true,
+      "own_only": true,
+      "group": "Auth",
+      "request_shape": "{current_password: string, new_password: string}",
+      "response_shape": "",
+      "description": "Sets a new password after checking the current one, used by the Profile screen."
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/forgot-password",
+      "handler": "auth-8",
+      "auth_required": false,
+      "group": "Auth",
+      "request_shape": "{email: string}",
+      "response_shape": "{message: string}",
+      "description": "Emails a signed, expiring reset link through Resend when the address belongs to an account, always answering 200; the token is stored only as a hash in password_reset_tokens. Used by the Forgot Password screen."
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/reset-password",
+      "handler": "auth-9",
+      "auth_required": false,
+      "group": "Auth",
+      "request_shape": "{token: string, password: string}",
+      "response_shape": "",
+      "description": "Sets a new password when the emailed token is unexpired and unused, then marks the token used_at; used by the Reset Password screen."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/users",
+      "handler": "people-management-10",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "People Management",
+      "request_shape": "",
+      "response_shape": "User[]",
+      "description": "Lists all participants, filterable by account_status and role, used by the Admin Operations screen to find accounts awaiting approval."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/users",
+      "handler": "people-management-11",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "People Management",
+      "request_shape": "{name: string, email: string, password: string, role: string}",
+      "response_shape": "User",
+      "description": "Adds a donor, NGO, volunteer, sponsor or admin account directly as active, used by the Admin Operations screen; the password is stored only as a hash."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/users/{userId}",
+      "handler": "people-management-12",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "People Management",
+      "request_shape": "",
+      "response_shape": "User",
+      "description": "Returns one participant's account details for the admin's review."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/users/{userId}",
+      "handler": "people-management-13",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "People Management",
+      "request_shape": "Partial<User>",
+      "response_shape": "User",
+      "description": "Corrects a participant's name, email or role; password_hash and account_status are not changed here, and the role change applies from the next sign-in."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/users/{userId}/approve",
+      "handler": "people-management-14",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "People Management",
+      "request_shape": "",
+      "response_shape": "User",
+      "description": "Moves an account from pending_approval or suspended to active so the participant can use the app, used by the Admin Operations screen."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/users/{userId}/suspend",
+      "handler": "people-management-15",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "People Management",
+      "request_shape": "",
+      "response_shape": "User",
+      "description": "Moves an active account to suspended and ends its sessions, used by the Admin Operations screen to deactivate a participant."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/availability",
+      "handler": "capacity-and-availability-16",
+      "auth_required": true,
+      "roles": [
+        "NGO",
+        "Volunteer / NGO Transporter"
+      ],
+      "own_only": true,
+      "group": "Capacity And Availability",
+      "request_shape": "",
+      "response_shape": "{is_available: boolean, need_portions?: number, capacity_portions?: number, carrying_capacity_portions?: number}",
+      "description": "Returns the caller's availability and capacity figures, used by the NGO Capacity and Volunteer Tasks screens."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/my/availability",
+      "handler": "capacity-and-availability-17",
+      "auth_required": true,
+      "roles": [
+        "NGO",
+        "Volunteer / NGO Transporter"
+      ],
+      "own_only": true,
+      "group": "Capacity And Availability",
+      "request_shape": "{is_available?: boolean, need_portions?: number, capacity_portions?: number, carrying_capacity_portions?: number}",
+      "response_shape": "{is_available: boolean, need_portions?: number, capacity_portions?: number, carrying_capacity_portions?: number}",
+      "description": "Updates the caller's availability; an NGO sets need_portions, capacity_portions and is_available, a volunteer sets is_available and carrying_capacity_portions; negative quantities are refused. Used by the NGO Capacity and Volunteer Tasks screens."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/restaurants",
+      "handler": "restaurants-18",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Restaurants",
+      "request_shape": "",
+      "response_shape": "Restaurant[]",
+      "description": "Lists the restaurants the donor manages, used by the Donor Dashboard and Restaurant Preferences screens."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/restaurants",
+      "handler": "restaurants-19",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Restaurants",
+      "request_shape": "Restaurant",
+      "response_shape": "Restaurant",
+      "description": "Creates the donor's restaurant with name, address and coordinates; a donor may hold only one restaurant and an unapproved account is refused."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/restaurants/{restaurantId}",
+      "handler": "restaurants-20",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Restaurants",
+      "request_shape": "",
+      "response_shape": "Restaurant",
+      "description": "Returns one of the donor's restaurants including its saved preferences, used by the Restaurant Preferences screen."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/my/restaurants/{restaurantId}",
+      "handler": "restaurants-21",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Restaurants",
+      "request_shape": "Partial<Restaurant>",
+      "response_shape": "Restaurant",
+      "description": "Updates the restaurant's name, address and coordinates; preferences are changed only through the preferences endpoint and handling declarations are never stored here."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/my/restaurants/{restaurantId}/preferences",
+      "handler": "restaurants-22",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Restaurants",
+      "request_shape": "{preferences: object}",
+      "response_shape": "Restaurant",
+      "description": "Saves the restaurant's preferences as a json object, used by the Restaurant Preferences screen; safety declarations are not accepted or copied here, so each donation needs a fresh checklist."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/restaurants",
+      "handler": "restaurants-23",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Restaurants",
+      "request_shape": "",
+      "response_shape": "Restaurant[]",
+      "description": "Lists every restaurant with its owner, for admin review and correction."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/restaurants/{restaurantId}",
+      "handler": "restaurants-24",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Restaurants",
+      "request_shape": "Partial<Restaurant>",
+      "response_shape": "Restaurant",
+      "description": "Corrects any restaurant's name, address, coordinates or preferences."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/sponsor-campaigns",
+      "handler": "sponsor-campaigns-25",
+      "auth_required": true,
+      "roles": [
+        "CSR Sponsor"
+      ],
+      "own_only": true,
+      "group": "Sponsor Campaigns",
+      "request_shape": "",
+      "response_shape": "SponsorCampaign[]",
+      "description": "Lists the sponsor's own campaigns with their recognition_text, used by the Sponsor Impact screen for campaign recognition."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/sponsor-campaigns",
+      "handler": "sponsor-campaigns-26",
+      "auth_required": true,
+      "roles": [
+        "CSR Sponsor"
+      ],
+      "own_only": true,
+      "group": "Sponsor Campaigns",
+      "request_shape": "SponsorCampaign",
+      "response_shape": "SponsorCampaign",
+      "description": "Creates a campaign owned by the sponsor; starts_on must not be after ends_on and cost_per_portion must be zero or more."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/sponsor-campaigns/{campaignId}",
+      "handler": "sponsor-campaigns-27",
+      "auth_required": true,
+      "roles": [
+        "CSR Sponsor"
+      ],
+      "own_only": true,
+      "group": "Sponsor Campaigns",
+      "request_shape": "",
+      "response_shape": "SponsorCampaign",
+      "description": "Returns one of the sponsor's campaigns including recognition_text."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/my/sponsor-campaigns/{campaignId}",
+      "handler": "sponsor-campaigns-28",
+      "auth_required": true,
+      "roles": [
+        "CSR Sponsor"
+      ],
+      "own_only": true,
+      "group": "Sponsor Campaigns",
+      "request_shape": "Partial<SponsorCampaign>",
+      "response_shape": "SponsorCampaign",
+      "description": "Edits the sponsor's campaign, including setting is_active to false to deactivate it; the same date and cost checks apply."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/sponsor-campaigns",
+      "handler": "sponsor-campaigns-29",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Sponsor Campaigns",
+      "request_shape": "",
+      "response_shape": "SponsorCampaign[]",
+      "description": "Lists all sponsor campaigns for admin review."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/sponsor-campaigns/{campaignId}",
+      "handler": "sponsor-campaigns-30",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Sponsor Campaigns",
+      "request_shape": "Partial<SponsorCampaign>",
+      "response_shape": "SponsorCampaign",
+      "description": "Corrects any sponsor campaign's dates, cost, recognition text or active flag."
+    },
+    {
+      "method": "POST",
+      "path": "/api/donation-extractions",
+      "handler": "donation-drafting-31",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "group": "Donation Drafting",
+      "request_shape": "{raw_input: string, input_method: string}",
+      "response_shape": "{available: boolean, food_description?: string, portions?: number, pickup_by?: string}",
+      "description": "Sends a spoken or typed food description to the Anthropic service and returns draft values for the donor to edit; returns available=false when the AI service is not configured, so the donor fills the form manually. Used by the Quick Post screen."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/donations",
+      "handler": "donations-32",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Donations",
+      "request_shape": "Donation",
+      "response_shape": "Donation",
+      "description": "Creates a draft donation from voice, text or manual input for one of the donor's restaurants; portions must be above zero and pickup_by must be in the future. Used by the Quick Post screen."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/donations",
+      "handler": "donations-33",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Donations",
+      "request_shape": "",
+      "response_shape": "Donation[]",
+      "description": "Lists the donor's own donations with their current status, used by the Tracking screen."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/my/donations/{donationId}",
+      "handler": "donations-34",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Donations",
+      "request_shape": "Partial<Donation>",
+      "response_shape": "Donation",
+      "description": "Edits a draft's food_description, portions and pickup_by before publishing; once published the values are locked and the server refuses the change. Used by the Quick Post screen."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/donations/{donationId}/repeat",
+      "handler": "donations-35",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Donations",
+      "request_shape": "",
+      "response_shape": "Donation",
+      "description": "Creates a new draft from one of the donor's earlier donations, copying the food description, portions and restaurant but not its handling declarations, so the checklist must be completed again; used by the Quick Post and Donor Dashboard screens for one-tap repeats."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/my/donations/{donationId}/photo",
+      "handler": "donations-36",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Donations",
+      "request_shape": "{photo: file}",
+      "response_shape": "Donation",
+      "description": "Attaches an optional photo to the donor's draft, storing its url in photo_url; files over the size limit or of a non-image type are refused. Used by the Quick Post screen."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/donations/{donationId}/publish",
+      "handler": "donations-37",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Donations",
+      "request_shape": "",
+      "response_shape": "Donation",
+      "description": "Moves a draft to published and sets published_at and portions_available to portions, but only when the draft has its preparation time, storage/handling and allergen declarations, a future pickup_by and portions above zero; matching NGOs are notified as part of this call. Used by the Quick Post screen."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/donations/{donationId}/cancel",
+      "handler": "donations-38",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Donations",
+      "request_shape": "",
+      "response_shape": "Donation",
+      "description": "Moves the donor's donation to cancelled while it is draft or published with no claim, used from the Tracking screen; a donation already claimed is refused."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/donor-dashboard",
+      "handler": "dashboards-39",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Dashboards",
+      "request_shape": "",
+      "response_shape": "{published: number, claimed: number, delivered: number, recent_donations: Donation[]}",
+      "description": "Returns the donor's activity summary and recent donations, used by the Donor Dashboard screen; published = donations currently published, claimed = donations with status claimed, delivered = donations with status delivered, all counted over the donor's own donations and recent_donations are the 5 most recently updated."
+    },
+    {
+      "method": "GET",
+      "path": "/api/donations/{donationId}",
+      "handler": "donations-40",
+      "auth_required": true,
+      "roles": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin"
+      ],
+      "group": "Donations",
+      "request_shape": "",
+      "response_shape": "{donation: Donation, restaurant: Restaurant}",
+      "description": "Returns one donation with its restaurant for the Donation Detail screen; the server allows the owning donor, an NGO that can see it as published or has claimed it, a volunteer on its pickup, and any admin, and refuses everyone else."
+    },
+    {
+      "method": "GET",
+      "path": "/api/donation-matches",
+      "handler": "donation-matching-41",
+      "auth_required": true,
+      "roles": [
+        "NGO"
+      ],
+      "group": "Donation Matching",
+      "request_shape": "",
+      "response_shape": "{donation: Donation, restaurant: Restaurant, portions_available: number, match_explanation: string}[]",
+      "description": "Lists published donations with portions_available above zero and a pickup_by still in the future, each with a match_explanation based on the NGO's current need_portions and capacity_portions, used by the NGO Feed screen for in-app alerts and match explanations."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/donations",
+      "handler": "admin-operations-42",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Admin Operations",
+      "request_shape": "",
+      "response_shape": "Donation[]",
+      "description": "Lists every donation, filterable by status, so the admin can monitor active rescues on the Admin Operations screen (status claimed or picked_up)."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/donations/{donationId}",
+      "handler": "admin-operations-43",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Admin Operations",
+      "request_shape": "Partial<Donation>",
+      "response_shape": "Donation",
+      "description": "Corrects any donation's fields, including sponsor_campaign_id, for admin review; status moves still follow the server's transition rules."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/operations-summary",
+      "handler": "admin-operations-44",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Admin Operations",
+      "request_shape": "",
+      "response_shape": "{pending_approvals: number, active_rescues: number, failed_assignments: number, suspended_users: number}",
+      "description": "Returns the counts the Admin Operations screen starts from; pending_approvals = users with pending_approval, active_rescues = donations with status claimed or picked_up, failed_assignments = pickup tasks with status failed, suspended_users = users with suspended."
+    },
+    {
+      "method": "GET",
+      "path": "/api/impact-dashboard",
+      "handler": "dashboards-45",
+      "auth_required": true,
+      "roles": [
+        "CSR Sponsor"
+      ],
+      "group": "Dashboards",
+      "request_shape": "",
+      "response_shape": "{confirmed_portions_delivered: number, estimated_waste_avoided_kg: number, illustrative_cost: number, assumptions: {kg_per_portion: number, cost_basis: string, is_illustrative: boolean}}",
+      "description": "Returns the transparent impact totals for the Sponsor Impact screen: confirmed_portions_delivered = sum of confirmed_portions on claims of delivered donations; estimated_waste_avoided_kg = confirmed_portions_delivered × kg_per_portion (0.35 from settings); illustrative_cost = sum of confirmed portions on delivered donations linked to the sponsor's campaigns × that campaign's cost_per_portion; the assumptions are returned with the figures so the interface can label them."
+    },
+    {
+      "method": "GET",
+      "path": "/api/donations/{donationId}/handling-declarations",
+      "handler": "handling-declarations-46",
+      "auth_required": true,
+      "roles": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin"
+      ],
+      "group": "Handling declarations",
+      "request_shape": "",
+      "response_shape": "HandlingDeclaration[]",
+      "description": "Returns the handling checklist entries (preparation time, storage and handling, allergens) of one donation, shown on Donation Detail to everyone involved so an NGO can review them before claiming; the server returns them only for donations the caller is involved in."
+    },
+    {
+      "method": "POST",
+      "path": "/api/donations/{donationId}/handling-declarations",
+      "handler": "handling-declarations-47",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Handling declarations",
+      "request_shape": "HandlingDeclaration",
+      "response_shape": "HandlingDeclaration",
+      "description": "Adds one fresh checklist entry (kind preparation_time, storage_handling or allergens) to the donor's own donation from Quick Post; allowed only while the donation is draft and the donor owns it, and each kind is stored per donation so no declaration is reused from restaurant preferences."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/donations/{donationId}/handling-declarations/{declarationId}",
+      "handler": "handling-declarations-48",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Handling declarations",
+      "request_shape": "Partial<HandlingDeclaration>",
+      "response_shape": "HandlingDeclaration",
+      "description": "Edits the details of one checklist entry on the donor's own draft donation before publishing, as the donor corrects values in Quick Post; the server rejects the change once the donation is published."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/donations/{donationId}/handling-declarations/{declarationId}",
+      "handler": "handling-declarations-49",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Handling declarations",
+      "request_shape": "",
+      "response_shape": "",
+      "description": "Removes one checklist entry from the donor's own draft donation before publishing, so the donor can redo the checklist; the server rejects the removal once the donation is published."
+    },
+    {
+      "method": "POST",
+      "path": "/api/donations/{donationId}/claims",
+      "handler": "donation-claims-50",
+      "auth_required": true,
+      "roles": [
+        "NGO"
+      ],
+      "own_only": true,
+      "group": "Donation claims",
+      "request_shape": "{portions_claimed: number}",
+      "response_shape": "DonationClaim",
+      "description": "Reserves portions_claimed of a published donation for the NGO from NGO Claim inside one database transaction, refusing it if portions_claimed exceeds portions_available or the pickup-by time has passed; it sets reserved_until to now plus the configured reservation timeout (default 5 minutes) and creates an open pickup task for volunteers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/donation-claims",
+      "handler": "donation-claims-51",
+      "auth_required": true,
+      "roles": [
+        "NGO"
+      ],
+      "own_only": true,
+      "group": "Donation claims",
+      "request_shape": "",
+      "response_shape": "DonationClaim[]",
+      "description": "Lists the NGO's own claims, including reserved, confirmed, released and expired ones, for NGO Receipt and NGO Claim; the caller sees only claims their organisation made."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/donation-claims/{claimId}/confirm-receipt",
+      "handler": "donation-claims-52",
+      "auth_required": true,
+      "roles": [
+        "NGO"
+      ],
+      "own_only": true,
+      "group": "Donation claims",
+      "request_shape": "{confirmed_portions: number}",
+      "response_shape": "DonationClaim",
+      "description": "Records the quantity the NGO actually received from NGO Receipt: confirmed_portions must be between 0 and portions_claimed, the linked pickup task must be handed_over, and the server sets received_at, moves the claim to confirmed and the donation to delivered, and only confirmed portions count toward impact."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/donation-claims/{claimId}/release",
+      "handler": "donation-claims-53",
+      "auth_required": true,
+      "roles": [
+        "NGO"
+      ],
+      "own_only": true,
+      "group": "Donation claims",
+      "request_shape": "",
+      "response_shape": "DonationClaim",
+      "description": "Lets the NGO give up its own reserved claim before handover from NGO Claim; the server sets the claim to released, returns its portions to the donation, cancels its open pickup task and records a status event."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/donation-claims",
+      "handler": "donation-claims-54",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Donation claims",
+      "request_shape": "",
+      "response_shape": "DonationClaim[]",
+      "description": "Lists every claim across donations so Admin Operations can monitor active rescues; the admin can filter by status to see reserved claims and those awaiting receipt."
+    },
+    {
+      "method": "GET",
+      "path": "/api/pickup-tasks",
+      "handler": "pickup-tasks-55",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter"
+      ],
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask[]",
+      "description": "Lists open pickup tasks on Volunteer Tasks that the volunteer can accept, filtered to those whose claimed portions fit the volunteer's carrying capacity and whose donation has not passed its pickup-by time."
+    },
+    {
+      "method": "POST",
+      "path": "/api/pickup-tasks/{pickupTaskId}/accept",
+      "handler": "pickup-tasks-56",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter"
+      ],
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask",
+      "description": "Lets an available volunteer accept an open pickup from Volunteer Tasks inside a transaction; the server checks the task is still open, the volunteer's account is active and available, and carrying capacity covers the claimed portions, then sets volunteer_id and accepted_at, moves the task to accepted and records a status event."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/pickup-tasks",
+      "handler": "pickup-tasks-57",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter"
+      ],
+      "own_only": true,
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask[]",
+      "description": "Lists the pickup tasks the volunteer has accepted, with their current status, for Volunteer Tasks and Active Delivery status updates."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/pickup-tasks/{pickupTaskId}/collect",
+      "handler": "pickup-tasks-58",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter"
+      ],
+      "own_only": true,
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask",
+      "description": "Confirms from Active Delivery that the volunteer has collected the food; the server allows it only from accepted, sets collected_at, moves the task to collected and the donation to picked_up, and records a status event."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/pickup-tasks/{pickupTaskId}/handover",
+      "handler": "pickup-tasks-59",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter"
+      ],
+      "own_only": true,
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask",
+      "description": "Confirms from Active Delivery that the food was handed over to the NGO; the server allows it only from collected, sets handed_over_at, moves the task to handed_over, and notifies the NGO to confirm the received quantity."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/pickup-tasks/{pickupTaskId}/fail",
+      "handler": "pickup-tasks-60",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter"
+      ],
+      "own_only": true,
+      "group": "Pickup tasks",
+      "request_shape": "{failure_reason: string}",
+      "response_shape": "PickupTask",
+      "description": "Lets the volunteer report that an accepted or collected pickup failed, with a failure_reason, so Admin Operations can resolve it; the server moves the task to failed and records a status event."
+    },
+    {
+      "method": "GET",
+      "path": "/api/donations/{donationId}/pickup-tasks",
+      "handler": "pickup-tasks-61",
+      "auth_required": true,
+      "roles": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin"
+      ],
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask[]",
+      "description": "Returns the pickup tasks of one donation with their status and timestamps, shown on Donation Detail to the donor, the claiming NGO, volunteers and admins involved in that donation."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/pickup-tasks",
+      "handler": "pickup-tasks-62",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask[]",
+      "description": "Lists all pickup tasks so Admin Operations can monitor active rescues and find failed assignments, filterable by status."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/pickup-tasks/{pickupTaskId}/reassign",
+      "handler": "pickup-tasks-63",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask",
+      "description": "Resolves a failed assignment from Admin Operations by returning the task to open, clearing volunteer_id, accepted_at, collected_at and handed_over_at, and recording a status event; the server refuses it if the linked claim has already expired."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/pickup-tasks/{pickupTaskId}/cancel",
+      "handler": "pickup-tasks-64",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask",
+      "description": "Resolves a failed assignment from Admin Operations by cancelling the task, releasing its claim so the claimed portions return to the donation, and moving the donation back to published when no live claims remain; the server records a status event."
+    },
+    {
+      "method": "GET",
+      "path": "/api/donations/{donationId}/status-events",
+      "handler": "status-history-65",
+      "auth_required": true,
+      "roles": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin"
+      ],
+      "group": "Status history",
+      "request_shape": "",
+      "response_shape": "StatusEvent[]",
+      "description": "Returns the status history of one donation, each event with from_status, to_status, actor and note, for Tracking and Donation Detail; the history is written only by the server during transitions and cannot be edited or deleted."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/notifications",
+      "handler": "notifications-66",
+      "auth_required": true,
+      "own_only": true,
+      "group": "Notifications",
+      "request_shape": "",
+      "response_shape": "Notification[]",
+      "description": "Lists the caller's in-app alerts, such as new eligible donations for NGOs, accepted pickups for donors and handover prompts for NGOs, newest first, for the NGO Feed alerts and each role's screens."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/my/notifications/{notificationId}",
+      "handler": "notifications-67",
+      "auth_required": true,
+      "own_only": true,
+      "group": "Notifications",
+      "request_shape": "",
+      "response_shape": "",
+      "description": "Dismisses one of the caller's own in-app alerts from the alert list on any screen; it removes only the caller's own notification."
+    },
+    {
+      "method": "GET",
+      "path": "/api/settings",
+      "handler": "settings-68",
+      "auth_required": true,
+      "roles": [
+        "NGO",
+        "CSR Sponsor",
+        "Admin"
+      ],
+      "group": "Settings",
+      "request_shape": "",
+      "response_shape": "Setting[]",
+      "description": "Returns the configurable settings (reservation timeout in minutes, default 5, and impact assumption of 0.35 kg per portion) so NGO Claim can show the countdown and Sponsor Impact can label its assumptions."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/settings/{settingKey}",
+      "handler": "settings-69",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Settings",
+      "request_shape": "{value: object}",
+      "response_shape": "Setting",
+      "description": "Changes the value of one configurable setting from Admin Operations, such as the reservation timeout or the kg-per-portion impact assumption, validating the value range on the server before saving."
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/demo-sign-in",
+      "handler": "auth-1",
+      "auth_required": false,
+      "group": "Auth",
+      "request_shape": "{role: string}",
+      "response_shape": "User",
+      "description": "Signs the visitor in instantly as the pre-seeded approved synthetic demo user for the chosen role (donor, ngo, volunteer, admin or csr_sponsor), with no password, and is called by the Role Entry screen."
+    },
+    {
+      "method": "POST",
+      "path": "/api/restaurants",
+      "handler": "restaurants-17",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Restaurants",
+      "request_shape": "{name: string, latitude: number, longitude: number}",
+      "response_shape": "Restaurant",
+      "description": "Creates a restaurant owned by the caller with status pending_approval, validates name and coordinates, and links it to the caller's user.restaurant_id, used by the donor's onboarding."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/restaurants/{restaurantId}",
+      "handler": "restaurants-18",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Restaurants",
+      "request_shape": "{name?: string, latitude?: number, longitude?: number}",
+      "response_shape": "Restaurant",
+      "description": "Changes the donor's own restaurant name or coordinates, while status and owner cannot be changed by the donor, and the donor's restaurant settings use it."
+    },
+    {
+      "method": "GET",
+      "path": "/api/restaurants",
+      "handler": "restaurants-19",
+      "auth_required": true,
+      "roles": [
+        "NGO",
+        "Volunteer / NGO Transporter"
+      ],
+      "group": "Restaurants",
+      "request_shape": "",
+      "response_shape": "Restaurant[]",
+      "description": "Lists only approved restaurants with name and coordinates, so NGO and volunteer screens can show where donations come from and explain matches."
+    },
+    {
+      "method": "GET",
+      "path": "/api/restaurants/{restaurantId}",
+      "handler": "restaurants-20",
+      "auth_required": true,
+      "roles": [
+        "NGO",
+        "Volunteer / NGO Transporter"
+      ],
+      "group": "Restaurants",
+      "request_shape": "",
+      "response_shape": "Restaurant",
+      "description": "Returns one approved restaurant's name and coordinates for an NGO or volunteer reviewing a donation's pickup point; it returns 404 when the restaurant is not approved."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/restaurants/{restaurantId}",
+      "handler": "restaurants-22",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Restaurants",
+      "request_shape": "",
+      "response_shape": "Restaurant",
+      "description": "Returns one restaurant's full record and owner for admin review before approval."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/restaurants/{restaurantId}/approve",
+      "handler": "restaurants-24",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Restaurants",
+      "request_shape": "",
+      "response_shape": "Restaurant",
+      "description": "Sets a pending or suspended restaurant to approved so its donor can post and NGOs can see it, used by Admin Operations."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/restaurants/{restaurantId}/suspend",
+      "handler": "restaurants-25",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Restaurants",
+      "request_shape": "{reason?: string}",
+      "response_shape": "Restaurant",
+      "description": "Sets a restaurant to suspended so it can no longer post donations, used by Admin Operations."
+    },
+    {
+      "method": "GET",
+      "path": "/api/restaurants/{restaurantId}/preferences",
+      "handler": "restaurant-preferences-26",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Restaurant Preferences",
+      "request_shape": "",
+      "response_shape": "RestaurantPreference",
+      "description": "Returns the donor's restaurant's saved defaults (default portions, preferred pickup window, pickup notes) for the Restaurant Preferences and Quick Post screens, and never includes handling declarations."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/restaurants/{restaurantId}/preferences",
+      "handler": "restaurant-preferences-27",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Restaurant Preferences",
+      "request_shape": "Partial<RestaurantPreference>",
+      "response_shape": "RestaurantPreference",
+      "description": "Creates or replaces the restaurant's saved defaults and sets updated_by_user_id; it accepts only portions, pickup window and notes, so safety declarations are never stored or copied from earlier donations."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/restaurants/{restaurantId}/preferences",
+      "handler": "restaurant-preferences-28",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Restaurant Preferences",
+      "request_shape": "",
+      "response_shape": "RestaurantPreference",
+      "description": "Returns a restaurant's saved preferences for admin review."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/restaurants/{restaurantId}/preferences",
+      "handler": "restaurant-preferences-29",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Restaurant Preferences",
+      "request_shape": "Partial<RestaurantPreference>",
+      "response_shape": "RestaurantPreference",
+      "description": "Corrects a restaurant's saved defaults (portions, pickup window, notes) for administrative fixes."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/dashboard",
+      "handler": "dashboards-30",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Dashboards",
+      "request_shape": "",
+      "response_shape": "{restaurant: Restaurant, donations_published_this_month: number, recent_donations: Donation[]}",
+      "description": "Returns the donor's restaurant and its recent donations, plus donations_published_this_month = count of the restaurant's donations with published_at in the current calendar month, for the Donor Dashboard screen."
+    },
+    {
+      "method": "GET",
+      "path": "/api/ngos",
+      "handler": "ngos-31",
+      "auth_required": true,
+      "roles": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter"
+      ],
+      "group": "NGOs",
+      "request_shape": "",
+      "response_shape": "Ngo[]",
+      "description": "Lists approved NGOs with name, coordinates and service_radius_km, so donors see who can receive food and NGO screens can explain distance matches."
+    },
+    {
+      "method": "GET",
+      "path": "/api/ngos/{ngoId}",
+      "handler": "ngos-32",
+      "auth_required": true,
+      "roles": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter"
+      ],
+      "group": "NGOs",
+      "request_shape": "",
+      "response_shape": "Ngo",
+      "description": "Returns one approved NGO's name, coordinates and service radius for the donation detail and NGO screens."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/ngos",
+      "handler": "ngos-33",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "NGOs",
+      "request_shape": "?status=string",
+      "response_shape": "Ngo[]",
+      "description": "Lists every NGO with its status so the admin can approve or suspend them and link them to NGO accounts."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/ngos",
+      "handler": "ngos-34",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "NGOs",
+      "request_shape": "{name: string, latitude: number, longitude: number, service_radius_km: number}",
+      "response_shape": "Ngo",
+      "description": "Creates an NGO record with status pending_approval from its name, coordinates and service radius, so the admin can then link an NGO account to it."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/ngos/{ngoId}",
+      "handler": "ngos-35",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "NGOs",
+      "request_shape": "",
+      "response_shape": "Ngo",
+      "description": "Returns one NGO's full record for admin review."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/ngos/{ngoId}",
+      "handler": "ngos-36",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "NGOs",
+      "request_shape": "Partial<Ngo>",
+      "response_shape": "Ngo",
+      "description": "Corrects an NGO's name, coordinates, service radius or status fields."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/ngos/{ngoId}/approve",
+      "handler": "ngos-37",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "NGOs",
+      "request_shape": "",
+      "response_shape": "Ngo",
+      "description": "Sets an NGO to approved so it can claim donations and appear in matching, used by Admin Operations."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/ngos/{ngoId}/suspend",
+      "handler": "ngos-38",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "NGOs",
+      "request_shape": "{reason?: string}",
+      "response_shape": "Ngo",
+      "description": "Sets an NGO to suspended so it can no longer claim donations or appear in matching, used by Admin Operations."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/ngo-capacity",
+      "handler": "ngo-capacity-39",
+      "auth_required": true,
+      "roles": [
+        "NGO"
+      ],
+      "own_only": true,
+      "group": "NGO capacity",
+      "request_shape": "",
+      "response_shape": "NgoCapacity",
+      "description": "Returns the caller's NGO capacity record (current need, capacity, max portions per claim, cold storage and availability) for the NGO Capacity screen."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/ngo-capacity",
+      "handler": "ngo-capacity-40",
+      "auth_required": true,
+      "roles": [
+        "NGO"
+      ],
+      "own_only": true,
+      "group": "NGO capacity",
+      "request_shape": "NgoCapacity",
+      "response_shape": "NgoCapacity",
+      "description": "Creates the caller's NGO capacity record once, linked to the caller's NGO, with current need, capacity and availability set on the NGO Capacity screen; refused if a record already exists."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/my/ngo-capacity",
+      "handler": "ngo-capacity-41",
+      "auth_required": true,
+      "roles": [
+        "NGO"
+      ],
+      "own_only": true,
+      "group": "NGO capacity",
+      "request_shape": "Partial<NgoCapacity>",
+      "response_shape": "NgoCapacity",
+      "description": "Updates the caller's current need, capacity, max portions per claim, cold storage flag and availability from the NGO Capacity screen; the server rejects values below zero and max_portions_per_claim above capacity_portions."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/ngo-capacities",
+      "handler": "ngo-capacity-42",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "NGO capacity",
+      "request_shape": "",
+      "response_shape": "NgoCapacity[]",
+      "description": "Lists every NGO's capacity record so an admin can review availability during rescue monitoring."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/ngo-capacities/{ngoCapacityId}",
+      "handler": "ngo-capacity-43",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "NGO capacity",
+      "request_shape": "Partial<NgoCapacity>",
+      "response_shape": "NgoCapacity",
+      "description": "Corrects an NGO's capacity record on behalf of the NGO, with the same value checks as the NGO's own update."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/donations/{donationId}",
+      "handler": "donations-46",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Donations",
+      "request_shape": "",
+      "response_shape": "DonationDetail",
+      "description": "Returns one of the caller restaurant's donations with its handling declarations and status history for the donor's Donation Detail view."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/my/donations/{donationId}",
+      "handler": "donations-48",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Donations",
+      "request_shape": "",
+      "response_shape": "{deleted: boolean}",
+      "description": "Discards a draft donation and its draft handling declarations; refused once the donation has been published."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/donations/{donationId}/photo",
+      "handler": "donations-52",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Donations",
+      "request_shape": "multipart/form-data {file: image}",
+      "response_shape": "Donation",
+      "description": "Uploads the optional photo for a draft donation from Quick Post and stores its URL in photo_url; refused for files that are not images."
+    },
+    {
+      "method": "POST",
+      "path": "/api/donations/extract",
+      "handler": "donations-53",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "group": "Donations",
+      "request_shape": "{transcript: string}",
+      "response_shape": "{description: string, portions_total: number, pickup_by_at: string, ai_available: boolean}",
+      "description": "Sends the donor's spoken-then-transcribed or typed food description to the AI provider and returns extracted description, portions and pickup-by time for the donor to edit; when the AI is unavailable it answers 503 with fallback true so the screen switches to manual entry."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/donations/{donationId}/handling-declarations",
+      "handler": "handling-declarations-54",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Handling declarations",
+      "request_shape": "",
+      "response_shape": "HandlingDeclaration[]",
+      "description": "Lists the handling declarations recorded for one of the caller restaurant's donations, shown on the donor's Donation Detail view."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/donations/{donationId}/handling-declarations",
+      "handler": "handling-declarations-55",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Handling declarations",
+      "request_shape": "HandlingDeclaration",
+      "response_shape": "HandlingDeclaration",
+      "description": "Records a fresh handling checklist (preparation_time_minutes, storage_method, requires_refrigeration, allergens and checklist_confirmed) for one draft donation; declarations are never copied from restaurant preferences or earlier donations, and the server refuses it once the donation is published."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/my/donations/{donationId}/handling-declarations/{handlingDeclarationId}",
+      "handler": "handling-declarations-56",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Handling declarations",
+      "request_shape": "Partial<HandlingDeclaration>",
+      "response_shape": "HandlingDeclaration",
+      "description": "Edits a handling checklist while its donation is still draft, so the donor can correct preparation time, storage, allergens or confirmation before publishing."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/my/donations/{donationId}/handling-declarations/{handlingDeclarationId}",
+      "handler": "handling-declarations-57",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Handling declarations",
+      "request_shape": "",
+      "response_shape": "{deleted: boolean}",
+      "description": "Removes a handling checklist from a draft donation so it can be completed again; refused once the donation is published."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/handling-declarations/{handlingDeclarationId}",
+      "handler": "handling-declarations-59",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Handling declarations",
+      "request_shape": "Partial<HandlingDeclaration>",
+      "response_shape": "HandlingDeclaration",
+      "description": "Corrects a handling declaration's recorded values during rescue review; the server keeps checklist_confirmed and declared_at consistent with the correction."
+    },
+    {
+      "method": "GET",
+      "path": "/api/donations/eligible",
+      "handler": "donations-60",
+      "auth_required": true,
+      "roles": [
+        "NGO"
+      ],
+      "group": "Donations",
+      "request_shape": "",
+      "response_shape": "{donations: {donation: Donation, distance_km: number, match_explanation: string}[], alerts: {message: string, donation_id: string}[]}",
+      "description": "Returns the NGO feed of donations eligible for the caller's NGO with a short match explanation and in-app alerts: a donation qualifies when it is published or partially_claimed, portions_remaining is above 0, pickup_by_at is in the future, the haversine distance from the restaurant to the NGO is within service_radius_km, the NGO is available, and cold storage exists when requires_refrigeration is true."
+    },
+    {
+      "method": "GET",
+      "path": "/api/donations/{donationId}/claims",
+      "handler": "donation-claims-63",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter"
+      ],
+      "group": "Donation claims",
+      "request_shape": "",
+      "response_shape": "DonationClaim[]",
+      "description": "Lists the claims on a donation so a volunteer assigned to its pickup can see which NGO receives how many portions during collection and handover."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/donation-claims/{claimId}",
+      "handler": "donation-claims-65",
+      "auth_required": true,
+      "roles": [
+        "NGO"
+      ],
+      "own_only": true,
+      "group": "Donation claims",
+      "request_shape": "",
+      "response_shape": "DonationClaim",
+      "description": "Returns one of the caller NGO's claims with its donation summary and remaining time on the reservation."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/donation-claims/{claimId}/confirm",
+      "handler": "donation-claims-66",
+      "auth_required": true,
+      "roles": [
+        "NGO"
+      ],
+      "own_only": true,
+      "group": "Donation claims",
+      "request_shape": "",
+      "response_shape": "DonationClaim",
+      "description": "Confirms a reserved claim before its reserved_until time so the portions are committed to the NGO; after the window the server refuses it with 409 and the portions return to portions_remaining, and the donation moves to claimed or partially_claimed."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/donations/{donationId}",
+      "handler": "donations-69",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Donations",
+      "request_shape": "",
+      "response_shape": "DonationDetail",
+      "description": "Returns any donation with its handling declarations, claims and status history for an admin reviewing a rescue."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/donations/{donationId}/resolve-failure",
+      "handler": "donations-71",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Donations",
+      "request_shape": "{action: 'reopen' | 'close', reason: string}",
+      "response_shape": "Donation",
+      "description": "Resolves a failed assignment on a donation: action reopen returns it to published with the unclaimed portions available again, action close moves it to cancelled; the server records the reason in the status history."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/donation-claims/{claimId}",
+      "handler": "donation-claims-73",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Donation claims",
+      "request_shape": "Partial<DonationClaim>",
+      "response_shape": "DonationClaim",
+      "description": "Corrects a claim's status or received quantity during failed-assignment resolution; the server keeps portions_received at or below portions_claimed and keeps the donation's portions_remaining consistent."
+    },
+    {
+      "method": "GET",
+      "path": "/api/pickup-tasks/open",
+      "handler": "pickup-tasks-74",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter"
+      ],
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask[]",
+      "description": "Lists open pickup tasks with no volunteer yet, showing pickup location, portion_count and pickup-by time, so a volunteer can choose one on the Volunteer Tasks screen; the server returns only tasks whose donation is claimed and whose volunteer is currently available."
+    },
+    {
+      "method": "GET",
+      "path": "/api/pickup-tasks/{pickupTaskId}",
+      "handler": "pickup-tasks-76",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter",
+        "NGO",
+        "Admin"
+      ],
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask",
+      "description": "Returns one pickup task's details (portions, status, timestamps, failure_reason) for the Active Delivery screen and for the claiming NGO's view of its collection; a volunteer may read any task, and an NGO may read tasks against its own claims."
+    },
+    {
+      "method": "POST",
+      "path": "/api/pickup-tasks/{pickupTaskId}/collect",
+      "handler": "pickup-tasks-78",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter"
+      ],
+      "own_only": true,
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask",
+      "description": "Confirms that the volunteer has collected the food from the restaurant on the Active Delivery screen; the server allows it only for the assigned volunteer while status is accepted, sets collected_at and status collected, and writes a status event that moves the donation to in_transit."
+    },
+    {
+      "method": "POST",
+      "path": "/api/pickup-tasks/{pickupTaskId}/handover",
+      "handler": "pickup-tasks-79",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter"
+      ],
+      "own_only": true,
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask",
+      "description": "Confirms that the volunteer handed the food over to the claiming NGO on the Active Delivery screen; the server allows it only for the assigned volunteer while status is collected, sets handed_over_at and status handed_over, and writes a status event; the NGO then confirms the received quantity in its own receipt step."
+    },
+    {
+      "method": "POST",
+      "path": "/api/pickup-tasks/{pickupTaskId}/fail",
+      "handler": "pickup-tasks-80",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter"
+      ],
+      "own_only": true,
+      "group": "Pickup tasks",
+      "request_shape": "{reason: string}",
+      "response_shape": "PickupTask",
+      "description": "Reports that the assigned pickup could not be completed, with a reason, from the Active Delivery screen; the server allows it only for the assigned volunteer while status is accepted or collected, sets status failed and failure_reason, and writes a status event so an admin can resolve it."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/pickup-tasks/{pickupTaskId}",
+      "handler": "pickup-tasks-82",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Pickup tasks",
+      "request_shape": "Partial<PickupTask>",
+      "response_shape": "PickupTask",
+      "description": "Corrects a pickup task's portion_count or failure_reason on the Admin Operations screen; the server refuses changes to status, volunteer_user_id and the timestamps, which move only through the accept, collect, handover, fail and resolve actions."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/pickup-tasks/{pickupTaskId}/resolve",
+      "handler": "pickup-tasks-83",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Pickup tasks",
+      "request_shape": "{resolution: string, reason: string, volunteer_user_id?: string}",
+      "response_shape": "PickupTask",
+      "description": "Resolves a failed pickup from the Admin Operations screen: resolution 'reassign' returns the task to open, clearing the volunteer, or 'close' keeps it failed; the server allows it only while status is failed, requires a reason, and writes a status event recording the admin as actor."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/sponsor-campaigns",
+      "handler": "sponsor-campaigns-87",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Sponsor campaigns",
+      "request_shape": "SponsorCampaign",
+      "response_shape": "SponsorCampaign",
+      "description": "Creates a sponsor campaign in draft status for a sponsor user, checking that ends_on is not before starts_on and that sponsor_user_id belongs to a CSR sponsor account."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/sponsor-campaigns/{sponsorCampaignId}",
+      "handler": "sponsor-campaigns-88",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Sponsor campaigns",
+      "request_shape": "",
+      "response_shape": "SponsorCampaign",
+      "description": "Returns one sponsor campaign's full details for the admin's campaign management."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/sponsor-campaigns/{sponsorCampaignId}",
+      "handler": "sponsor-campaigns-89",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Sponsor campaigns",
+      "request_shape": "Partial<SponsorCampaign>",
+      "response_shape": "SponsorCampaign",
+      "description": "Edits a campaign's name, recognition_text, sponsor_user_id or dates; the server refuses changes to status, which moves only through the activate and end actions."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/admin/sponsor-campaigns/{sponsorCampaignId}",
+      "handler": "sponsor-campaigns-90",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Sponsor campaigns",
+      "request_shape": "",
+      "response_shape": "{deleted: boolean}",
+      "description": "Removes a draft sponsor campaign that was created in error; the server refuses to delete an active or ended campaign."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/sponsor-campaigns/{sponsorCampaignId}/activate",
+      "handler": "sponsor-campaigns-91",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Sponsor campaigns",
+      "request_shape": "",
+      "response_shape": "SponsorCampaign",
+      "description": "Moves a draft campaign to active from the admin campaign screen, so its recognition appears to the sponsor; the server allows it only from draft and only when the current date is within starts_on and ends_on."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/sponsor-campaigns/{sponsorCampaignId}/end",
+      "handler": "sponsor-campaigns-92",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Sponsor campaigns",
+      "request_shape": "",
+      "response_shape": "SponsorCampaign",
+      "description": "Moves an active campaign to ended from the admin campaign screen; the server allows it only from active."
+    },
+    {
+      "method": "GET",
+      "path": "/api/impact-reports",
+      "handler": "impact-reports-93",
+      "auth_required": true,
+      "roles": [
+        "CSR Sponsor"
+      ],
+      "group": "Impact reports",
+      "request_shape": "",
+      "response_shape": "ImpactReport[]",
+      "description": "Lists generated impact reports, newest first, for the Sponsor Impact dashboard; each report shows confirmed_portions, kg_per_portion_assumption (0.35 by default), estimated_waste_avoided_kg and illustrative_cost with its currency, so assumptions are labelled."
+    },
+    {
+      "method": "GET",
+      "path": "/api/impact-reports/{impactReportId}",
+      "handler": "impact-reports-94",
+      "auth_required": true,
+      "roles": [
+        "CSR Sponsor"
+      ],
+      "group": "Impact reports",
+      "request_shape": "",
+      "response_shape": "ImpactReport",
+      "description": "Returns one impact report with its period, assumptions and generated_at for the Sponsor Impact dashboard."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/impact-reports",
+      "handler": "impact-reports-95",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Impact reports",
+      "request_shape": "",
+      "response_shape": "ImpactReport[]",
+      "description": "Lists all generated impact reports for admin review."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/impact-reports",
+      "handler": "impact-reports-96",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Impact reports",
+      "request_shape": "{period_start: string, period_end: string}",
+      "response_shape": "ImpactReport",
+      "description": "Generates an impact report for a period: confirmed_portions = sum of portions_received on confirmed donation claims whose receipt falls within period_start to period_end; estimated_waste_avoided_kg = confirmed_portions × kg_per_portion_assumption (0.35 unless configured); illustrative_cost = confirmed_portions × the configured illustrative per-portion rate; the server rejects a period whose end is before its start and stores generated_at."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/admin/impact-reports/{impactReportId}",
+      "handler": "impact-reports-97",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Impact reports",
+      "request_shape": "",
+      "response_shape": "{deleted: boolean}",
+      "description": "Removes an impact report generated for the wrong period so it can be regenerated; reports are otherwise never edited, so no PATCH exists."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/ngo-capacities/{ngoCapacityId}",
+      "handler": "fix-130",
+      "description": "Load one NGO capacity record for the records correction section on /admin-operations.",
+      "group": "Ngo Capacities"
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/restaurants/{restaurantId}/preferences",
+      "handler": "fix-131",
+      "description": "Return the restaurant's saved preferences to its donor",
+      "group": "Preferences"
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/restaurants",
+      "handler": "restaurants-17",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Restaurants",
+      "request_shape": "Restaurant",
+      "response_shape": "Restaurant",
+      "description": "Adds a synthetic restaurant with its owner, latitude and longitude, starting in pending_approval. Used by the Restaurants screen."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/donation-extractions",
+      "handler": "donation-posting-50",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Donation Posting",
+      "request_shape": "{input_text: string, input_method: \"voice\" | \"text\"}",
+      "response_shape": "{available: boolean, description?: string, portions_total?: number, pickup_by_at?: string, ai_extracted: boolean}",
+      "description": "Sends the spoken or typed food description to the AI provider on Quick Post and returns suggested description, portions_total and pickup_by_at with ai_extracted true; when the AI is not configured or fails it returns ai_extracted false and empty fields so the donor posts manually."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/my/donations/{donationId}/photo",
+      "handler": "donation-posting-52",
+      "auth_required": true,
+      "roles": [
+        "Donor"
+      ],
+      "own_only": true,
+      "group": "Donation Posting",
+      "request_shape": "",
+      "response_shape": "Donation",
+      "description": "Removes the optional photo from a draft donation and clears photo_url."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/donation-matches",
+      "handler": "ngo-feed-60",
+      "auth_required": true,
+      "roles": [
+        "NGO"
+      ],
+      "own_only": true,
+      "group": "NGO Feed",
+      "request_shape": "",
+      "response_shape": "{matches: {donation: Donation, distance_km: number, portions_available: number, match_reasons: string[]}[], alerts: {donation_id: string, message: string, created_at: string}[]}",
+      "description": "Returns published donations eligible for the caller's NGO, where a donation qualifies when portions_remaining > 0, pickup_by_at is in the future, its distance from the NGO (computed from latitude and longitude) is within service_radius_km, and the NGO is approved and available; each item carries concise match reasons and the feed carries in-app alerts for donations newly matched since the NGO last opened the feed."
+    },
+    {
+      "method": "POST",
+      "path": "/api/my/donation-claims/{claimId}/receipt",
+      "handler": "donation-claims-66",
+      "auth_required": true,
+      "roles": [
+        "NGO"
+      ],
+      "own_only": true,
+      "group": "Donation Claims",
+      "request_shape": "{portions_received: number}",
+      "response_shape": "DonationClaim",
+      "description": "Records the quantity the NGO received on NGO Receipt once the claim is confirmed and its pickup is handed over, storing portions_received (0 to portions_claimed) and received_at; only these NGO-confirmed portions count as rescued food in impact reporting."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/pickup-tasks/{pickupTaskId}",
+      "handler": "pickup-tasks-76",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter"
+      ],
+      "own_only": true,
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask",
+      "description": "Returns one accepted pickup the volunteer owns, including portion_count, timestamps and status, for the Active Delivery screen."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/donation-claims/{claimId}/pickup-tasks",
+      "handler": "pickup-tasks-80",
+      "auth_required": true,
+      "roles": [
+        "NGO"
+      ],
+      "own_only": true,
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask[]",
+      "description": "Lets the NGO that made a claim see the pickup tasks created for it and their status, so it can follow the handover."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/pickup-tasks/{pickupTaskId}",
+      "handler": "pickup-tasks-82",
+      "auth_required": true,
+      "roles": [
+        "Admin"
+      ],
+      "group": "Pickup tasks",
+      "request_shape": "",
+      "response_shape": "PickupTask",
+      "description": "Returns one pickup task with its volunteer, claim, donation link and failure_reason for an admin reviewing a rescue."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/sponsor-campaigns/{sponsorCampaignId}",
+      "handler": "sponsor-campaigns-86",
+      "auth_required": true,
+      "roles": [
+        "CSR Sponsor"
+      ],
+      "own_only": true,
+      "group": "Sponsor campaigns",
+      "request_shape": "",
+      "response_shape": "SponsorCampaign",
+      "description": "Returns one campaign the signed-in sponsor owns, including recognition text and dates."
+    },
+    {
+      "method": "GET",
+      "path": "/api/my/volunteer-availability",
+      "handler": "volunteer-availability-1",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter"
+      ],
+      "own_only": true,
+      "group": "Volunteer availability",
+      "request_shape": "",
+      "response_shape": "{is_available: boolean, carrying_capacity: number | null}",
+      "description": "Returns the signed-in volunteer's current availability and carrying capacity so the Volunteer Tasks screen can show them before changes are made."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/my/volunteer-availability",
+      "handler": "volunteer-availability-2",
+      "auth_required": true,
+      "roles": [
+        "Volunteer / NGO Transporter"
+      ],
+      "own_only": true,
+      "group": "Volunteer availability",
+      "request_shape": "{is_available?: boolean, carrying_capacity?: number}",
+      "response_shape": "{is_available: boolean, carrying_capacity: number | null}",
+      "description": "Sets the signed-in volunteer's availability toggle and carrying capacity in portions, used by the Volunteer Tasks screen; a volunteer whose status is not approved is refused, and carrying_capacity must be a positive whole number when given."
+    }
+  ]
+}

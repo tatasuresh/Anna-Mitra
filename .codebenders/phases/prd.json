@@ -1,0 +1,43 @@
+{
+  "raw_text": "# Anna Mitra\n> A mobile-first web app that lets restaurants post surplus edible food in under 60 seconds, matches it to nearby NGOs, coordinates volunteer pickup, and reports confirmed rescue impact.\n\n## Overview\nEdible surplus food is wasted while nearby organisations need meals. Anna Mitra helps donors post eligible surplus, matches it to suitable NGOs, and coordinates collection and handover by volunteers. It reports only NGO-confirmed deliveries as rescued food, giving admins and CSR sponsors a transparent view of impact. The pilot is a hackathon MVP using synthetic buffet restaurants and NGOs in Velachery, Chennai.\n\n## Target Users\n- **Donor**: posts eligible surplus food with handling information and tracks its status.\n- **NGO**: sees eligible donations, claims all or part of them, and confirms what was received.\n- **Volunteer / NGO transporter**: toggles availability, accepts pickups, and confirms collection and handover.\n- **Admin**: approves or suspends participants, monitors active rescues and resolves failed assignments.\n- **CSR sponsor**: views campaign recognition and a transparent dashboard of confirmed impact.\n\n## Core Capabilities\n### Donor\n- Post a repeat donation with one tap.\n- Speak or type a food description, number of portions and pickup-by time.\n- Edit extracted values before publishing.\n- Complete a short fresh handling checklist covering preparation time, storage/handling and allergens.\n- Add an optional photo.\n- Publish a donation and track its status.\n- Save restaurant preferences, without reusing safety declarations.\n- Post manually when voice or AI is unavailable.\n\n### NGO\n- See eligible nearby donations with concise match explanations and in-app alerts.\n- Maintain current need, capacity and availability.\n- Claim all or part of a donation within a short confirmation window.\n- Confirm the received quantity.\n\n### Volunteer / NGO transporter\n- Toggle availability.\n- Indicate carrying capacity.\n- Accept a pickup.\n- Confirm collection and handover.\n- See simple status updates.\n\n### Admin\n- Approve or suspend participants.\n- Monitor active rescues.\n- Resolve failed assignments.\n\n### CSR sponsor\n- See campaign recognition.\n- View a transparent dashboard of confirmed portions delivered, estimated waste avoided and illustrative costs.\n\n## Out of Scope\n- Production-grade OTP or KYC verification.\n- Live GPS or continuous location tracking.\n- Payment integration, billing and payment gateway (future work).\n- Advanced forecasting.\n- A complex multi-agent system.\n- Food safety certification, and tax or legal-benefit claims.\n\n## Key Pages / Screens\n- **Role Entry** (`/`): where a visitor picks a role and signs in with an instant synthetic demo account.\n- **Login** (`/login`): where a participant signs in with their account.\n- **Sign Up** (`/signup`): where donors, NGOs, volunteers and sponsors create their own account, pending admin approval.\n- **Forgot Password** (`/forgot-password`): where a participant asks for a password reset link by email.\n- **Reset Password** (`/reset-password`): where a participant sets a new password from the emailed link.\n- **Profile** (`/profile`): where a person sees and changes their name, email and password, and signs out.\n- **Donor Dashboard** (`/donor-dashboard`): where a donor sees their restaurant's activity and starts a new post.\n- **Quick Post** (`/quick-post`): where a donor posts surplus food by voice or typing, or manually, and completes the handling checklist.\n- **Tracking** (`/donations`): where a donor follows the status of each of their donations.\n- **Donation Detail** (`/donations/[id]`): where anyone involved sees one donation's details, handling declarations and status history.\n- **NGO Feed** (`/ngo-feed`): where an NGO sees eligible nearby donations with match explanations and alerts.\n- **NGO Claim** (`/ngo-claim`): where an NGO claims all or part of a donation within the confirmation window.\n- **NGO Receipt** (`/ngo-receipt`): where an NGO confirms the quantity it received.\n- **NGO Capacity** (`/ngo-capacity`): where an NGO sets its current need, capacity and availability.\n- **Volunteer Tasks** (`/volunteer-tasks`): where a volunteer toggles availability, sets carrying capacity and accepts pickups.\n- **Active Delivery** (`/active-delivery`): where a volunteer confirms collection and handover and sees simple status updates.\n- **Admin Operations** (`/admin-operations`): where an admin approves or suspends participants, monitors active rescues and resolves failed assignments.\n- **Sponsor Impact** (`/sponsor-impact`): where a CSR sponsor sees campaign recognition and the transparent impact dashboard, with assumptions labelled.\n\n## Technical Constraints\n- Mobile-first progressive web app (PWA).\n- A React/Next.js PWA with a small API and a relational database is suggested, not mandatory. A single deployable application is preferred.\n- All hackathon data, people, contact details, addresses and coordinates are synthetic.\n- Server-side enforcement of permissions, deadline rules, quantity constraints and status transitions.\n- Transactions or equivalent concurrency controls for claims, so portions are never over-allocated.\n- Configurable reservation timeout, defaulting to 5 minutes, that releases unconfirmed portions.\n- Configurable impact assumption of 0.35 kg per portion, disclosed in the interface.\n- AI provider, microphone and notification service integrations are used when configured, with explicit working fallbacks when they are not.\n- No continuous location tracking.\n- No payment gateway.\n- Codebenders use must be explicitly documented for the hackathon.",
+  "product_name": "Anna Mitra",
+  "one_line_summary": "Lets restaurants post surplus food fast, matches it to nearby NGOs, coordinates volunteer pickup and reports confirmed rescue impact.",
+  "target_users": [
+    "Donor",
+    "NGO",
+    "Volunteer / NGO transporter",
+    "Admin",
+    "CSR sponsor"
+  ],
+  "core_capabilities": [
+    "Donor: post a repeat donation with one tap",
+    "Donor: speak or type a food description, portions and pickup-by time",
+    "Donor: edit extracted values before publishing",
+    "Donor: complete a fresh handling checklist covering preparation time, storage/handling and allergens",
+    "Donor: add an optional photo",
+    "Donor: publish a donation and track its status",
+    "Donor: save restaurant preferences without reusing safety declarations",
+    "Donor: post manually when voice or AI is unavailable",
+    "NGO: see eligible nearby donations with match explanations and in-app alerts",
+    "NGO: maintain current need, capacity and availability",
+    "NGO: claim all or part of a donation within a short confirmation window",
+    "NGO: confirm the received quantity",
+    "Volunteer / NGO transporter: toggle availability and indicate carrying capacity",
+    "Volunteer / NGO transporter: accept a pickup",
+    "Volunteer / NGO transporter: confirm collection and handover and see simple status updates",
+    "Admin: approve or suspend participants",
+    "Admin: monitor active rescues",
+    "Admin: resolve failed assignments",
+    "CSR sponsor: see campaign recognition",
+    "CSR sponsor: view a transparent dashboard of confirmed portions delivered, estimated waste avoided and illustrative costs"
+  ],
+  "non_goals": [
+    "Production-grade OTP or KYC verification",
+    "Live GPS or continuous location tracking",
+    "Payment integration, billing and payment gateway",
+    "Advanced forecasting",
+    "A complex multi-agent system",
+    "Food safety certification, and tax or legal-benefit claims"
+  ],
+  "logo": ".codebenders/brand/logo-a7622450.png"
+}

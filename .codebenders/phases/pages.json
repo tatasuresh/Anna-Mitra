@@ -1,0 +1,330 @@
+{
+  "pages": [
+    {
+      "name": "Role Entry",
+      "route": "/",
+      "description": "Where a visitor picks a role and signs in with an instant synthetic demo account.",
+      "personas": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin",
+        "CSR Sponsor"
+      ],
+      "uses": {
+        "Donor": "pick the Donor role and enter the demo account",
+        "NGO": "pick the NGO role and enter the demo account",
+        "Volunteer / NGO Transporter": "pick the volunteer role and enter the demo account",
+        "Admin": "pick the admin role and enter the demo account",
+        "CSR Sponsor": "pick the sponsor role and enter the demo account"
+      }
+    },
+    {
+      "name": "Login",
+      "route": "/login",
+      "description": "Where a participant signs in with their account.",
+      "personas": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin",
+        "CSR Sponsor"
+      ],
+      "uses": {
+        "Donor": "sign in to post and track donations",
+        "NGO": "sign in to see and claim donations",
+        "Volunteer / NGO Transporter": "sign in to take pickups",
+        "Admin": "sign in to run operations",
+        "CSR Sponsor": "sign in to view impact"
+      }
+    },
+    {
+      "name": "Sign Up",
+      "route": "/signup",
+      "description": "Where donors, NGOs, volunteers and sponsors create their own account, pending admin approval.",
+      "personas": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "CSR Sponsor"
+      ],
+      "uses": {
+        "Donor": "create a restaurant account, pending approval",
+        "NGO": "create an organisation account, pending approval",
+        "Volunteer / NGO Transporter": "create a volunteer account, pending approval",
+        "CSR Sponsor": "create a sponsor account, pending approval"
+      }
+    },
+    {
+      "name": "Forgot Password",
+      "route": "/forgot-password",
+      "description": "Where a participant asks for a password reset link by email.",
+      "personas": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin",
+        "CSR Sponsor"
+      ],
+      "uses": {
+        "Donor": "request a reset link by email",
+        "NGO": "request a reset link by email",
+        "Volunteer / NGO Transporter": "request a reset link by email",
+        "Admin": "request a reset link by email",
+        "CSR Sponsor": "request a reset link by email"
+      }
+    },
+    {
+      "name": "Reset Password",
+      "route": "/reset-password",
+      "description": "Where a participant sets a new password from the emailed link.",
+      "personas": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin",
+        "CSR Sponsor"
+      ],
+      "uses": {
+        "Donor": "set a new password from the link",
+        "NGO": "set a new password from the link",
+        "Volunteer / NGO Transporter": "set a new password from the link",
+        "Admin": "set a new password from the link",
+        "CSR Sponsor": "set a new password from the link"
+      }
+    },
+    {
+      "name": "Profile",
+      "route": "/profile",
+      "description": "Where a person sees and changes their name, email and password, and signs out.",
+      "personas": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin",
+        "CSR Sponsor"
+      ],
+      "uses": {
+        "Donor": "change name, email or password, then sign out",
+        "NGO": "change name, email or password, then sign out",
+        "Volunteer / NGO Transporter": "change name, email or password, then sign out",
+        "Admin": "change name, email or password, then sign out",
+        "CSR Sponsor": "change name, email or password, then sign out"
+      }
+    },
+    {
+      "name": "Donor Dashboard",
+      "route": "/donor-dashboard",
+      "description": "Where a donor sees their restaurant's activity and starts a new post.",
+      "personas": [
+        "Donor"
+      ],
+      "uses": {
+        "Donor": "see recent activity and start a new post"
+      }
+    },
+    {
+      "name": "Restaurant Preferences",
+      "route": "/restaurant-preferences",
+      "description": "Where a donor saves restaurant preferences, without reusing safety declarations. Also on this screen: Load the current preferences with GET /api/my/restaurants/{restaurantId}/preferences before editing, and save them with PUT /api/my/restaurants/{restaurantId}/preferences.",
+      "personas": [
+        "Donor"
+      ],
+      "uses": {
+        "Donor": "save restaurant preferences, leaving safety declarations blank"
+      }
+    },
+    {
+      "name": "Quick Post",
+      "route": "/quick-post",
+      "description": "Where a donor posts surplus food by voice or typing, or manually, and completes the handling checklist.",
+      "personas": [
+        "Donor"
+      ],
+      "uses": {
+        "Donor": "post a repeat donation with one tap, or describe food by voice or text, edit values, complete the checklist, add an optional photo and publish"
+      }
+    },
+    {
+      "name": "Tracking",
+      "route": "/donations",
+      "description": "Where a donor follows the status of each of their donations.",
+      "personas": [
+        "Donor"
+      ],
+      "uses": {
+        "Donor": "follow the status of each donation"
+      }
+    },
+    {
+      "name": "Donation Detail",
+      "route": "/donations/[id]",
+      "description": "Where anyone involved sees one donation's details, handling declarations and status history. Also on this screen: For the donor who posted it, add a 'Cancel donation' action that calls POST /api/my/donations/{donationId}/cancel and shows the resulting status.",
+      "personas": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin"
+      ],
+      "uses": {
+        "Donor": "review details, handling declarations and status history",
+        "NGO": "review details and handling declarations before claiming",
+        "Volunteer / NGO Transporter": "review pickup details and handling declarations",
+        "Admin": "review details and status history of a rescue"
+      }
+    },
+    {
+      "name": "NGO Feed",
+      "route": "/ngo-feed",
+      "description": "Where an NGO sees eligible nearby donations with match explanations and alerts.",
+      "personas": [
+        "NGO"
+      ],
+      "uses": {
+        "NGO": "browse eligible nearby donations with match explanations and in-app alerts"
+      }
+    },
+    {
+      "name": "NGO Claim",
+      "route": "/ngo-claim",
+      "description": "Where an NGO claims all or part of a donation within the confirmation window. Also on this screen: Add a 'Release claim' action on the claim result panel that calls POST /api/my/donation-claims/{claimId}/release and returns the portions to the donation.",
+      "personas": [
+        "NGO"
+      ],
+      "uses": {
+        "NGO": "claim all or part of a donation before the window closes"
+      }
+    },
+    {
+      "name": "NGO Receipt",
+      "route": "/ngo-receipt",
+      "description": "Where an NGO confirms the quantity it received.",
+      "personas": [
+        "NGO"
+      ],
+      "uses": {
+        "NGO": "confirm the quantity received"
+      }
+    },
+    {
+      "name": "NGO Capacity",
+      "route": "/ngo-capacity",
+      "description": "Where an NGO sets its current need, capacity and availability. Also on this screen: Add fields for maximum portions per claim and whether the NGO has cold storage, saved with PATCH /api/my/ngo-capacity.",
+      "personas": [
+        "NGO"
+      ],
+      "uses": {
+        "NGO": "set current need, capacity and availability"
+      }
+    },
+    {
+      "name": "Volunteer Tasks",
+      "route": "/volunteer-tasks",
+      "description": "Where a volunteer toggles availability, sets carrying capacity and accepts pickups.",
+      "personas": [
+        "Volunteer / NGO Transporter"
+      ],
+      "uses": {
+        "Volunteer / NGO Transporter": "toggle availability, set carrying capacity and accept pickups"
+      }
+    },
+    {
+      "name": "Active Delivery",
+      "route": "/active-delivery",
+      "description": "Where a volunteer confirms collection and handover and sees simple status updates. Also on this screen: Add a 'Report a problem' action that asks for a reason and calls POST /api/my/pickup-tasks/{pickupTaskId}/fail, which stores failure_reason.",
+      "personas": [
+        "Volunteer / NGO Transporter"
+      ],
+      "uses": {
+        "Volunteer / NGO Transporter": "confirm collection and handover and see status updates"
+      }
+    },
+    {
+      "name": "Admin Operations",
+      "route": "/admin-operations",
+      "description": "Where an admin approves or suspends participants, monitors active rescues and resolves failed assignments. Also on this screen: Failed assignments panel lists failed pickups with their failure_reason via GET /api/admin/pickup-tasks, and lets the admin reassign (POST /api/admin/pickup-tasks/{pickupTaskId}/reassign), cancel (POST /api/admin/pickup-tasks/{pickupTaskId}/cancel) or resolve (POST /api/admin/pickup-tasks/{pickupTaskId}/resolve) each one. Also on this screen: Active rescues panel shows counts and a list of open donations, claims and pickups using GET /api/admin/operations-summary, GET /api/admin/donations and GET /api/admin/donation-claims, with each row linking to /donations/[id]. Also on this screen: Add a records correction section for open rescues that lists handling declarations, claims, NGO capacities, donations and pickup tasks and lets the admin edit them via PATCH /api/admin/handling-declarations/{handlingDeclarationId}, PATCH /api/admin/donation-claims/{claimId}, GET and PATCH /api/admin/ngo-capacities/{ngoCapacityId}, PATCH /api/admin/donations/{donationId} and PATCH /api/admin/pickup Also on this screen: List pending and active participants using GET /api/admin/users, and approve or suspend each one with POST /api/admin/users/{userId}/approve and POST /api/admin/users/{userId}/suspend. Also on this screen: When the admin chooses Reassign on a failed pickup, show approved volunteers who are available (from GET /api/admin/users), let the admin pick one, then call POST /api/admin/pickup-tasks/{pickupTaskId}/reassign with that volunteer. Also on this screen: Add a records correction section: list NGO capacity records via GET /api/admin/ngo-capacities, load one via GET /api/admin/ngo-capacities/{ngoCapacityId}, and save corrections with PATCH /api/admin/ngo-capacities/{ngoCapacityId}.",
+      "personas": [
+        "Admin"
+      ],
+      "uses": {
+        "Admin": "approve or suspend participants, monitor active rescues and resolve failed assignments"
+      }
+    },
+    {
+      "name": "Sponsor Impact",
+      "route": "/sponsor-impact",
+      "description": "Where a CSR sponsor sees campaign recognition and the transparent impact dashboard, with assumptions labelled. Also on this screen: Show the recognition text and dates of the signed-in sponsor's campaigns using GET /api/my/sponsor-campaigns and GET /api/my/sponsor-campaigns/{campaignId}. Also on this screen: The assumptions panel reads the kg-per-portion and illustrative cost assumptions from GET /api/settings and shows them labelled next to the figures.",
+      "personas": [
+        "CSR Sponsor"
+      ],
+      "uses": {
+        "CSR Sponsor": "see campaign recognition and the impact dashboard with assumptions labelled"
+      }
+    },
+    {
+      "name": "Users",
+      "route": "/users",
+      "description": "Manage Users using GET /api/admin/users, GET /api/admin/users/{userId}, PATCH /api/admin/users/{userId}, POST /api/admin/users, POST /api/admin/users/{userId}/approve, POST /api/admin/users/{userId}/suspend",
+      "personas": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin",
+        "CSR Sponsor"
+      ],
+      "uses": {}
+    },
+    {
+      "name": "Sponsor Campaigns",
+      "route": "/sponsor-campaigns",
+      "description": "Manage Sponsor Campaigns using DELETE /api/admin/sponsor-campaigns/{sponsorCampaignId}, GET /api/admin/sponsor-campaigns, GET /api/admin/sponsor-campaigns/{sponsorCampaignId}, GET /api/my/sponsor-campaigns, GET /api/my/sponsor-campaigns/{campaignId}, PATCH /api/admin/sponsor-campaigns/{campaignId}, PATCH /api/admin/sponsor-campaigns/{sponsorCampaignId}, PATCH /api/my/sponsor-campaigns/{campaignId}, POST /api/admin/sponsor-campaigns, POST /api/admin/sponsor-campaigns/{sponsorCampaignId}/activate, POST /api/admin/sponsor-campaigns/{sponsorCampaignId}/end, POST /api/my/sponsor-campaigns Also on this screen: Admin can create a campaign (POST /api/admin/sponsor-campaigns), activate it (POST /api/admin/sponsor-campaigns/{sponsorCampaignId}/activate) and end it (POST /api/admin/sponsor-campaigns/{sponsorCampaignId}/end).",
+      "personas": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin",
+        "CSR Sponsor"
+      ],
+      "uses": {}
+    },
+    {
+      "name": "Settings",
+      "route": "/settings",
+      "description": "Manage Settings using GET /api/settings, PATCH /api/admin/settings/{settingKey} Also on this screen: Also set the illustrative cost per portion and currency, saved with PATCH /api/admin/settings/{settingKey} and read with GET /api/settings.",
+      "personas": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin",
+        "CSR Sponsor"
+      ],
+      "uses": {}
+    },
+    {
+      "name": "Restaurants",
+      "route": "/restaurants",
+      "description": "Manage Restaurants using GET /api/admin/restaurants, GET /api/admin/restaurants/{restaurantId}, GET /api/admin/restaurants/{restaurantId}/preferences, GET /api/my/restaurants, GET /api/my/restaurants/{restaurantId}, GET /api/restaurants, GET /api/restaurants/{restaurantId}, GET /api/restaurants/{restaurantId}/preferences, PATCH /api/admin/restaurants/{restaurantId}, PATCH /api/admin/restaurants/{restaurantId}/preferences, PATCH /api/my/restaurants/{restaurantId}, PATCH /api/restaurants/{restaurantId}, POST /api/admin/restaurants/{restaurantId}/approve, POST /api/admin/restaurants/{restaurantId}/suspend, POST /api/my/restaurants, POST /api/restaurants, PUT /api/my/restaurants/{restaurantId}/preferences, PUT /api/restaurants/{restaurantId}/preferences",
+      "personas": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin",
+        "CSR Sponsor"
+      ],
+      "uses": {}
+    },
+    {
+      "name": "NGO Organisations",
+      "route": "/ngos",
+      "description": "Admin lists NGO organisations and creates, edits, approves or suspends them, including latitude, longitude and service radius, using GET /api/admin/ngos, POST /api/admin/ngos, GET and PATCH /api/admin/ngos/{ngoId}, and POST approve and suspend on /api/admin/ngos/{ngoId}.",
+      "personas": [
+        "Donor",
+        "NGO",
+        "Volunteer / NGO Transporter",
+        "Admin",
+        "CSR Sponsor"
+      ],
+      "uses": {}
+    }
+  ]
+}

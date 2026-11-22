@@ -1,0 +1,472 @@
+{
+  "version": 1,
+  "data": {
+    "currency": "INR",
+    "today": "2026-11-22",
+    "collections": {
+      "users": [
+        {
+          "id": "u1",
+          "name": "Meera Raghunathan",
+          "email": "meera.r@saffronbuffet.in",
+          "persona": "Donor",
+          "status": "approved"
+        },
+        {
+          "id": "u2",
+          "name": "Rahul D'Souza",
+          "email": "rahul@coraltablechennai.in",
+          "persona": "Donor",
+          "status": "pending"
+        },
+        {
+          "id": "u3",
+          "name": "Lakshmi Iyer",
+          "email": "lakshmi@velacheryhungerrelief.org",
+          "persona": "NGO",
+          "status": "approved"
+        },
+        {
+          "id": "u4",
+          "name": "Arun Selvam",
+          "email": "arun@pallikaranaishelter.org",
+          "persona": "NGO",
+          "status": "approved"
+        },
+        {
+          "id": "u5",
+          "name": "Karthik Sundar",
+          "email": "karthik.sundar@mail.in",
+          "persona": "Volunteer / NGO Transporter",
+          "status": "approved"
+        },
+        {
+          "id": "u6",
+          "name": "Divya Krishnan",
+          "email": "divya.krishnan@mail.in",
+          "persona": "Volunteer / NGO Transporter",
+          "status": "suspended"
+        },
+        {
+          "id": "u7",
+          "name": "Priya Nair",
+          "email": "priya.nair@anamitra-ops.in",
+          "persona": "Admin",
+          "status": "approved"
+        },
+        {
+          "id": "u8",
+          "name": "Vikram Rao",
+          "email": "vikram.rao@anamitra-ops.in",
+          "persona": "Admin",
+          "status": "approved"
+        },
+        {
+          "id": "u9",
+          "name": "Neha Kulkarni",
+          "email": "neha.kulkarni@greenplateinc.in",
+          "persona": "CSR Sponsor",
+          "status": "approved"
+        },
+        {
+          "id": "u10",
+          "name": "Anand Joseph",
+          "email": "anand.joseph@cityfoodfund.in",
+          "persona": "CSR Sponsor",
+          "status": "pending"
+        }
+      ],
+      "restaurants": [
+        {
+          "id": "r1",
+          "user_id": "u1",
+          "name": "Saffron Buffet",
+          "address": "14 100 Feet Road, Velachery, Chennai 600042"
+        },
+        {
+          "id": "r2",
+          "user_id": "u2",
+          "name": "Coral Table Kitchen",
+          "address": "7 Vijaya Nagar Main Road, Velachery, Chennai 600042"
+        }
+      ],
+      "restaurant_preferences": [
+        {
+          "id": "p1",
+          "restaurant_id": "r1",
+          "cuisine": "North and South Indian buffet",
+          "usual_pickup_window": "21:00 to 22:00",
+          "pickup_contact_phone": "+91 90000 14022",
+          "sms_alerts": true
+        }
+      ],
+      "ngos": [
+        {
+          "id": "n1",
+          "user_id": "u3",
+          "name": "Velachery Hunger Relief Trust",
+          "area": "Velachery",
+          "current_need_portions": 60,
+          "capacity_portions": 80,
+          "accepting_donations": true,
+          "availability_changed_at": "2026-11-22T08:40"
+        },
+        {
+          "id": "n2",
+          "user_id": "u4",
+          "name": "Pallikaranai Shelter Kitchen",
+          "area": "Pallikaranai",
+          "current_need_portions": 40,
+          "capacity_portions": 50,
+          "accepting_donations": false,
+          "availability_changed_at": "2026-11-21T19:15"
+        }
+      ],
+      "volunteers": [
+        {
+          "id": "v1",
+          "user_id": "u5",
+          "available": true,
+          "carrying_capacity_portions": 20
+        },
+        {
+          "id": "v2",
+          "user_id": "u6",
+          "available": false,
+          "carrying_capacity_portions": 10
+        }
+      ],
+      "donations": [
+        {
+          "id": "d1",
+          "restaurant_id": "r1",
+          "food_description": "Chicken biryani with raita, buffet trays",
+          "portions": 40,
+          "pickup_by": "2026-11-22T21:30",
+          "posted_at": "2026-11-22T12:50",
+          "status": "claimed",
+          "prep_time": "Cooked 12:40 today",
+          "storage_handling": "Held hot above 63 C; chilled within 2 hours if unused",
+          "allergens": "Dairy (raita), nuts (garnish)",
+          "photo_name": "biryani-trays.jpg"
+        },
+        {
+          "id": "d2",
+          "restaurant_id": "r1",
+          "food_description": "Vegetable fried rice and paneer manchurian",
+          "portions": 25,
+          "pickup_by": "2026-11-22T23:00",
+          "posted_at": "2026-11-22T11:50",
+          "status": "published",
+          "prep_time": "Cooked 11:30 today",
+          "storage_handling": "Chilled in shallow trays by 16:00",
+          "allergens": "Soy, gluten (soy sauce)",
+          "photo_name": null
+        },
+        {
+          "id": "d3",
+          "restaurant_id": "r1",
+          "food_description": "Idli, sambar and coconut chutney",
+          "portions": 30,
+          "pickup_by": "2026-11-21T20:00",
+          "posted_at": "2026-11-21T09:00",
+          "status": "confirmed",
+          "prep_time": "Batter fermented overnight; cooked 08:30",
+          "storage_handling": "Kept covered and hot; chilled at close",
+          "allergens": "Lentils (urad dal); mustard in sambar",
+          "photo_name": null
+        },
+        {
+          "id": "d4",
+          "restaurant_id": "r1",
+          "food_description": "Mutton keema pav",
+          "portions": 18,
+          "pickup_by": "2026-11-20T21:00",
+          "posted_at": "2026-11-20T11:00",
+          "status": "expired",
+          "prep_time": "Cooked 11:30",
+          "storage_handling": "Hot-held; not chilled in time",
+          "allergens": "Gluten (pav), dairy (butter)",
+          "photo_name": null
+        },
+        {
+          "id": "d5",
+          "restaurant_id": "r1",
+          "food_description": "Paneer tikka with naan",
+          "portions": 22,
+          "pickup_by": "2026-11-24T20:00",
+          "posted_at": "2026-11-22T09:30",
+          "status": "published",
+          "prep_time": "Cooked on the day of pickup",
+          "storage_handling": "Chilled within 2 hours of cooking",
+          "allergens": "Dairy (paneer, butter), gluten (naan)",
+          "photo_name": null
+        },
+        {
+          "id": "d6",
+          "restaurant_id": "r1",
+          "food_description": "Fish curry with steamed rice",
+          "portions": 35,
+          "pickup_by": "2026-11-19T18:00",
+          "posted_at": "2026-11-18T10:00",
+          "status": "delivered",
+          "prep_time": "Cooked 12:00 on 19 Nov",
+          "storage_handling": "Chilled within 4 hours; insulated box transport",
+          "allergens": "Fish, mustard seed",
+          "photo_name": null
+        },
+        {
+          "id": "d7",
+          "restaurant_id": "r1",
+          "food_description": "Chapati, dal makhani and kachumber salad",
+          "portions": 50,
+          "pickup_by": "2026-11-23T14:00",
+          "posted_at": "2026-11-22T08:10",
+          "status": "claimed",
+          "prep_time": "Cooked 07:30 today",
+          "storage_handling": "Chilled by 10:00",
+          "allergens": "Gluten (wheat), dairy (butter)",
+          "photo_name": null
+        }
+      ],
+      "status_events": [
+        {
+          "id": "e1",
+          "donation_id": "d1",
+          "status": "published",
+          "changed_at": "2026-11-22T12:50"
+        },
+        {
+          "id": "e2",
+          "donation_id": "d1",
+          "status": "claimed",
+          "changed_at": "2026-11-22T13:45"
+        },
+        {
+          "id": "e3",
+          "donation_id": "d2",
+          "status": "published",
+          "changed_at": "2026-11-22T11:50"
+        },
+        {
+          "id": "e4",
+          "donation_id": "d3",
+          "status": "published",
+          "changed_at": "2026-11-21T09:00"
+        },
+        {
+          "id": "e5",
+          "donation_id": "d3",
+          "status": "confirmed",
+          "changed_at": "2026-11-21T20:40"
+        },
+        {
+          "id": "e6",
+          "donation_id": "d4",
+          "status": "published",
+          "changed_at": "2026-11-20T11:00"
+        },
+        {
+          "id": "e7",
+          "donation_id": "d4",
+          "status": "expired",
+          "changed_at": "2026-11-20T21:00"
+        },
+        {
+          "id": "e8",
+          "donation_id": "d6",
+          "status": "published",
+          "changed_at": "2026-11-18T10:00"
+        },
+        {
+          "id": "e9",
+          "donation_id": "d6",
+          "status": "delivered",
+          "changed_at": "2026-11-19T16:10"
+        },
+        {
+          "id": "e10",
+          "donation_id": "d7",
+          "status": "claimed",
+          "changed_at": "2026-11-22T11:15"
+        }
+      ],
+      "claims": [
+        {
+          "id": "c1",
+          "donation_id": "d1",
+          "ngo_id": "n1",
+          "portions": 25,
+          "status": "confirmed",
+          "claimed_at": "2026-11-22T13:45"
+        },
+        {
+          "id": "c2",
+          "donation_id": "d3",
+          "ngo_id": "n1",
+          "portions": 30,
+          "status": "confirmed",
+          "claimed_at": "2026-11-21T10:30"
+        },
+        {
+          "id": "c3",
+          "donation_id": "d6",
+          "ngo_id": "n2",
+          "portions": 35,
+          "status": "confirmed",
+          "claimed_at": "2026-11-18T12:00"
+        },
+        {
+          "id": "c4",
+          "donation_id": "d7",
+          "ngo_id": "n2",
+          "portions": 20,
+          "status": "confirmed",
+          "claimed_at": "2026-11-22T11:15"
+        },
+        {
+          "id": "c5",
+          "donation_id": "d2",
+          "ngo_id": "n1",
+          "portions": 10,
+          "status": "released",
+          "claimed_at": "2026-11-22T12:30"
+        }
+      ],
+      "pickups": [
+        {
+          "id": "pk1",
+          "claim_id": "c1",
+          "volunteer_id": "v1",
+          "status": "accepted",
+          "accepted_at": "2026-11-22T13:50"
+        },
+        {
+          "id": "pk2",
+          "claim_id": "c3",
+          "volunteer_id": "v1",
+          "status": "handed_over",
+          "accepted_at": "2026-11-18T12:30"
+        },
+        {
+          "id": "pk3",
+          "claim_id": "c2",
+          "volunteer_id": "v2",
+          "status": "handed_over",
+          "accepted_at": "2026-11-21T10:45"
+        },
+        {
+          "id": "pk4",
+          "claim_id": "c5",
+          "volunteer_id": "v2",
+          "status": "failed",
+          "accepted_at": "2026-11-22T12:40"
+        }
+      ],
+      "receipts": [
+        {
+          "id": "rc1",
+          "claim_id": "c2",
+          "received_portions": 30,
+          "confirmed_at": "2026-11-21T20:35"
+        }
+      ],
+      "failed_assignments": [
+        {
+          "id": "fa1",
+          "claim_id": "c5",
+          "pickup_id": "pk4",
+          "failure_reason": "Volunteer went offline before collection; portions released",
+          "failed_at": "2026-11-22T12:50"
+        }
+      ],
+      "matches": [
+        {
+          "id": "mt1",
+          "donation_id": "d2",
+          "ngo_id": "n1",
+          "explanation": "Fits your open need of 60 portions; 25 portions can be taken before the 23:00 pickup-by."
+        },
+        {
+          "id": "mt2",
+          "donation_id": "d5",
+          "ngo_id": "n1",
+          "explanation": "Within your current capacity of 80 portions; pickup on 24 Nov leaves time to confirm."
+        }
+      ],
+      "notifications": [
+        {
+          "id": "nt1",
+          "user_id": "u3",
+          "donation_id": "d2",
+          "message": "New match: 25 portions of vegetable fried rice from Saffron Buffet.",
+          "created_at": "2026-11-22T11:52"
+        },
+        {
+          "id": "nt2",
+          "user_id": "u3",
+          "donation_id": "d5",
+          "message": "New match: 22 portions of paneer tikka with naan, pickup by 24 Nov 20:00.",
+          "created_at": "2026-11-22T09:35"
+        },
+        {
+          "id": "nt3",
+          "user_id": "u1",
+          "donation_id": "d1",
+          "message": "Velachery Hunger Relief Trust claimed 25 portions of your biryani donation.",
+          "created_at": "2026-11-22T13:46"
+        }
+      ],
+      "campaigns": [
+        {
+          "id": "cp1",
+          "user_id": "u9",
+          "name": "Velachery Plates Winter Drive",
+          "recognition_text": "Recognised as a founding sponsor of the Velachery Plates Winter Drive for rescued buffet food.",
+          "illustrative_cost_per_portion": 35
+        }
+      ],
+      "settings": [
+        {
+          "id": "s1",
+          "key": "reservation_timeout_minutes",
+          "value": 5
+        },
+        {
+          "id": "s2",
+          "key": "impact_kg_per_portion",
+          "value": 0.35
+        }
+      ]
+    },
+    "viewers": {
+      "Donor": "u1",
+      "NGO": "u3",
+      "Volunteer / NGO Transporter": "u5",
+      "Admin": "u7",
+      "CSR Sponsor": "u9"
+    }
+  },
+  "covers": {
+    "/": "409b11378a19c188",
+    "/login": "a3912408cef3da7a",
+    "/signup": "fc796bc849500ec6",
+    "/forgot-password": "14c7c3a85de529dd",
+    "/reset-password": "fe956f170ad56c75",
+    "/profile": "581f2f3aacb0d87d",
+    "/donor-dashboard": "6f3de4dae11b0cde",
+    "/restaurant-preferences": "50df9e1acc4f7d90",
+    "/quick-post": "b947e5cf14175e5f",
+    "/donations": "d89aac73c059b65a",
+    "/donations/{}": "aaad570ff6352298",
+    "/ngo-feed": "5c61b546da48e277",
+    "/ngo-claim": "ca30782ba1446d26",
+    "/ngo-receipt": "7f41aebd39bc1895",
+    "/ngo-capacity": "700596c6de4e4c62",
+    "/volunteer-tasks": "8fe416e281dc5837",
+    "/active-delivery": "360ff6c38b897010",
+    "/admin-operations": "49705871b7bd6481",
+    "/sponsor-impact": "d862edd5876cc0b9"
+  },
+  "at": "2026-11-22T15:01:40.330Z"
+}
