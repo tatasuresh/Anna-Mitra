@@ -134,7 +134,7 @@ test.describe('AI donation extraction', () => {
     const donor = await apiAs(baseURL!, 'donor');
     const now = localNow();
     const res = await donor.post(url, {
-      data: { ...valid(), input_text: 'We have 30 portions of vegetable pulao and raita left. Please collect by 9 pm tonight.', now_local: now },
+      data: { ...valid(), input_text: 'We have 30 portions of vegetable pulao and raita left. Please collect by 9 pm tomorrow.', now_local: now },
     });
     expect(res.status(), await res.text()).toBe(200);
     const body = await res.json();
@@ -144,7 +144,11 @@ test.describe('AI donation extraction', () => {
     expect(body.description).toMatch(/pulao/i);
     expect(body.pickup_by_local).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/);
     expect(body.pickup_by_local > now).toBeTruthy();
-    expect(body.pickup_by_local.slice(11)).toBe('21:00');
+    // "Tomorrow" is the next local date whatever the time of day the test runs at.
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const pad = (n: number) => String(n).padStart(2, '0');
+    expect(body.pickup_by_local).toBe(`${tomorrow.getFullYear()}-${pad(tomorrow.getMonth() + 1)}-${pad(tomorrow.getDate())}T21:00`);
   });
 
   test('instructions hidden in the description are not followed', async ({ baseURL }) => {
