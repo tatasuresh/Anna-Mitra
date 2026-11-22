@@ -86,8 +86,9 @@ export async function POST(
         return { kind: 'not_found' as const };
       }
 
-      const eventCount = await tx.statusEvent.count({
+      const lastEvent = await tx.statusEvent.aggregate({
         where: { donationId: existing.donationId },
+        _max: { sequenceNo: true },
       });
 
       await tx.statusEvent.create({
@@ -99,7 +100,7 @@ export async function POST(
           toStatus: 'failed',
           reason: failureReason,
           eventType: 'pickup_failed',
-          sequenceNo: eventCount + 1,
+          sequenceNo: (lastEvent._max.sequenceNo ?? 0) + 1,
           recordType: 'PickupTask',
           recordId: pickupTaskId,
         },

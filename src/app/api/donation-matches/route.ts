@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { prisma } from '@/lib/db';
 import { requireUser } from '@/lib/session';
+import { expireOverdueDonations } from '@/lib/expiry';
 
 const ELIGIBLE_STATUSES = ['published', 'partially_claimed'] as const;
 const MAX_RESULTS = 200;
@@ -50,6 +51,7 @@ function buildExplanation(params: {
 export async function GET(request: NextRequest) {
   const user = await requireUser(request);
   if (user instanceof Response) return user;
+  await expireOverdueDonations();
 
   try {
     const me = await prisma.user.findUnique({ where: { id: user.id } });

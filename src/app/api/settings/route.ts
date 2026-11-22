@@ -1,28 +1,9 @@
 import { NextResponse } from 'next/server';
 import { requireUser } from '@/lib/session';
 import { prisma } from '@/lib/db';
+import { getAllSettings } from '@/lib/settings';
 
 const ALLOWED_ROLES = ['ngo', 'csr_sponsor', 'admin'] as const;
-
-type Setting = {
-  key: string;
-  value: number | string | boolean;
-  description: string;
-};
-
-// Configurable defaults. The PATCH /api/admin/settings/{settingKey} route owns changes.
-const DEFAULT_SETTINGS: Setting[] = [
-  {
-    key: 'reservation_timeout_minutes',
-    value: 5,
-    description: 'Minutes an NGO claim stays reserved before it must be confirmed.',
-  },
-  {
-    key: 'kg_per_portion',
-    value: 0.35,
-    description: 'Impact assumption: estimated kilograms of food per confirmed portion.',
-  },
-];
 
 export async function GET(request: Request) {
   const user = await requireUser(request);
@@ -42,7 +23,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    return NextResponse.json({ settings: DEFAULT_SETTINGS });
+    return NextResponse.json({ settings: await getAllSettings() });
   } catch {
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }

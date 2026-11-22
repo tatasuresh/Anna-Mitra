@@ -137,12 +137,13 @@ export default function VolunteerTasksPage() {
       ) : (
         <section className="ui-section mt-6 grid min-w-0 gap-4 sm:grid-cols-2" data-nexen-id="nx-fc731ad2-4">
           <div className="ui-card min-w-0">
-            <AvailabilityToggle
-              isAvailable={isAvailable}
-              onSave={saveAvailability}
-              disabled={isLoading}
-            />
-            <p className="ui-meta mt-2" data-nexen-id="nx-fc731ad2-5">Currently: {isAvailable ? 'Available' : 'Not available'}</p>
+            <div className="ui-card-body">
+              <AvailabilityToggle
+                isAvailable={isAvailable}
+                onSave={saveAvailability}
+                disabled={isLoading}
+              />
+            </div>
           </div>
 
           <div className="ui-card min-w-0">

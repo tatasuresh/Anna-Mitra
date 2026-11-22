@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db';
 import { requireUser } from '@/lib/session';
+import { expireOverdueDonations } from '@/lib/expiry';
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -10,6 +11,7 @@ type RouteContext = { params: Promise<{ donationId: string }> };
 async function authorizeDonor(request: Request) {
   const user = await requireUser(request);
   if (user instanceof Response) return user;
+  await expireOverdueDonations();
   if (user.role !== 'donor') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }

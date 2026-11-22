@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import ClaimForm from '@/components/ClaimForm';
 import ConfirmWindowTimer from '@/components/ConfirmWindowTimer';
@@ -104,7 +105,15 @@ export default function NgoClaimPage() {
     <main data-nexen-component="nx_app_ngo_claim_page" className="mx-auto w-full max-w-xl space-y-4 p-4" data-nexen-id="nx-35e17a85-3">
       <h1 className="text-xl font-semibold" data-nexen-id="nx-35e17a85-4">Claim donation</h1>
 
-      {!donationId && <p className="text-sm text-muted-foreground" data-nexen-id="nx-35e17a85-5">No donation selected.</p>}
+      {!donationId && (
+        <p className="text-sm text-muted-foreground" data-nexen-id="nx-35e17a85-5">
+          No donation selected. Pick one from the{' '}
+          <Link className="ui-link" href="/ngo-feed">
+            NGO feed
+          </Link>
+          .
+        </p>
+      )}
       {isLoading && <p className="text-sm text-muted-foreground" data-nexen-id="nx-35e17a85-6">Loading donation…</p>}
       {error && <p className="text-sm text-[hsl(var(--danger))]" data-nexen-id="nx-35e17a85-7">{error}</p>}
 

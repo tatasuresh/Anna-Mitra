@@ -9,6 +9,8 @@ export default defineConfig({
   timeout: 60_000,
   expect: { timeout: 10_000 },
   retries: 1,
+  // The API tests change shared settings and data, so run one at a time.
+  workers: 1,
   reporter: [['list'], ['html', { open: 'never' }]],
   use: { baseURL, trace: 'on-first-retry', screenshot: 'only-on-failure' },
   projects: [
@@ -16,6 +18,6 @@ export default defineConfig({
     { name: 'ui-mobile', testMatch: /ui\.spec\.ts/, use: { ...devices['Pixel 7'] } },
     { name: 'ui-desktop', testMatch: /ui\.spec\.ts/, use: { ...devices['Desktop Chrome'] } },
     // API tests are viewport independent, so they run once.
-    { name: 'api', testMatch: /(access|flow)\.spec\.ts/ },
+    { name: 'api', testMatch: /(access|flow|rules)\.spec\.ts/ },
   ],
 });

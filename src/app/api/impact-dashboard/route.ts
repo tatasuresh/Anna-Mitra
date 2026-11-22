@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { requireUser } from '@/lib/session';
+import { getSettingValue } from '@/lib/settings';
 
-const KG_PER_PORTION = 0.35;
 const COST_BASIS =
   'Illustrative only: confirmed portions on delivered donations linked to the sponsor campaign, multiplied by that campaign cost_per_portion. Demonstration figures; no payment or billing data is involved.';
 
@@ -15,6 +15,7 @@ export async function GET(request: Request) {
   }
 
   try {
+    const KG_PER_PORTION = await getSettingValue('kg_per_portion');
     const campaigns = await prisma.sponsorCampaign.findMany({
       where: { sponsorUserId: user.id },
       select: { id: true, costPerPortion: true },

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { DonationStatus } from '@prisma/client';
 import { prisma } from '@/lib/db';
 import { requireUser } from '@/lib/session';
+import { expireOverdueDonations } from '@/lib/expiry';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,6 +11,7 @@ const VALID_STATUSES = new Set<string>(Object.values(DonationStatus));
 export async function GET(request: Request) {
   const user = await requireUser(request);
   if (user instanceof Response) return user;
+  await expireOverdueDonations();
 
   if (user.role !== 'admin') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

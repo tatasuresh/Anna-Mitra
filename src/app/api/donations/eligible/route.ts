@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { requireUser } from '@/lib/session';
+import { expireOverdueDonations } from '@/lib/expiry';
 
 const EARTH_RADIUS_KM = 6371;
 
@@ -22,6 +23,7 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): nu
 export async function GET(request: Request) {
   const user = await requireUser(request);
   if (user instanceof Response) return user;
+  await expireOverdueDonations();
 
   try {
     const account = await prisma.user.findUnique({
@@ -60,6 +62,7 @@ export async function GET(request: Request) {
         status: { in: ['published', 'partially_claimed'] },
         portionsRemaining: { gt: 0 },
         pickupByAt: { gt: now },
+        restaurant: { status: 'approved' },
       },
       include: {
         restaurant: true,

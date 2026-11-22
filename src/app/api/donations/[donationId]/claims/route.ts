@@ -15,7 +15,10 @@ class ClaimConflictError extends Error {
   }
 }
 
-function reservationMinutes(): number {
+// Admin setting first, then the RESERVATION_TIMEOUT_MINUTES env var, then the default.
+async function reservationMinutes(): Promise<number> {
+  const stored = await prisma.setting.findUnique({ where: { key: 'reservation_timeout_minutes' } }).catch(() => null);
+  if (stored && stored.value > 0) return stored.value;
   const raw = Number(process.env.RESERVATION_TIMEOUT_MINUTES);
   return Number.isFinite(raw) && raw > 0 ? raw : DEFAULT_RESERVATION_MINUTES;
 }
@@ -131,10 +134,18 @@ export async function POST(
 
     const donation = await prisma.donation.findUnique({
       where: { id: donationId },
+      include: { restaurant: { select: { status: true } } },
     });
 
     if (!donation) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+
+    if (donation.restaurant.status !== 'approved') {
+      return NextResponse.json(
+        { error: 'This donation is not open for claims because the restaurant is not approved' },
+        { status: 403 },
+      );
     }
 
     const upperBound =
@@ -163,7 +174,7 @@ export async function POST(
     }
 
     const reservedUntil = new Date(
-      now.getTime() + reservationMinutes() * 60 * 1000
+      now.getTime() + (await reservationMinutes()) * 60 * 1000
     );
 
     const claim = await prisma.$transaction(async (tx) => {
@@ -224,8 +235,13 @@ export async function POST(
         },
       });
 
-      const sequenceNo =
-        (await tx.statusEvent.count({ where: { donationId } })) + 1;
+      // Next number after the highest one used, not the row count: the count can land
+      // on a number that already exists and break the (donationId, sequenceNo) unique key.
+      const lastEvent = await tx.statusEvent.aggregate({
+        where: { donationId },
+        _max: { sequenceNo: true },
+      });
+      const sequenceNo = (lastEvent._max.sequenceNo ?? 0) + 1;
 
       await tx.statusEvent.create({
         data: {
@@ -252,6 +268,7 @@ export async function POST(
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
+    console.error('Creating a donation claim failed', e);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }
