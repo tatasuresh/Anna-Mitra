@@ -1,0 +1,49 @@
+name: Deploy to Railway
+
+# Railway's own GitHub trigger is not connected for this project, so this workflow
+# deploys the Anna-Mitra service whenever main changes.
+#
+# One-time setup: in Railway, open the project's Settings -> Tokens, create a project
+# token for the production environment, and save it in this repository under
+# Settings -> Secrets and variables -> Actions as RAILWAY_TOKEN.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never run two deploys at once; a newer push replaces a queued one.
+concurrency:
+  group: railway-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the Railway token is set
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then
+            echo "::error::The RAILWAY_TOKEN repository secret is not set. Create a project token in Railway (Settings -> Tokens) and add it under Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install the Railway CLI
+        run: npm install --global @railway/cli
+
+      - name: Deploy
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway up --ci --service Anna-Mitra
