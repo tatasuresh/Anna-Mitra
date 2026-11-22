@@ -10,7 +10,7 @@
       "priority": "medium",
       "effort": "L",
       "tokens": 204750,
-      "status": "open",
+      "status": "done",
       "why": "Voice capture and AI extraction with fallbacks is a large, integration-heavy part, and donors can already post manually.",
       "covers": {
         "endpoints": [
@@ -22,7 +22,7 @@
           "anthropic"
         ]
       },
-      "note": "Saved for after the first build."
+      "note": "Built: Quick Post has a describe-it box (browser speech or typing) that calls POST /api/my/donation-extractions, which uses Claude to draft the description, portions and pickup time. Manual entry remains the fallback."
     }
   ],
   "leftOut": {
@@ -64,7 +64,7 @@
         "priority": "medium",
         "effort": "L",
         "tokens": 204750,
-        "status": "open",
+        "status": "done",
         "why": "Voice capture and AI extraction with fallbacks is a large, integration-heavy part, and donors can already post manually.",
         "covers": {
           "endpoints": [
@@ -75,7 +75,8 @@
           "integrations": [
             "anthropic"
           ]
-        }
+        },
+        "note": "Built: Quick Post has a describe-it box (browser speech or typing) that calls POST /api/my/donation-extractions, which uses Claude to draft the description, portions and pickup time. Manual entry remains the fallback."
       }
     ]
   }
