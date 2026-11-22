@@ -390,7 +390,7 @@
       "group": "Donation Drafting",
       "request_shape": "{raw_input: string, input_method: string}",
       "response_shape": "{available: boolean, food_description?: string, portions?: number, pickup_by?: string}",
-      "description": "Sends a spoken or typed food description to the Anthropic service and returns draft values for the donor to edit; returns available=false when the AI service is not configured, so the donor fills the form manually. Used by the Quick Post screen."
+      "description": "Not implemented: superseded by POST /api/my/donation-extractions. Sends a spoken or typed food description to the Anthropic service and returns draft values for the donor to edit; returns available=false when the AI service is not configured, so the donor fills the form manually. Used by the Quick Post screen."
     },
     {
       "method": "POST",
@@ -1317,7 +1317,7 @@
       "group": "Donations",
       "request_shape": "{transcript: string}",
       "response_shape": "{description: string, portions_total: number, pickup_by_at: string, ai_available: boolean}",
-      "description": "Sends the donor's spoken-then-transcribed or typed food description to the AI provider and returns extracted description, portions and pickup-by time for the donor to edit; when the AI is unavailable it answers 503 with fallback true so the screen switches to manual entry."
+      "description": "Not implemented: superseded by POST /api/my/donation-extractions. Sends the donor's spoken-then-transcribed or typed food description to the AI provider and returns extracted description, portions and pickup-by time for the donor to edit; when the AI is unavailable it answers 503 with fallback true so the screen switches to manual entry."
     },
     {
       "method": "GET",
@@ -1757,9 +1757,9 @@
       ],
       "own_only": true,
       "group": "Donation Posting",
-      "request_shape": "{input_text: string, input_method: \"voice\" | \"text\"}",
-      "response_shape": "{available: boolean, description?: string, portions_total?: number, pickup_by_at?: string, ai_extracted: boolean}",
-      "description": "Sends the spoken or typed food description to the AI provider on Quick Post and returns suggested description, portions_total and pickup_by_at with ai_extracted true; when the AI is not configured or fails it returns ai_extracted false and empty fields so the donor posts manually."
+      "request_shape": "{input_text: string (max 1000), input_method: \"voice\" | \"text\", now_local: string (YYYY-MM-DDTHH:mm), timezone: string}",
+      "response_shape": "{available: boolean, ai_extracted: boolean, reason?: \"not_configured\" | \"failed\" | \"unclear\", description?: string, portions_total?: number, pickup_by_local?: string (YYYY-MM-DDTHH:mm, donor local time)}",
+      "description": "Sends the spoken (browser speech-to-text) or typed food description to Claude (model claude-haiku-5-5, override with ANTHROPIC_MODEL; key in ANTHROPIC_API_KEY) and returns suggested description, portions_total and pickup_by_local for the donor to edit. Donor only (403 otherwise); input is validated (400) and limited to 10 requests per minute per user (429). When the key is not configured or the call fails it answers 200 with available false and ai_extracted false; when nothing usable is found it answers available true and ai_extracted false. Only future pickup times within 14 days are returned."
     },
     {
       "method": "DELETE",

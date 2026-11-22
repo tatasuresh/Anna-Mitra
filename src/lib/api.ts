@@ -1452,6 +1452,23 @@ export async function getAdminSponsorCampaigns(query?: Record<string, string | n
 export async function updateAdminSponsorCampaign(campaignId: string, input: Partial<Omit<SponsorCampaign, 'createdAt' | 'deletedAt' | 'id' | 'updatedAt'>>): Promise<SponsorCampaign> {
   return http(`/api/admin/sponsor-campaigns/${campaignId}`, { method: 'PATCH', body: JSON.stringify(input) });
 }
+export type DonationExtraction = {
+  available: boolean;
+  ai_extracted: boolean;
+  reason?: 'not_configured' | 'failed' | 'unclear';
+  description?: string;
+  portions_total?: number;
+  /** Local time in the donor's timezone, YYYY-MM-DDTHH:mm. */
+  pickup_by_local?: string;
+};
+export async function createMyDonationExtraction(input: {
+  input_text: string;
+  input_method: 'voice' | 'text';
+  now_local: string;
+  timezone: string;
+}): Promise<DonationExtraction> {
+  return http(`/api/my/donation-extractions`, { method: 'POST', body: JSON.stringify(input) });
+}
 export async function createMyDonation(input: Partial<Omit<Donation, 'createdAt' | 'deletedAt' | 'id' | 'updatedAt'>>): Promise<Donation> {
   return http(`/api/my/donations`, { method: 'POST', body: JSON.stringify(input) });
 }

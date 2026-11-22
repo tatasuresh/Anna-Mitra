@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import DonationVoiceInput from '@/components/DonationVoiceInput';
 import ExtractedValuesForm from '@/components/ExtractedValuesForm';
 import HandlingChecklist from '@/components/HandlingChecklist';
 import PhotoUpload from '@/components/PhotoUpload';
@@ -15,6 +16,7 @@ import {
   getMyDonationById,
   getMyDonations,
   updateMyDonation,
+  type DonationExtraction,
 } from '@/lib/api';
 import type { Donation } from '@/types/donation';
 
@@ -57,6 +59,10 @@ export default function QuickPostPage() {
   const [isRepeating, setIsRepeating] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  // How the values were produced, recorded on the donation when it is first saved.
+  const [aiStatus, setAiStatus] = useState<'idle' | 'filled' | 'unclear' | 'unavailable'>('idle');
+  const [inputMethod, setInputMethod] = useState<'manual' | 'text' | 'voice'>('manual');
+  const [aiExtracted, setAiExtracted] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !user) router.replace('/login');
@@ -84,6 +90,22 @@ export default function QuickPostPage() {
     setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
 
+  const handleExtraction = (result: DonationExtraction, method: 'voice' | 'text') => {
+    if (!result.ai_extracted) {
+      setAiStatus(result.available ? 'unclear' : 'unavailable');
+      return;
+    }
+    setValues((prev) => ({
+      foodDescription: result.description ?? prev.foodDescription,
+      portions: result.portions_total ? String(result.portions_total) : prev.portions,
+      pickupBy: result.pickup_by_local ?? prev.pickupBy,
+    }));
+    setErrors({});
+    setInputMethod(method);
+    setAiExtracted(true);
+    setAiStatus('filled');
+  };
+
   const applyDonation = (d: Donation) => {
     setDraftId(d.id);
     setValues({
@@ -93,6 +115,9 @@ export default function QuickPostPage() {
     });
     setPhotoUrl(d.photoUrl ?? null);
     setChecklistDone(false);
+    setInputMethod('manual');
+    setAiExtracted(false);
+    setAiStatus('idle');
   };
 
   const handleRepeat = async (donationId: string) => {
@@ -122,7 +147,7 @@ export default function QuickPostPage() {
         await updateMyDonation(draftId, payload);
         return draftId;
       }
-      const d = await createMyDonation(payload);
+      const d = await createMyDonation({ ...payload, inputMethod, aiExtracted });
       setDraftId(d.id);
       return d.id;
     } catch (err) {
@@ -189,14 +214,23 @@ export default function QuickPostPage() {
       <section className="ui-section" data-nexen-id="nx-674d1bca-6">
         <h2 className="ui-section-title" data-nexen-id="nx-674d1bca-7">Review donation values</h2>
         <div className="ui-stack">
-          <div className="ui-alert ui-alert-info">
-            Voice and AI extraction are not available yet. Enter each value by hand. Every value can be edited before publishing.
-          </div>
+          <DonationVoiceInput onResult={handleExtraction} disabled={isPublishing} />
+          {aiStatus === 'filled' && (
+            <div role="status" className="ui-alert ui-alert-success">
+              Filled from your description. Check each value below, fix anything that is wrong, then save.
+            </div>
+          )}
+          {aiStatus === 'unclear' && (
+            <div role="status" className="ui-alert ui-alert-warning">
+              We could not find the food, portions or pickup time in that description. Try again with more detail, or
+              enter the values by hand.
+            </div>
+          )}
           <ExtractedValuesForm
             values={values}
             onChange={handleChange}
             errors={errors}
-            aiUnavailable
+            aiUnavailable={aiStatus === 'unavailable'}
           />
           <div className="ui-actions">
             <button className="ui-btn ui-btn-secondary" type="button" onClick={persist} disabled={isPublishing} data-nexen-id="nx-674d1bca-8">
