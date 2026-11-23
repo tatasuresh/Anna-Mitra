@@ -10,7 +10,21 @@ import {
   getAuthMe,
   getDonationById,
   getDonationStatusEvents,
+  getMyDonationHandlingDeclarations,
 } from '@/lib/api';
+import type { HandlingDeclaration } from '@/types/handlingdeclaration';
+
+const STORAGE_LABELS: Record<string, string> = {
+  hot_held: 'Held hot above 63 °C',
+  refrigerated: 'Chilled within 2 hours if unused',
+  ambient: 'Ambient, dry storage',
+  frozen: 'Frozen',
+};
+
+function formatAllergens(value?: string | null): string {
+  if (!value || value === 'none_declared' || value === 'none') return 'None declared';
+  return value;
+}
 
 type DonationDetail = Awaited<ReturnType<typeof getDonationById>>;
 type StatusEvents = Awaited<ReturnType<typeof getDonationStatusEvents>>;
@@ -26,6 +40,7 @@ export default function DonationDetailPage() {
   const [role, setRole] = useState<string | null>(null);
   const [detail, setDetail] = useState<DonationDetail | null>(null);
   const [events, setEvents] = useState<StatusEvents | null>(null);
+  const [declarations, setDeclarations] = useState<HandlingDeclaration[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isCancelling, setIsCancelling] = useState(false);
@@ -50,12 +65,15 @@ export default function DonationDetailPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const [donationResult, eventsResult] = await Promise.all([
+      const [donationResult, eventsResult, declarationsResult] = await Promise.all([
         getDonationById(id),
         getDonationStatusEvents(id),
+        // Donor-only route; other roles get 403, so fall back to an empty list.
+        getMyDonationHandlingDeclarations(id).catch(() => [] as HandlingDeclaration[]),
       ]);
       setDetail(donationResult);
       setEvents(eventsResult);
+      setDeclarations(Array.isArray(declarationsResult) ? declarationsResult : []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'This donation could not be loaded.');
     } finally {
@@ -164,11 +182,38 @@ export default function DonationDetailPage() {
 
       <section className="min-w-0 rounded-[var(--radius)] border border-border bg-card p-4 shadow-sm sm:p-6" data-nexen-id="nx-576f0269-19">
         <h2 className="mb-3 text-lg font-semibold" data-nexen-id="nx-576f0269-20">Handling declarations</h2>
-        <HandlingChecklist
-          donationId={id}
-          disabled={!canEditDeclarations}
-          onSaved={() => void loadAll()}
-        />
+        {declarations.length > 0 ? (
+          <ul className="space-y-3">
+            {declarations.map((d) => (
+              <li key={d.id} className="min-w-0 rounded-[var(--radius)] border border-border p-3 text-sm">
+                <dl className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <div className="min-w-0">
+                    <dt className="text-muted-foreground">Prepared</dt>
+                    <dd>
+                      {d.preparedAt ? new Date(d.preparedAt).toLocaleString('en-IN') : '—'} ({d.preparationTimeMinutes} min before declaring)
+                    </dd>
+                  </div>
+                  <div className="min-w-0">
+                    <dt className="text-muted-foreground">Storage</dt>
+                    <dd>{STORAGE_LABELS[d.storageMethod] ?? d.storageMethod}</dd>
+                  </div>
+                  <div className="min-w-0">
+                    <dt className="text-muted-foreground">Allergens</dt>
+                    <dd className="break-words">{formatAllergens(d.allergens)}</dd>
+                  </div>
+                  <div className="min-w-0">
+                    <dt className="text-muted-foreground">Confirmed accurate</dt>
+                    <dd>{d.checklistConfirmed ? 'Yes' : 'No'}</dd>
+                  </div>
+                </dl>
+              </li>
+            ))}
+          </ul>
+        ) : canEditDeclarations ? (
+          <HandlingChecklist donationId={id} onSaved={() => void loadAll()} />
+        ) : (
+          <p className="text-sm text-muted-foreground">No handling declaration was recorded for this donation.</p>
+        )}
       </section>
 
       <section className="min-w-0 rounded-[var(--radius)] border border-border bg-card p-4 shadow-sm sm:p-6" data-nexen-id="nx-576f0269-21">
