@@ -1,4 +1,6 @@
 # Anna Mitra
+Anna Mitra — Sharing Food. Spreading Hope.
+What if every surplus meal could become someone's next meal? Anna Mitra is an AI-powered food rescue platform that transforms surplus food into hope, connecting restaurants and food donors with NGOs and volunteers who can deliver it to people in need. With effortless voice-based food donations, intelligent matching, real-time pickup coordination, and transparent impact tracking, Anna Mitra makes food rescue faster, smarter, and more accessible. By bridging the gap between food waste and hunger, it empowers communities to turn everyday surplus into meaningful social impact.Because good food deserves a better destination, and every meal matters.
 
 ## Running it
 
@@ -9,6 +11,10 @@ npm run dev
 ```
 
 The app serves on <http://localhost:3000>.
+
+If you want to access the hosted App, please click here https://anna-mitra-production.up.railway.app/ 
+
+For best viewing experience, install the PWA app on Mobile
 
 Sign in as `demo@example.com` with the password you set as `DEMO_PASSWORD` in `.env` (the seed reads it; each role also has an account, `<role>@example.com`).
 
